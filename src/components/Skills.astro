@@ -1,0 +1,405 @@
+---
+// Skills.astro — Seção de Habilidades
+import Button from './Button.astro';
+
+interface Props {
+	headlinePrefix?: string;
+	headlineAccent?: string;
+	headlineSuffix?: string;
+	description?: string;
+	ctaText?: string;
+}
+
+const {
+	headlinePrefix = "Sou um ",
+	headlineAccent = "designer versátil que colabora com fundadores para transformar ideias em produtos reais.",
+	headlineSuffix = " Foco em interfaces claras, decisões certeiras e execução rápida.",
+	description = "Dando vida à sua visão de forma rápida e eficiente, seja branding ou websites, eu cuido de tudo, entregando soluções fluidas e eficazes do início ao fim.",
+	ctaText = "Ver Projetos"
+} = Astro.props;
+---
+
+<section class="skills-section" id="skills" data-header-theme="dark" aria-label="Habilidades e Apresentação">
+	<div class="skills-container">
+		<!-- Bloco do Título Manifesto Editorial -->
+		<div class="skills-headline-wrapper">
+			<!-- Versão Manifesto (4 Linhas) -->
+			<h2 class="skills-headline skills-headline-desktop" id="skills-headline-desktop">
+				<span class="headline-line-mask first-line">
+					<span class="headline-line-inner">
+						<span class="skills-text-white">Sou um </span><span class="skills-accent">designer versátil que colabora</span>
+					</span>
+				</span>
+				<span class="headline-line-mask">
+					<span class="headline-line-inner">
+						<span class="skills-accent">com fundadores para transformar ideias</span>
+					</span>
+				</span>
+				<span class="headline-line-mask">
+					<span class="headline-line-inner">
+						<span class="skills-accent">em produtos reais. </span><span class="skills-text-white">Foco em interfaces claras,</span>
+					</span>
+				</span>
+				<span class="headline-line-mask">
+					<span class="headline-line-inner">
+						<span class="skills-text-white">decisões certeiras e execução rápida.</span>
+					</span>
+				</span>
+			</h2>
+
+			<!-- Versão Mobile (Quebras de linha naturais, sem palavras isoladas como 'que', 'para', 'decisões') -->
+			<h2 class="skills-headline skills-headline-mobile" id="skills-headline-mobile">
+				<span class="headline-line-mask">
+					<span class="headline-line-inner">
+						<span class="skills-text-white">Sou um </span><span class="skills-accent">designer versátil</span>
+					</span>
+				</span>
+				<span class="headline-line-mask">
+					<span class="headline-line-inner">
+						<span class="skills-accent">que colabora</span>
+					</span>
+				</span>
+				<span class="headline-line-mask">
+					<span class="headline-line-inner">
+						<span class="skills-accent">com fundadores</span>
+					</span>
+				</span>
+				<span class="headline-line-mask">
+					<span class="headline-line-inner">
+						<span class="skills-accent">para transformar ideias</span>
+					</span>
+				</span>
+				<span class="headline-line-mask">
+					<span class="headline-line-inner">
+						<span class="skills-accent">em produtos reais.</span>
+					</span>
+				</span>
+				<span class="headline-line-mask">
+					<span class="headline-line-inner">
+						<span class="skills-text-white">Foco em interfaces claras,</span>
+					</span>
+				</span>
+				<span class="headline-line-mask">
+					<span class="headline-line-inner">
+						<span class="skills-text-white">decisões certeiras</span>
+					</span>
+				</span>
+				<span class="headline-line-mask">
+					<span class="headline-line-inner">
+						<span class="skills-text-white">e execução rápida.</span>
+					</span>
+				</span>
+			</h2>
+		</div>
+
+		<!-- Linha Inferior: Subtexto editorial alinhado na metade direita -->
+		<div class="skills-bottom-row">
+			<div class="skills-col-spacer" aria-hidden="true"></div>
+			<div class="skills-col-content">
+				<p class="skills-description">
+					<span class="desc-line">Dando vida à sua visão de forma rápida e eficiente,</span>
+					<span class="desc-line">seja branding ou websites, eu cuido de tudo, entregando</span>
+					<span class="desc-line">soluções fluidas e eficazes do início ao fim.</span>
+				</p>
+				<div class="skills-cta-wrap">
+					<Button href="#work" id="skills-cta-btn">
+						{ctaText}
+					</Button>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	/* --------------------------------------------------
+	 * Estrutura Geral da Seção (#0e0e0e — Grafite Neutro Absoluto)
+	 * -------------------------------------------------- */
+	.skills-section {
+		position: relative;
+		width: 100%;
+		background-color: #0e0e0e;
+		color: #ffffff;
+		padding: clamp(5.5rem, 11vh, 9rem) clamp(1.5rem, 5.5vw, 80px);
+		box-sizing: border-box;
+		overflow: hidden;
+		z-index: 20;
+		box-shadow: none;
+	}
+
+	.skills-container {
+		width: 100%;
+		max-width: 1320px;
+		margin: 0 auto;
+		display: flex;
+		flex-direction: column;
+	}
+
+	/* --------------------------------------------------
+	 * Título Manifesto Editorial (4 Linhas Mascaradas)
+	 * -------------------------------------------------- */
+	.skills-headline-wrapper {
+		width: 100%;
+		max-width: 1320px;
+		margin: 0 auto;
+	}
+
+	.skills-headline {
+		margin: 0;
+		font-family: 'Rethink Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+		font-size: clamp(2.35rem, 4.4vw, 4.25rem);
+		font-weight: 700;
+		line-height: 1.15;
+		letter-spacing: -0.038em;
+		color: #ffffff;
+	}
+
+	.skills-headline-desktop {
+		display: block;
+	}
+
+	.skills-headline-mobile {
+		display: none;
+	}
+
+	/* VanceLib #17 Máscaras e Linhas */
+	.headline-line-mask {
+		display: block;
+		width: fit-content;
+		max-width: 100%;
+		overflow: hidden;
+		padding-bottom: 0.08em;
+		margin-bottom: -0.08em;
+	}
+
+	.headline-line-mask.first-line {
+		padding-left: clamp(3.2rem, 7.8vw, 6.8rem);
+	}
+
+	.headline-line-inner {
+		display: inline-block;
+		white-space: nowrap;
+		opacity: 0;
+	}
+
+	.skills-text-white {
+		color: #ffffff;
+	}
+
+	/* Cor linho suave do manifesto editorial */
+	.skills-accent {
+		color: #C8C6BA;
+	}
+
+	/* --------------------------------------------------
+	 * Linha Inferior: Subtexto + Botão na Coluna Direita
+	 * -------------------------------------------------- */
+	.skills-bottom-row {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: clamp(1.5rem, 3vw, 2.5rem);
+		width: 100%;
+		max-width: 1080px;
+		margin: clamp(3.5rem, 7vh, 5.5rem) auto 0 auto;
+	}
+
+	.skills-col-spacer {
+		width: 100%;
+	}
+
+	.skills-col-content {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		max-width: 520px;
+	}
+
+	.skills-description {
+		font-family: 'Rethink Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+		font-size: clamp(0.9rem, 1.1vw, 0.975rem);
+		font-weight: 400;
+		line-height: 1.58;
+		color: #D6D4CA;
+		margin: 0 0 1.75rem 0;
+		letter-spacing: -0.012em;
+		opacity: 0;
+		transform: translateY(25px);
+		will-change: transform, opacity;
+		display: flex;
+		flex-direction: column;
+		gap: 0.18em;
+	}
+
+	.skills-description .desc-line {
+		display: block;
+	}
+
+	.skills-cta-wrap {
+		display: flex;
+		align-items: center;
+		opacity: 0;
+		transform: translateY(20px) scale(0.96);
+		will-change: transform, opacity;
+	}
+
+	/* --------------------------------------------------
+	 * Responsividade (Tablet e Mobile)
+	 * -------------------------------------------------- */
+	@media (max-width: 1024px) {
+		.skills-section {
+			padding: clamp(5rem, 9vh, 7.5rem) clamp(1.25rem, 3.5vw, 2.5rem);
+		}
+
+		.skills-container {
+			max-width: 100%;
+		}
+
+		.skills-headline-wrapper {
+			width: 100%;
+			max-width: 100%;
+		}
+
+		.skills-headline-desktop {
+			font-size: clamp(2rem, 4.35vw, 3.25rem);
+			line-height: 1.16;
+		}
+
+		.headline-line-mask.first-line {
+			padding-left: clamp(1.2rem, 2.8vw, 2.4rem);
+		}
+	}
+
+	@media (max-width: 920px) {
+		.skills-bottom-row {
+			grid-template-columns: 1fr;
+			margin-top: clamp(2.75rem, 5vh, 4rem);
+		}
+
+		.skills-col-spacer {
+			display: none;
+		}
+
+		.skills-col-content {
+			max-width: 620px;
+		}
+	}
+
+	@media (max-width: 580px) {
+		.skills-section {
+			padding: 4.5rem clamp(1rem, 3.5vw, 1.25rem);
+		}
+
+		.skills-headline-desktop {
+			display: none;
+		}
+
+		.skills-headline-mobile {
+			display: block;
+			width: 100%;
+			max-width: 100%;
+			font-size: clamp(1.68rem, 7.5vw, 2.35rem);
+			line-height: 1.18;
+			letter-spacing: -0.035em;
+		}
+
+		.skills-headline-mobile .headline-line-mask {
+			padding-left: 0;
+			margin-bottom: 0.06em;
+			width: fit-content;
+			max-width: 100%;
+		}
+
+		.skills-headline-mobile .headline-line-inner {
+			white-space: nowrap;
+		}
+
+		.skills-bottom-row {
+			margin-top: 2.5rem;
+		}
+
+		.skills-col-content {
+			width: 100%;
+			max-width: 100%;
+		}
+
+		.skills-description {
+			font-size: clamp(0.78rem, 3.2vw, 0.855rem);
+			line-height: 1.54;
+			letter-spacing: -0.018em;
+			margin-bottom: 1.75rem;
+		}
+	}
+</style>
+
+<script>
+	import gsap from 'gsap';
+	import { ScrollTrigger } from 'gsap/ScrollTrigger';
+	import { initTextBlockReveal } from '../scripts/text-block-animation';
+
+	gsap.registerPlugin(ScrollTrigger);
+
+	function setup() {
+		// 1. Text Block Revealer Animation on Skills Headline
+		initTextBlockReveal(['#skills-headline-desktop', '#skills-headline-mobile'], {
+			blockColor: '#ffffff',
+			duration: 0.65,
+			stagger: 0.1,
+			trigger: '#skills',
+			start: 'top 75%',
+		});
+
+		// 2. Animação de Entrada do Subtexto e do Botão (Idêntica à seção About)
+		const bottomRow = document.querySelector('.skills-bottom-row') as HTMLElement | null;
+		const descEl = document.querySelector('.skills-description') as HTMLElement | null;
+		const btnWrap = document.querySelector('.skills-cta-wrap') as HTMLElement | null;
+
+		if (!descEl || !btnWrap) return;
+
+		// Reseta estados iniciais
+		gsap.set(descEl, { opacity: 0, y: 25 });
+		gsap.set(btnWrap, { opacity: 0, y: 20, scale: 0.96 });
+
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+			gsap.set([descEl, btnWrap], { opacity: 1, y: 0, scale: 1 });
+			return;
+		}
+
+		const bottomTl = gsap.timeline({
+			scrollTrigger: {
+				trigger: bottomRow || descEl,
+				start: 'top 85%',
+				toggleActions: 'play none none none',
+				once: true,
+			},
+		});
+
+		// Revelação do parágrafo e do botão entrando juntos em perfeita sincronia
+		bottomTl.to(descEl, {
+			opacity: 1,
+			y: 0,
+			duration: 0.55,
+			ease: 'power2.out',
+		}, 0)
+		.to(btnWrap, {
+			opacity: 1,
+			y: 0,
+			scale: 1,
+			duration: 0.55,
+			ease: 'power2.out',
+		}, 0);
+	}
+
+	// Run after DOM loaded & fonts ready
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', () => {
+			document.fonts.ready.then(setup);
+		});
+	} else {
+		document.fonts.ready.then(setup);
+	}
+
+	document.addEventListener('astro:after-swap', () => {
+		document.fonts.ready.then(setup);
+	});
+</script>
+

@@ -1,0 +1,822 @@
+---
+// About.astro — Seção About inspirada fielmente na referência visual
+import Button from './Button.astro';
+interface Props {
+	counter?: string;
+	title?: string;
+	paragraphs?: string[];
+	description?: string;
+	imageSrc?: string;
+	imageAlt?: string;
+	buttonText?: string;
+	buttonHref?: string;
+}
+
+const defaultParagraphs = [
+	"Sou web designer focado em criar sites que unem estética, estratégia e experiência digital. Transformo conceitos em interfaces que não apenas chamam atenção, mas também comunicam de forma clara e fazem sentido para quem está do outro lado da&nbsp;tela.",
+	"Acredito que um bom design vai além do visual: cada escolha, da tipografia às animações, deve ter um propósito. Meu processo mistura <strong>criatividade, atenção aos detalhes e pensamento estratégico</strong> para criar experiências digitais que representem de verdade cada&nbsp;projeto.",
+	"<strong>No fim, meu objetivo é simples:</strong> criar marcas e projetos digitais únicos que sejam visualmente impactantes, intuitivos de usar e difíceis de&nbsp;esquecer."
+];
+
+const {
+	counter = "02 — 03",
+	title = "SOBRE MIM",
+	paragraphs = defaultParagraphs,
+	imageSrc = "/images/about-pedro.jpeg",
+	imageAlt = "Pedro Lourenço — Processo Criativo e Estratégia",
+	buttonText = "Entrar em contato",
+	buttonHref = "#contact"
+} = Astro.props;
+---
+
+<section class="about-section" id="about" aria-label="Sobre Pedro Lourenço">
+	<div class="about-container">
+		<!-- Linha Principal: Coluna de Texto à Esquerda + Foto à Direita -->
+		<div class="about-grid">
+			<!-- Coluna Esquerda: Texto Editorial -->
+			<div class="about-content-col">
+				<!-- Título da Seção com Revealer Block -->
+				<h2 class="about-title">
+					<span class="about-title-wrapper">
+						<span class="about-title-text">{title}</span>
+						<span class="about-title-block" aria-hidden="true"></span>
+					</span>
+				</h2>
+
+				<!-- Narrativa Editorial (Mais Copy) -->
+				<div class="about-text-content">
+					{paragraphs.map((para) => (
+						<p class="about-description" set:html={para} />
+					))}
+				</div>
+
+				<!-- Botão de Ação / Call To Action -->
+				<div class="about-action-wrap">
+					<Button href={buttonHref} id="about-cta-btn">
+						{buttonText}
+					</Button>
+				</div>
+			</div>
+
+			<!-- Coluna Direita: Retrato Editorial -->
+			<div class="about-media-col">
+				<div class="about-media-wrapper">
+					<!-- Imagem Preto e Branco com Cortina Editorial de Revelação -->
+					<div class="about-image-card">
+						<div class="about-card-curtain" aria-hidden="true"></div>
+						<img
+							src={imageSrc}
+							alt={imageAlt}
+							class="about-portrait-img"
+							loading="lazy"
+							decoding="async"
+							width="1200"
+							height="896"
+						/>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	/* --------------------------------------------------
+	 * Estrutura Geral da Seção (Fundo Marfim / Bege Claro)
+	 * -------------------------------------------------- */
+	.about-section {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		background-color: #FFFFFF;
+		color: #111215;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: clamp(1.5rem, 3vh, 3rem) clamp(1.5rem, 5.5vw, 80px);
+		box-sizing: border-box;
+		overflow: hidden;
+		z-index: 50;
+		opacity: 0;
+		pointer-events: none;
+		visibility: hidden;
+		will-change: opacity, transform;
+	}
+
+	.about-topo-bg {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 1;
+		pointer-events: none;
+		overflow: hidden;
+	}
+
+	.about-container {
+		position: relative;
+		z-index: 10;
+		width: 100%;
+		max-width: 1340px;
+		margin: 0 auto;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+
+	/* --------------------------------------------------
+	 * Grid Editorial: Texto à Esquerda, Imagem à Direita
+	 * -------------------------------------------------- */
+	.about-grid {
+		display: grid;
+		grid-template-columns: 1fr 1.15fr;
+		gap: clamp(3rem, 5.5vw, 6rem);
+		align-items: center;
+		width: 100%;
+	}
+
+	/* --------------------------------------------------
+	 * Coluna Esquerda: Texto & Identidade
+	 * -------------------------------------------------- */
+	.about-content-col {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		max-width: 470px;
+		width: 100%;
+	}
+
+	.about-title {
+		margin: 0 0 clamp(1.25rem, 2.5vh, 1.75rem) 0;
+		font-family: 'Rethink Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+		font-size: clamp(1.18rem, 1.45vw, 1.45rem);
+		font-weight: 800;
+		letter-spacing: -0.015em;
+		text-transform: uppercase;
+		color: #111215;
+		display: inline-block;
+		width: fit-content;
+	}
+
+	.about-title-wrapper {
+		position: relative;
+		display: inline-block;
+		overflow: hidden;
+		vertical-align: top;
+		width: fit-content;
+	}
+
+	.about-title-text {
+		display: inline-block;
+		opacity: 0;
+		will-change: opacity;
+	}
+
+	.about-title-block {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: #111215;
+		z-index: 2;
+		transform: scaleX(0);
+		transform-origin: left center;
+		pointer-events: none;
+		will-change: transform;
+	}
+
+	.about-text-content {
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+		margin-bottom: 0;
+		width: 100%;
+	}
+
+	.about-description {
+		font-family: 'Rethink Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+		font-size: clamp(1.02rem, 1.18vw, 1.14rem);
+		font-weight: 400;
+		line-height: 1.62;
+		color: #111215;
+		margin: 0;
+		letter-spacing: -0.012em;
+		text-wrap: pretty;
+		opacity: 0;
+		transform: translateY(25px);
+	}
+
+	.about-description strong {
+		font-weight: 700;
+		color: #111215;
+	}
+
+	/* --------------------------------------------------
+	 * Botão Call To Action Abaixo do Texto
+	 * -------------------------------------------------- */
+	.about-action-wrap {
+		margin-top: clamp(1.75rem, 3.5vh, 2.5rem);
+		display: flex;
+		align-items: center;
+		opacity: 0;
+		transform: translateY(20px) scale(0.96);
+	}
+
+	/* --------------------------------------------------
+	 * Coluna Direita: Foto + Retrato
+	 * -------------------------------------------------- */
+	.about-media-col {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+		width: 100%;
+	}
+
+	.about-media-wrapper {
+		position: relative;
+		width: 100%;
+		max-width: clamp(450px, 42vw, 620px);
+		margin-left: auto;
+	}
+
+	/* Card da Foto com Enquadramento Arredondado */
+	.about-image-card {
+		position: relative;
+		width: 100%;
+		aspect-ratio: 1.1 / 1;
+		overflow: hidden;
+		border-radius: 20px;
+		background-color: transparent;
+		border: none !important;
+		outline: none !important;
+		box-shadow: none;
+		opacity: 0;
+		transform: translateY(25px);
+		isolation: isolate;
+		will-change: transform, opacity;
+	}
+
+	/* Cortina Editorial de Revelação */
+	.about-card-curtain {
+		position: absolute;
+		inset: 0;
+		background-color: #111215;
+		z-index: 4;
+		border-radius: inherit;
+		border: none !important;
+		outline: none !important;
+		transform-origin: top center;
+		pointer-events: none;
+		will-change: transform, opacity;
+		transform: scaleY(1);
+	}
+
+	.about-portrait-img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: 52% 22%;
+		display: block;
+		border-radius: inherit;
+		border: none !important;
+		outline: none !important;
+		/* Efeito Preto e Branco de alto contraste artístico */
+		filter: grayscale(100%) contrast(1.08) brightness(0.96);
+		transform: scale(1.25);
+		transform-origin: 52% 26%;
+	}
+
+	/* Large Tablet / iPad Pro 1032x1376 Breakpoint: Imagem em cima, texto em baixo */
+	@media (min-width: 1000px) and (max-width: 1200px),
+	       (min-width: 1000px) and (max-width: 1280px) and (orientation: portrait) {
+		.about-section {
+			height: 100%;
+			min-height: 100%;
+			padding: clamp(2.5rem, 4vh, 3.8rem) clamp(2rem, 4vw, 3.5rem);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.about-container {
+			margin: 0 auto;
+			width: 100%;
+			max-width: 880px;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+		}
+
+		.about-grid {
+			display: flex;
+			flex-direction: column;
+			align-items: stretch;
+			gap: clamp(2rem, 3vh, 2.6rem);
+			width: 100%;
+		}
+
+		.about-media-col {
+			order: 1;
+			width: 100%;
+			max-width: 100%;
+			display: flex;
+			justify-content: stretch;
+			align-items: center;
+		}
+
+		.about-media-wrapper {
+			width: 100%;
+			max-width: 100%;
+			margin: 0;
+		}
+
+		.about-image-card {
+			width: 100%;
+			aspect-ratio: 1.18 / 1;
+			border-radius: 24px;
+			overflow: hidden;
+		}
+
+		.about-portrait-img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			object-position: 50% 16%;
+			transform: scale(1.04);
+			transform-origin: 50% 18%;
+		}
+
+		.about-content-col {
+			order: 2;
+			width: 100%;
+			max-width: 100%;
+			align-items: flex-start;
+		}
+
+		.about-title {
+			font-size: 1.75rem;
+			font-weight: 800;
+			letter-spacing: -0.02em;
+			margin-bottom: 1rem;
+		}
+
+		.about-text-content {
+			display: flex;
+			flex-direction: column;
+			gap: 1rem;
+			width: 100%;
+		}
+
+		.about-description {
+			font-size: 1.18rem;
+			line-height: 1.65;
+			margin-bottom: 0;
+		}
+
+		.about-action-wrap {
+			margin-top: 1.6rem;
+			margin-bottom: 0;
+			display: flex;
+			width: 100%;
+		}
+
+		.about-action-wrap :global(a),
+		.about-action-wrap :global(button) {
+			padding: 14px 32px !important;
+			font-size: 1.02rem !important;
+		}
+	}
+
+	@media (max-width: 1024px) {
+		.about-section {
+			height: auto;
+			min-height: 100svh;
+			padding: clamp(4.5rem, 8vh, 6.5rem) clamp(1.5rem, 4vw, 3rem);
+		}
+
+		.about-grid {
+			grid-template-columns: 1fr;
+			gap: 4rem;
+		}
+
+		.about-content-col {
+			max-width: 600px;
+		}
+
+		.about-media-col {
+			align-items: flex-start;
+		}
+
+		.about-media-wrapper {
+			margin-left: 0;
+			max-width: 520px;
+		}
+	}
+
+	/* --------------------------------------------------
+	 * Resolução 768x1024 (iPad Portrait)
+	 * Visual equilibrado, respiro editorial e imagem reduzida
+	 * -------------------------------------------------- */
+	@media (min-width: 768px) and (max-width: 820px) {
+		.about-section {
+			height: 100%;
+			min-height: 100%;
+			padding: clamp(2rem, 3.8vh, 3rem) clamp(1.25rem, 3vw, 1.75rem);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.about-container {
+			margin: 0 auto;
+			width: 100%;
+			max-width: 680px;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+		}
+
+		.about-grid {
+			display: flex;
+			flex-direction: column;
+			align-items: stretch;
+			gap: clamp(1.8rem, 2.8vh, 2.4rem);
+			width: 100%;
+		}
+
+		.about-media-col {
+			order: 1;
+			width: 100%;
+			max-width: 100%;
+			display: flex;
+			justify-content: stretch;
+			align-items: center;
+		}
+
+		.about-media-wrapper {
+			width: 100%;
+			max-width: 100%;
+			margin: 0;
+		}
+
+		.about-image-card {
+			width: 100%;
+			aspect-ratio: 1.25 / 1;
+			border-radius: 20px;
+			overflow: hidden;
+		}
+
+		.about-portrait-img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			object-position: 50% 16%;
+			transform: scale(1.04);
+			transform-origin: 50% 18%;
+		}
+
+		.about-content-col {
+			order: 2;
+			width: 100%;
+			max-width: 100%;
+			align-items: flex-start;
+		}
+
+		.about-title {
+			font-size: 1.35rem;
+			font-weight: 800;
+			letter-spacing: -0.02em;
+			margin-bottom: 0.8rem;
+		}
+
+		.about-text-content {
+			display: flex;
+			flex-direction: column;
+			gap: 0.8rem;
+			width: 100%;
+		}
+
+		.about-description {
+			font-size: 0.93rem;
+			line-height: 1.58;
+			margin-bottom: 0;
+		}
+
+		.about-action-wrap {
+			margin-top: clamp(1.6rem, 2.6vh, 2.2rem);
+			margin-bottom: 0;
+			display: flex;
+			width: 100%;
+		}
+
+		.about-action-wrap :global(a),
+		.about-action-wrap :global(button) {
+			padding: 11px 26px !important;
+			font-size: 0.9rem !important;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.about-section {
+			height: 100%;
+			min-height: 100%;
+			padding: clamp(1.5rem, 3vh, 2.2rem) clamp(1.1rem, 3.8vw, 1.5rem) clamp(2rem, 3.5vh, 2.75rem) clamp(1.1rem, 3.8vw, 1.5rem);
+			overflow: visible;
+			display: flex;
+			align-items: flex-start;
+			justify-content: center;
+		}
+
+		/* Ajuste específico para mobile com tela alta (393x852 iPhone 14/15/16 Pro, 412x915, etc.) */
+		@media (min-height: 820px) {
+			.about-section {
+				padding-bottom: clamp(1.35rem, 2vh, 1.85rem);
+			}
+
+			.about-action-wrap {
+				margin-top: 1.25rem;
+			}
+		}
+
+		@media (min-height: 880px) {
+			.about-section {
+				padding-bottom: clamp(1.15rem, 1.6vh, 1.55rem);
+			}
+		}
+
+		.about-container {
+			margin: 0 auto;
+			width: 100%;
+			max-width: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+		}
+
+		.about-grid {
+			display: flex;
+			flex-direction: column;
+			gap: 1.5rem;
+			width: 100%;
+		}
+
+		.about-media-col {
+			order: 1;
+			width: 100%;
+			max-width: 100%;
+		}
+
+		.about-media-wrapper {
+			width: 100%;
+			max-width: 100%;
+			margin: 0 auto;
+		}
+
+		.about-image-card {
+			width: 100%;
+			aspect-ratio: 1.1 / 1;
+			border-radius: 20px;
+			overflow: hidden;
+		}
+
+		.about-portrait-img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			object-position: 52% 22%;
+			transform: scale(1.25);
+			transform-origin: 52% 26%;
+		}
+
+		.about-content-col {
+			order: 2;
+			width: 100%;
+			max-width: 100%;
+		}
+
+		.about-title {
+			font-size: clamp(1.2rem, 4.8vw, 1.45rem);
+			font-weight: 800;
+			letter-spacing: -0.02em;
+			margin-bottom: 1rem;
+		}
+
+		.about-text-content {
+			display: flex;
+			flex-direction: column;
+			gap: 0.95rem;
+			width: 100%;
+		}
+
+		.about-description {
+			font-size: clamp(0.86rem, 3.2vw, 0.95rem);
+			line-height: 1.55;
+			margin-bottom: 0;
+		}
+
+		.about-action-wrap {
+			margin-top: 1.45rem;
+			margin-bottom: 0;
+			display: flex;
+			width: 100%;
+		}
+
+		.about-action-wrap :global(a),
+		.about-action-wrap :global(button) {
+			padding: 12px 28px !important;
+			font-size: 0.92rem !important;
+		}
+	}
+
+	@media (max-width: 640px) {
+		.about-section {
+			padding: clamp(1.25rem, 2.5vh, 1.8rem) clamp(1rem, 3.5vw, 1.35rem) clamp(1.75rem, 3vh, 2.4rem) clamp(1rem, 3.5vw, 1.35rem);
+		}
+
+		@media (min-height: 820px) {
+			.about-section {
+				padding-bottom: clamp(1.25rem, 1.8vh, 1.7rem);
+			}
+		}
+
+		.about-grid {
+			gap: 1.35rem;
+		}
+
+		.about-media-wrapper {
+			width: 100%;
+			max-width: 100%;
+		}
+
+		.about-image-card {
+			aspect-ratio: 1.1 / 1;
+			border-radius: 20px;
+		}
+
+		.about-title {
+			font-size: 1.25rem;
+			margin-bottom: 0.9rem;
+		}
+
+		.about-text-content {
+			gap: 0.88rem;
+		}
+
+		.about-description {
+			font-size: clamp(0.84rem, 3.1vw, 0.92rem);
+			line-height: 1.52;
+			margin-bottom: 0;
+		}
+
+		.about-action-wrap {
+			margin-top: 1.3rem;
+			margin-bottom: 0;
+		}
+
+		.about-action-wrap :global(a),
+		.about-action-wrap :global(button) {
+			padding: 11px 26px !important;
+			font-size: 0.9rem !important;
+		}
+	}
+</style>
+
+<script>
+	import gsap from 'gsap';
+
+	let aboutAnimationPlayed = false;
+	let aboutTimeline: gsap.core.Timeline | null = null;
+
+	function setupAbout() {
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+			gsap.set(['.about-title-text', '.about-description', '.about-action-wrap', '.about-image-card'], {
+				opacity: 1,
+				y: 0,
+				scale: 1,
+			});
+			gsap.set('.about-card-curtain', { scaleY: 0, display: 'none' });
+			return;
+		}
+
+		aboutAnimationPlayed = false;
+		if (aboutTimeline) {
+			aboutTimeline.kill();
+			aboutTimeline = null;
+		}
+
+		gsap.set('.about-title-text', { opacity: 0 });
+		gsap.set('.about-title-block', { scaleX: 0, transformOrigin: 'left center' });
+		gsap.set('.about-description', { opacity: 0, y: 20 });
+		gsap.set('.about-action-wrap', { opacity: 0, y: 15, scale: 0.97 });
+		gsap.set('.about-image-card', { opacity: 0, y: 25 });
+		gsap.set('.about-card-curtain', { display: 'block', scaleY: 1, opacity: 1, transformOrigin: 'top center' });
+		gsap.set('.about-container', { y: 0 });
+	}
+
+	function resetAboutEntrance() {
+		if (!aboutAnimationPlayed) return;
+		aboutAnimationPlayed = false;
+		if (aboutTimeline) {
+			aboutTimeline.kill();
+			aboutTimeline = null;
+		}
+		gsap.set('.about-title-text', { opacity: 0 });
+		gsap.set('.about-title-block', { scaleX: 0, transformOrigin: 'left center' });
+		gsap.set('.about-description', { opacity: 0, y: 20 });
+		gsap.set('.about-action-wrap', { opacity: 0, y: 15, scale: 0.97 });
+		gsap.set('.about-image-card', { opacity: 0, y: 25 });
+		gsap.set('.about-card-curtain', { display: 'block', scaleY: 1, opacity: 1, transformOrigin: 'top center' });
+		gsap.set('.about-container', { y: 0 });
+	}
+
+	function playAboutEntrance() {
+		if (aboutAnimationPlayed) return;
+		aboutAnimationPlayed = true;
+
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+			gsap.set(['.about-title-text', '.about-description', '.about-action-wrap', '.about-image-card'], {
+				opacity: 1,
+				y: 0,
+				scale: 1,
+			});
+			gsap.set('.about-card-curtain', { scaleY: 0, opacity: 0, display: 'none' });
+			return;
+		}
+
+		if (aboutTimeline) {
+			aboutTimeline.kill();
+		}
+
+		const tl = gsap.timeline();
+		aboutTimeline = tl;
+
+		// 1. O card da foto surge suavemente e a cortina se retira revelando o retrato
+		tl.to('.about-image-card', {
+			opacity: 1,
+			y: 0,
+			duration: 0.55,
+			ease: 'power2.out',
+		}, 0);
+
+		tl.to('.about-card-curtain', {
+			scaleY: 0,
+			opacity: 0,
+			duration: 0.60,
+			ease: 'power2.inOut',
+			transformOrigin: 'top center',
+			onComplete: () => {
+				gsap.set('.about-card-curtain', { display: 'none' });
+			}
+		}, 0.04);
+
+		// 2. Animação de Entrada Assinatura do Site: Bloco Deslizante Revelador do Título
+		tl.to('.about-title-block', {
+			scaleX: 1,
+			duration: 0.32,
+			ease: 'power2.inOut',
+			transformOrigin: 'left center',
+		}, 0.08);
+
+		tl.set('.about-title-text', {
+			opacity: 1,
+		}, 0.40);
+
+		tl.to('.about-title-block', {
+			scaleX: 0,
+			duration: 0.32,
+			ease: 'power2.inOut',
+			transformOrigin: 'right center',
+		}, 0.40);
+
+		// 3. Revelação cascata dos parágrafos editoriais
+		tl.to('.about-description', {
+			opacity: 1,
+			y: 0,
+			duration: 0.50,
+			stagger: 0.06,
+			ease: 'power2.out',
+		}, 0.22);
+
+		// 4. Botão de ação (CTA) surge com mola precisa
+		tl.to('.about-action-wrap', {
+			opacity: 1,
+			y: 0,
+			scale: 1,
+			duration: 0.45,
+			ease: 'back.out(1.15)',
+		}, 0.40);
+	}
+
+	(window as any).playAboutEntrance = playAboutEntrance;
+	(window as any).resetAboutEntrance = resetAboutEntrance;
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', setupAbout);
+	} else {
+		setupAbout();
+	}
+	document.addEventListener('astro:after-swap', setupAbout);
+</script>

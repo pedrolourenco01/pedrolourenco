@@ -1,0 +1,33 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Skills from '../components/Skills.astro';
+import Work from '../components/Work.astro';
+import Contact from '../components/Contact.astro';
+---
+
+<Layout>
+	<Header />
+	<main class="page-main">
+		<Hero />
+		<div class="content-overlap-hero">
+			<Skills />
+			<Work />
+			<Contact />
+		</div>
+	</main>
+</Layout>
+
+<style>
+	.page-main {
+		position: relative;
+		width: 100%;
+	}
+
+	.content-overlap-hero {
+		position: relative;
+		z-index: 20;
+		box-shadow: none;
+	}
+</style>

@@ -1,0 +1,660 @@
+---
+// Hero.astro - Fullscreen Dark Portrait Hero with White Monumental Typography
+import Button from './Button.astro';
+---
+
+<section class="hero-section" id="hero">
+
+	<!-- Fullscreen Cover Background Image (Pedro Portrait) -->
+	<div class="hero-bg-cover-wrap" aria-hidden="true">
+		<div class="hero-img-entrance-wrap">
+			<img
+				src="/images/fotos hero/test hero.png"
+				alt="Pedro Lourenço"
+				class="hero-bg-cover-img"
+				loading="eager"
+				fetchpriority="high"
+			/>
+		</div>
+		<div class="hero-bg-overlay" aria-hidden="true"></div>
+		<div class="hero-scroll-darken" id="hero-scroll-darken" aria-hidden="true"></div>
+	</div>
+
+	<!-- Hero Content Grid -->
+	<div class="hero-container">
+		<!-- Upper/Middle Content Row: Left Tagline + Right Standard Button -->
+		<div class="hero-upper-row">
+			<!-- Left Subtitle / Tagline Block (White Text) -->
+			<div class="hero-left-tagline">
+				<p class="tagline-line-1">Designer & Developer</p>
+				<p class="tagline-line-2">Crio experiências digitais para<br />marcas que querem se destacar.</p>
+			</div>
+
+			<!-- Right Standard Button -->
+			<div class="hero-right-btn-wrap">
+				<Button href="#contact" id="hero-cta-btn">
+					Entrar em contato
+				</Button>
+			</div>
+		</div>
+
+		<!-- Separator Line between upper row and marquee -->
+		<div class="hero-separator-line" aria-hidden="true"></div>
+
+		<!-- Bottom Monumental Edge-to-Edge Marquee Loop: a creative digital designer -->
+		<div class="hero-bottom-monumental">
+			<h1 class="sr-only">a creative digital designer</h1>
+			<div class="marquee-track-container" aria-hidden="true">
+				<div class="marquee-track">
+					<!-- Set 1 -->
+					<span class="marquee-item">
+						a creative digital designer
+						<div class="marquee-badge-wrap">
+							<svg viewBox="0 0 140 140" class="badge-svg">
+								<path id="badgePath1" d="M 70,70 m -48,0 a 48,48 0 1,1 96,0 a 48,48 0 1,1 -96,0" fill="none" />
+								<g class="badge-ring-rotate">
+									<text font-size="12" font-family="'Rethink Sans', sans-serif" font-weight="900" fill="#EE5037" stroke="#EE5037" stroke-width="0.9" stroke-linejoin="round" paint-order="stroke fill">
+										<textPath href="#badgePath1" startOffset="14px" textLength="123px" lengthAdjust="spacing">PEDRO LOURENÇO</textPath>
+										<textPath href="#badgePath1" startOffset="164.8px" textLength="123px" lengthAdjust="spacing">PEDRO LOURENÇO</textPath>
+									</text>
+									<circle cx="17.5" cy="70" r="2.8" fill="#EE5037" />
+									<circle cx="122.5" cy="70" r="2.8" fill="#EE5037" />
+								</g>
+							</svg>
+						</div>
+					</span>
+					<span class="marquee-item">
+						a creative digital designer
+						<div class="marquee-badge-wrap">
+							<svg viewBox="0 0 140 140" class="badge-svg">
+								<path id="badgePath2" d="M 70,70 m -48,0 a 48,48 0 1,1 96,0 a 48,48 0 1,1 -96,0" fill="none" />
+								<g class="badge-ring-rotate">
+									<text font-size="12" font-family="'Rethink Sans', sans-serif" font-weight="900" fill="#EE5037" stroke="#EE5037" stroke-width="0.9" stroke-linejoin="round" paint-order="stroke fill">
+										<textPath href="#badgePath2" startOffset="14px" textLength="123px" lengthAdjust="spacing">PEDRO LOURENÇO</textPath>
+										<textPath href="#badgePath2" startOffset="164.8px" textLength="123px" lengthAdjust="spacing">PEDRO LOURENÇO</textPath>
+									</text>
+									<circle cx="17.5" cy="70" r="2.8" fill="#EE5037" />
+									<circle cx="122.5" cy="70" r="2.8" fill="#EE5037" />
+								</g>
+							</svg>
+						</div>
+					</span>
+					<!-- Set 2 (Duplicate for seamless 50% loop) -->
+					<span class="marquee-item">
+						a creative digital designer
+						<div class="marquee-badge-wrap">
+							<svg viewBox="0 0 140 140" class="badge-svg">
+								<path id="badgePath3" d="M 70,70 m -48,0 a 48,48 0 1,1 96,0 a 48,48 0 1,1 -96,0" fill="none" />
+								<g class="badge-ring-rotate">
+									<text font-size="12" font-family="'Rethink Sans', sans-serif" font-weight="900" fill="#EE5037" stroke="#EE5037" stroke-width="0.9" stroke-linejoin="round" paint-order="stroke fill">
+										<textPath href="#badgePath3" startOffset="14px" textLength="123px" lengthAdjust="spacing">PEDRO LOURENÇO</textPath>
+										<textPath href="#badgePath3" startOffset="164.8px" textLength="123px" lengthAdjust="spacing">PEDRO LOURENÇO</textPath>
+									</text>
+									<circle cx="17.5" cy="70" r="2.8" fill="#EE5037" />
+									<circle cx="122.5" cy="70" r="2.8" fill="#EE5037" />
+								</g>
+							</svg>
+						</div>
+					</span>
+					<span class="marquee-item">
+						a creative digital designer
+						<div class="marquee-badge-wrap">
+							<svg viewBox="0 0 140 140" class="badge-svg">
+								<path id="badgePath4" d="M 70,70 m -48,0 a 48,48 0 1,1 96,0 a 48,48 0 1,1 -96,0" fill="none" />
+								<g class="badge-ring-rotate">
+									<text font-size="12" font-family="'Rethink Sans', sans-serif" font-weight="900" fill="#EE5037" stroke="#EE5037" stroke-width="0.9" stroke-linejoin="round" paint-order="stroke fill">
+										<textPath href="#badgePath4" startOffset="14px" textLength="123px" lengthAdjust="spacing">PEDRO LOURENÇO</textPath>
+										<textPath href="#badgePath4" startOffset="164.8px" textLength="123px" lengthAdjust="spacing">PEDRO LOURENÇO</textPath>
+									</text>
+									<circle cx="17.5" cy="70" r="2.8" fill="#EE5037" />
+									<circle cx="122.5" cy="70" r="2.8" fill="#EE5037" />
+								</g>
+							</svg>
+						</div>
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	/* --------------------------------------------------
+	 * Hero Section Shell (Fullscreen viewport frame)
+	 * Fundo Escuro / Preto
+	 * -------------------------------------------------- */
+	.hero-section {
+		position: sticky;
+		top: 0;
+		width: 100%;
+		height: 100vh;
+		height: 100svh;
+		min-height: 100svh;
+		background-color: #000000;
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+		z-index: 1;
+	}
+
+	/* --------------------------------------------------
+	 * Fullscreen Cover Background Image (Pedro Portrait)
+	 * -------------------------------------------------- */
+	.hero-bg-cover-wrap {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 1;
+		pointer-events: none;
+		overflow: hidden;
+		display: flex;
+		align-items: flex-end;
+		justify-content: center;
+	}
+
+	.hero-img-entrance-wrap {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		align-items: flex-end;
+		justify-content: center;
+		transform-origin: center bottom;
+		will-change: transform, opacity;
+		opacity: 0;
+		transform: translateY(32px);
+	}
+
+	:global(body.hero-loaded) .hero-img-entrance-wrap {
+		animation: heroPortraitEntrance 1.6s cubic-bezier(0.25, 1, 0.5, 1) 0.15s both;
+	}
+
+	.hero-bg-cover-img {
+		width: auto;
+		max-width: none;
+		height: clamp(640px, 104vh, 1220px);
+		max-height: 105vh;
+		object-fit: contain;
+		object-position: center bottom;
+		display: block;
+		filter: brightness(0.68) contrast(1.08);
+		transform-origin: center bottom;
+		will-change: transform;
+	}
+
+	.hero-bg-overlay {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(
+			180deg,
+			rgba(0, 0, 0, 0.4) 0%,
+			transparent 25%,
+			transparent 65%,
+			rgba(0, 0, 0, 0.75) 100%
+		);
+		z-index: 2;
+		pointer-events: none;
+	}
+
+	.hero-scroll-darken {
+		position: absolute;
+		inset: 0;
+		background-color: #000000;
+		opacity: 0;
+		z-index: 3;
+		pointer-events: none;
+		will-change: opacity;
+	}
+
+	/* --------------------------------------------------
+	 * Hero Content Layout - Breems Inspired Structure
+	 * Top Left: Subtitle/Tagline | Top Right: Standard Button
+	 * Bottom: Monumental PEDRO LOURENÇO edge-to-edge (BRANCO)
+	 * -------------------------------------------------- */
+	.hero-container {
+		position: relative;
+		z-index: 10;
+		width: 100%;
+		max-width: 1920px;
+		margin: 0 auto;
+		height: 100%;
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+		gap: clamp(1rem, 2.2vh, 2.2rem);
+		padding: clamp(5.5rem, 9vh, 7.5rem) clamp(1.5rem, 4vw, 4.5rem) clamp(0.75rem, 2.2vh, 1.8rem);
+		box-sizing: border-box;
+		pointer-events: none;
+	}
+
+	.hero-upper-row {
+		display: flex;
+		align-items: flex-end;
+		justify-content: space-between;
+		width: 100%;
+		gap: 2rem;
+		pointer-events: auto;
+		z-index: 10;
+		margin-top: auto;
+	}
+
+	/* Subtitle / Tagline Block (Left Side - White Text) */
+	.hero-left-tagline {
+		display: flex;
+		flex-direction: column;
+		max-width: clamp(340px, 42vw, 680px);
+		color: #FFFFFF;
+		font-family: 'Rethink Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+		text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+		will-change: transform, opacity;
+		opacity: 0;
+		transform: translateY(14px);
+	}
+
+	:global(body.hero-loaded) .hero-left-tagline {
+		animation: gentleContentFadeIn 1.45s cubic-bezier(0.16, 1, 0.3, 1) 1.35s both;
+	}
+
+	.tagline-line-1 {
+		font-style: normal;
+		font-size: clamp(1.6rem, 2.4vw, 2.35rem);
+		font-weight: 700;
+		line-height: 1.15;
+		margin: 0;
+		color: #FFFFFF;
+		letter-spacing: -0.03em;
+	}
+
+	.tagline-line-2 {
+		font-size: clamp(1.05rem, 1.4vw, 1.35rem);
+		font-weight: 400;
+		line-height: 1.4;
+		margin: 0.6rem 0 0 0;
+		color: rgba(255, 255, 255, 0.9);
+		letter-spacing: -0.015em;
+	}
+
+	/* Standard Button Wrapper (Right Side) */
+	.hero-right-btn-wrap {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		pointer-events: auto;
+		z-index: 10;
+		will-change: transform, opacity;
+		opacity: 0;
+		transform: translateY(14px);
+	}
+
+	:global(body.hero-loaded) .hero-right-btn-wrap {
+		animation: gentleContentFadeIn 1.45s cubic-bezier(0.16, 1, 0.3, 1) 1.35s both;
+	}
+
+	/* Separator Line between upper row and marquee */
+	.hero-separator-line {
+		width: 100%;
+		height: 1px;
+		background: linear-gradient(
+			90deg,
+			rgba(255, 255, 255, 0.05) 0%,
+			rgba(255, 255, 255, 0.22) 20%,
+			rgba(255, 255, 255, 0.22) 80%,
+			rgba(255, 255, 255, 0.05) 100%
+		);
+		margin: clamp(0.5rem, 1.2vh, 1rem) 0 0 0;
+		z-index: 10;
+		pointer-events: none;
+		will-change: transform, opacity;
+		opacity: 0;
+		transform: translateY(20px);
+	}
+
+	:global(body.hero-loaded) .hero-separator-line {
+		animation: contentFadeIn 1.0s cubic-bezier(0.25, 1, 0.5, 1) 1.05s both;
+	}
+
+	/* Bottom Monumental Edge-to-Edge Marquee Loop: a creative digital designer */
+	.hero-bottom-monumental {
+		width: 100vw;
+		margin-left: calc(-50vw + 50%);
+		display: flex;
+		align-items: flex-end;
+		pointer-events: auto;
+		z-index: 10;
+		overflow: hidden;
+		padding-bottom: clamp(0.5rem, 1.8vh, 1.5rem);
+		user-select: none;
+		will-change: transform, opacity;
+		opacity: 0;
+		transform: translateY(75px);
+	}
+
+	:global(body.hero-loaded) .hero-bottom-monumental {
+		animation: marqueeRiseUp 1.3s cubic-bezier(0.25, 1, 0.5, 1) 0.65s both;
+	}
+
+	.marquee-track-container {
+		width: 100%;
+		overflow: hidden;
+		display: flex;
+		position: relative;
+	}
+
+	.marquee-track {
+		display: flex;
+		white-space: nowrap;
+		will-change: transform;
+		animation: marqueeInfinite 85s linear infinite;
+	}
+
+	.marquee-item {
+		display: inline-flex;
+		align-items: center;
+		color: #FFFFFF;
+		font-family: 'Rethink Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+		font-size: clamp(2.5rem, 7.65vw, 7.65rem);
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: -0.015em;
+		line-height: 0.95;
+		white-space: nowrap;
+		padding-right: 0.12em;
+		text-shadow: none !important;
+		filter: none !important;
+	}
+
+	.marquee-badge-wrap {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: clamp(67px, 8.1vw, 121px);
+		height: clamp(67px, 8.1vw, 121px);
+		margin: 0 clamp(0.3em, 0.6vw, 0.7em);
+		vertical-align: middle;
+		flex-shrink: 0;
+		user-select: none;
+		pointer-events: none;
+	}
+
+	.badge-ring-rotate {
+		transform-origin: 70px 70px;
+		animation: badgeRotate 14s linear infinite;
+	}
+
+	.badge-ring-rotate text {
+		font-family: 'Rethink Sans', sans-serif;
+		font-weight: 800;
+		stroke: #EE5037;
+		stroke-width: 0.9px;
+		stroke-linejoin: round;
+		paint-order: stroke fill;
+	}
+
+	.badge-ring-rotate circle {
+		r: 2.8px;
+	}
+
+	.badge-svg {
+		width: 100%;
+		height: 100%;
+		overflow: visible;
+		display: block;
+	}
+
+	@keyframes marqueeRiseUp {
+		0% {
+			opacity: 0;
+			transform: translateY(75px);
+		}
+		100% {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@keyframes heroBgZoom {
+		0% {
+			opacity: 0;
+			transform: scale(1.06);
+		}
+		100% {
+			opacity: 1;
+			transform: scale(1);
+		}
+	}
+
+	@keyframes marqueeInfinite {
+		0% {
+			transform: translateX(0%);
+		}
+		100% {
+			transform: translateX(-50%);
+		}
+	}
+
+	@keyframes badgeRotate {
+		0% {
+			transform: rotate(0deg);
+		}
+		100% {
+			transform: rotate(-360deg);
+		}
+	}
+
+	.sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border-width: 0;
+	}
+
+	/* --------------------------------------------------
+	 * Entrance Animations
+	 * -------------------------------------------------- */
+	@keyframes heroPortraitEntrance {
+		0% {
+			opacity: 0;
+			transform: translateY(32px);
+		}
+		100% {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@keyframes titleFadeIn {
+		0% {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+		100% {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@keyframes contentFadeIn {
+		0% {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+		100% {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@keyframes gentleContentFadeIn {
+		0% {
+			opacity: 0;
+			transform: translateY(14px);
+		}
+		100% {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	/* --------------------------------------------------
+	 * Responsive Breakpoints
+	 * -------------------------------------------------- */
+	/* Large Tablet / iPad Pro 1032x1376 Breakpoint */
+	@media (min-width: 1000px) and (max-width: 1200px),
+	       (min-width: 1000px) and (max-width: 1280px) and (orientation: portrait) {
+		.hero-left-tagline {
+			max-width: 620px;
+		}
+
+		.tagline-line-1 {
+			font-size: clamp(2.35rem, 3.6vw, 3rem);
+		}
+
+		.tagline-line-2 {
+			font-size: clamp(1.25rem, 1.8vw, 1.55rem);
+			line-height: 1.42;
+			margin-top: 0.8rem;
+		}
+	}
+
+	@media (max-width: 900px) {
+		.hero-section {
+			height: auto;
+			min-height: 100svh;
+		}
+
+		.hero-container {
+			padding: 10.5rem 1.5rem 1.5rem 1.5rem;
+		}
+
+		.hero-upper-row {
+			gap: 1.5rem;
+		}
+
+		.monumental-svg {
+			max-height: 20vh;
+		}
+	}
+
+	@media (max-width: 768px) {
+		.hero-bg-cover-img {
+			position: relative;
+			left: clamp(35px, 14vw, 65px);
+		}
+	}
+
+	@media (max-width: 600px) {
+		.hero-bg-cover-img {
+			height: 90vh;
+			max-height: 92vh;
+			max-width: none;
+			width: auto;
+			position: relative;
+			left: clamp(35px, 14vw, 65px);
+		}
+
+		.hero-section {
+			min-height: 100svh;
+		}
+
+		.hero-container {
+			padding: 8.5rem 1.25rem 1.25rem 1.25rem;
+			flex-direction: column;
+		}
+
+		.hero-upper-row {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 1.25rem;
+		}
+
+		.monumental-svg {
+			max-height: 18vh;
+		}
+	}
+</style>
+
+<script>
+	function initHeroParallax() {
+		const heroImg = document.querySelector('.hero-bg-cover-img') as HTMLElement | null;
+		const darkenOverlay = document.getElementById('hero-scroll-darken');
+		if (!heroImg) return;
+
+		let ticking = false;
+
+		function updateParallax() {
+			const scrollY = window.scrollY || window.pageYOffset;
+			const heroHeight = window.innerHeight || 800;
+
+			// Parallax is active while transitioning to the next section
+			if (scrollY <= heroHeight * 1.5) {
+				// Normalized progress through the hero transition (0 to 1)
+				const progress = Math.min(1, Math.max(0, scrollY / (heroHeight * 0.95)));
+				
+				// Ease-out sine curve for an ultra-smooth, organic deceleration
+				const eased = Math.sin((progress * Math.PI) / 2);
+				
+				// Soft, controlled maximum descent (around 60px on desktop, ~45px on mobile)
+				const maxDescent = Math.min(60, Math.round(heroHeight * 0.075));
+				const parallaxY = eased * maxDescent;
+
+				heroImg.style.transform = `translate3d(0, ${parallaxY.toFixed(2)}px, 0)`;
+
+				if (darkenOverlay) {
+					const darkProgress = Math.min(1, Math.max(0, scrollY / (heroHeight * 0.85)));
+					darkenOverlay.style.opacity = (darkProgress * 0.65).toFixed(2);
+				}
+			}
+
+			ticking = false;
+		}
+
+		window.addEventListener('scroll', () => {
+			if (!ticking) {
+				window.requestAnimationFrame(updateParallax);
+				ticking = true;
+			}
+		}, { passive: true });
+
+		const lenisInstance = (window as any).lenis;
+		if (lenisInstance) {
+			lenisInstance.on('scroll', () => {
+				if (!ticking) {
+					window.requestAnimationFrame(updateParallax);
+					ticking = true;
+				}
+			});
+		}
+
+		updateParallax();
+	}
+
+	function triggerHeroEntrance() {
+		if (!document.body.classList.contains('hero-loaded')) {
+			document.body.classList.add('hero-loaded');
+		}
+	}
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', () => {
+			initHeroParallax();
+			requestAnimationFrame(() => {
+				setTimeout(triggerHeroEntrance, 40);
+			});
+		});
+	} else {
+		initHeroParallax();
+		requestAnimationFrame(() => {
+			setTimeout(triggerHeroEntrance, 40);
+		});
+	}
+	document.addEventListener('astro:after-swap', () => {
+		initHeroParallax();
+		document.body.classList.add('hero-loaded');
+	});
+</script>

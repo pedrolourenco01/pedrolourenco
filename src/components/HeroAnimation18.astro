@@ -1,0 +1,412 @@
+---
+// HeroAnimation18.astro — Implementação fiel e modular de "Hero Animations #18" (VanceLib)
+---
+
+<section class="hero18-wrapper" id="hero">
+	<div class="hero">
+		<!-- Barra de Progresso / Loading Central em Fenda -->
+		<div class="progress-bar">
+			<p>loading</p>
+			<p>/<span id="counter">0</span></p>
+		</div>
+
+		<!-- Container de Vídeo Cinematográfico com Rotação e Escala -->
+		<div class="video-container">
+			<video autoplay loop muted playsinline preload="auto">
+				<source src="/videos/hero-18.mp4" type="video/mp4" />
+				<source src="/videos/video.mp4" type="video/mp4" />
+			</video>
+		</div>
+
+		<!-- Top Navigation Icons -->
+		<nav class="hero18-nav" aria-hidden="true">
+			<p>&#9679;</p>
+			<p>&#9679;</p>
+		</nav>
+
+		<!-- Bottom Category Tags -->
+		<footer class="hero18-footer">
+			<p>ufc</p>
+			<p>podcasts</p>
+			<p>betting</p>
+			<p>rankings</p>
+			<p>news</p>
+		</footer>
+
+		<!-- Header Tipográfico Central Mascarado -->
+		<div class="header">
+			<h1><span>Combat from</span></h1>
+			<h1><span>the streets of</span></h1>
+			<h1><span>Kansas</span></h1>
+			<p><span>( watch the fight )</span></p>
+		</div>
+
+		<!-- Coordenadas Geográficas -->
+		<div class="coordinates">
+			<p><span>37.6934° N</span></p>
+			<p><span>97.3382° W</span></p>
+		</div>
+	</div>
+
+	<!-- Logo com Revelação e Retração Tipográfica Animada -->
+	<div class="logo">
+		<div class="char">
+			<h1>C</h1>
+		</div>
+		<div class="char anim-out">
+			<h1>l</h1>
+		</div>
+		<div class="char anim-out">
+			<h1>a</h1>
+		</div>
+		<div class="char anim-out">
+			<h1>s</h1>
+		</div>
+		<div class="char anim-out">
+			<h1>h</h1>
+		</div>
+		<div class="char anim-out">
+			<h1>o</h1>
+		</div>
+		<div class="char anim-out">
+			<h1>n</h1>
+		</div>
+		<div class="char anim-in">
+			<h1>.</h1>
+		</div>
+	</div>
+</section>
+
+<style>
+	.hero18-wrapper {
+		position: relative;
+		width: 100vw;
+		height: 100svh;
+		overflow: hidden;
+		background-color: #15161b;
+		font-family: 'Montserrat', sans-serif;
+		color: #ffffff;
+	}
+
+	.hero18-wrapper p {
+		position: relative;
+		font-size: 14px;
+		font-weight: 500;
+		text-transform: uppercase;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		margin: 0;
+	}
+
+	.hero18-wrapper .hero {
+		position: relative;
+		width: 100vw;
+		height: 100svh;
+		background-color: #15161b;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		clip-path: polygon(0% 45%, 0% 45%, 0% 55%, 0% 55%);
+		will-change: clip-path;
+	}
+
+	.hero18-wrapper .progress-bar {
+		position: absolute;
+		top: 50%;
+		left: 0;
+		transform: translateY(-50%);
+		width: 25vw;
+		padding: 2em;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		color: #ffbb00;
+		z-index: 10;
+		box-sizing: border-box;
+	}
+
+	.hero18-wrapper .video-container {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 100vw;
+		height: 100svh;
+		background-color: #000;
+		clip-path: polygon(20% 20%, 80% 20%, 80% 80%, 20% 80%);
+		will-change: transform, clip-path;
+		overflow: hidden;
+	}
+
+	.hero18-wrapper .video-container video {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: auto;
+		height: auto;
+		min-width: 100%;
+		min-height: 100%;
+		object-fit: cover;
+		opacity: 0.85;
+	}
+
+	.hero18-wrapper .hero18-nav,
+	.hero18-wrapper .hero18-footer {
+		width: 100vw;
+		padding: 1.5em;
+		display: flex;
+		justify-content: space-between;
+		color: #fff;
+		mix-blend-mode: difference;
+		z-index: 2;
+		box-sizing: border-box;
+	}
+
+	.hero18-wrapper .hero18-footer {
+		justify-content: flex-end;
+		gap: 1em;
+	}
+
+	.hero18-wrapper .header {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 100%;
+		transform: translate(-50%, -50%);
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		z-index: 3;
+		pointer-events: none;
+	}
+
+	.hero18-wrapper .header h1 {
+		width: 100%;
+		text-align: center;
+		text-transform: uppercase;
+		font-size: 7vw;
+		line-height: 0.85;
+		letter-spacing: -0.25rem;
+		color: #fff;
+		margin: 0;
+		font-weight: 900;
+		font-family: 'Montserrat', sans-serif;
+	}
+
+	.hero18-wrapper .header p {
+		margin-top: 1em;
+		color: #ffbb00;
+	}
+
+	.hero18-wrapper .coordinates {
+		position: absolute;
+		top: 50%;
+		left: 0;
+		transform: translateY(-50%);
+		width: 100vw;
+		padding: 1.5em;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		color: #ffbb00;
+		z-index: 3;
+		box-sizing: border-box;
+		pointer-events: none;
+	}
+
+	.hero18-wrapper .logo {
+		position: absolute;
+		bottom: 0;
+		padding: 1.5em;
+		left: 50%;
+		display: flex;
+		transform: translateX(-50%);
+		will-change: transform;
+		color: #fff;
+		mix-blend-mode: difference;
+		z-index: 4;
+	}
+
+	.hero18-wrapper .logo h1 {
+		font-size: 2.2rem;
+		font-weight: 800;
+		letter-spacing: -0.05rem;
+		margin: 0;
+		line-height: 1;
+		font-family: 'Montserrat', sans-serif;
+	}
+
+	.hero18-wrapper .char.anim-out h1 {
+		position: relative;
+		will-change: transform;
+	}
+
+	.hero18-wrapper .header h1,
+	.hero18-wrapper .header p,
+	.hero18-wrapper .coordinates p,
+	.hero18-wrapper .char.anim-out {
+		clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+	}
+
+	.hero18-wrapper .header span,
+	.hero18-wrapper .coordinates p span {
+		position: relative;
+		display: block;
+		transform: translateY(100%);
+		will-change: transform;
+	}
+
+	@media (max-width: 900px) {
+		.hero18-wrapper p {
+			font-size: 13px;
+		}
+
+		.hero18-wrapper .progress-bar {
+			justify-content: flex-end;
+		}
+
+		.hero18-wrapper .progress-bar p:nth-child(1) {
+			display: none;
+		}
+
+		.hero18-wrapper .header h1 {
+			font-size: 10vw;
+			letter-spacing: -0.125rem;
+		}
+
+		.hero18-wrapper .coordinates {
+			top: 65%;
+			justify-content: center;
+			gap: 1em;
+			color: #fff;
+			opacity: 0.5;
+		}
+	}
+</style>
+
+<script>
+	import gsap from 'gsap';
+	import { CustomEase } from 'gsap/CustomEase';
+
+	gsap.registerPlugin(CustomEase);
+
+	function initHero18() {
+		const heroContainer = document.querySelector('.hero18-wrapper');
+		if (!heroContainer) return;
+
+		let customEase;
+		try {
+			customEase = CustomEase.create('custom18', '.87,0,.13,1');
+		} catch (e) {
+			customEase = 'power4.inOut';
+		}
+
+		const counter = document.getElementById('counter');
+
+		// 0. Estado inicial
+		gsap.set('.hero18-wrapper .video-container', {
+			scale: 0,
+			rotation: -20,
+		});
+
+		gsap.set('.hero18-wrapper .hero', {
+			clipPath: 'polygon(0% 45%, 0% 45%, 0% 55%, 0% 55%)',
+		});
+
+		// 1. Abertura inicial da fenda em 25%
+		gsap.to('.hero18-wrapper .hero', {
+			clipPath: 'polygon(0% 45%, 25% 45%, 25% 55%, 0% 55%)',
+			duration: 1.5,
+			ease: customEase,
+			delay: 0.8,
+		});
+
+		// 2. Expansão horizontal da fenda para 100% com contador 0 -> 100
+		gsap.to('.hero18-wrapper .hero', {
+			clipPath: 'polygon(0% 45%, 100% 45%, 100% 55%, 0% 55%)',
+			duration: 2,
+			ease: customEase,
+			delay: 2.6,
+
+			onStart: () => {
+				gsap.to('.hero18-wrapper .progress-bar', {
+					width: '100vw',
+					duration: 2,
+					ease: customEase,
+				});
+
+				if (counter) {
+					gsap.to(counter, {
+						innerHTML: 100,
+						duration: 2,
+						ease: customEase,
+						snap: { innerHTML: 1 },
+					});
+				}
+			},
+		});
+
+		// 3. Expansão vertical em tela cheia com rotação e escala do vídeo
+		gsap.to('.hero18-wrapper .hero', {
+			clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+			duration: 1.1,
+			ease: customEase,
+			delay: 4.8,
+			onStart: () => {
+				gsap.to('.hero18-wrapper .video-container', {
+					scale: 1,
+					rotation: 0,
+					clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+					duration: 1.25,
+					ease: customEase,
+				});
+
+				gsap.to('.hero18-wrapper .progress-bar', {
+					opacity: 0,
+					duration: 0.3,
+				});
+
+				gsap.to('.hero18-wrapper .logo', {
+					left: '0%',
+					transform: 'translateX(0%)',
+					duration: 1.25,
+					ease: customEase,
+
+					onStart: () => {
+						gsap.to('.hero18-wrapper .char.anim-out h1', {
+							y: '100%',
+							duration: 1,
+							stagger: -0.075,
+							ease: customEase,
+						});
+
+						gsap.to('.hero18-wrapper .char.anim-in h1', {
+							x: '-1200%',
+							duration: 1,
+							ease: customEase,
+							delay: 0.25,
+						});
+					},
+				});
+			},
+		});
+
+		// 4. Revelação das linhas de texto (Kansas, coordenadas)
+		gsap.to(['.hero18-wrapper .header span', '.hero18-wrapper .coordinates span'], {
+			y: '0%',
+			duration: 1,
+			stagger: 0.125,
+			ease: 'power3.out',
+			delay: 5.5,
+		});
+	}
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', initHero18);
+	} else {
+		initHero18();
+	}
+	document.addEventListener('astro:after-swap', initHero18);
+</script>

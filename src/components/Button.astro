@@ -1,0 +1,40 @@
+---
+// Button.astro — Componente oficial de botão com efeito Flow Button e suporte a link/ação
+import { FlowButton } from './ui/flow-button';
+
+interface Props {
+	href?: string;
+	id?: string;
+	class?: string;
+	rippleColor?: string;
+	style?: Record<string, any>;
+	[key: string]: any;
+}
+
+const {
+	href = "#work",
+	id = "main-cta-btn",
+	class: className = "",
+	rippleColor = "#C83D27",
+	style = {},
+	...rest
+} = Astro.props;
+---
+
+<FlowButton
+	client:load
+	id={id}
+	href={href}
+	className={className}
+	rippleColor={rippleColor}
+	style={{
+		borderRadius: "8px",
+		border: "none !important",
+		outline: "none !important",
+		boxShadow: "none",
+		...style
+	}}
+	{...rest}
+>
+	<slot>See my Work</slot>
+</FlowButton>

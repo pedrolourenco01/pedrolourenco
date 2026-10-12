@@ -1,0 +1,150 @@
+---
+import '../styles/globals.css';
+import 'lenis/dist/lenis.css';
+---
+
+<!doctype html>
+<html lang="pt-BR">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content="Pedro Lourenço — Exibindo conteúdo autêntico, colaborações e campanhas criativas em um só lugar." />
+		<title>Pedro Lourenço — Portfólio</title>
+
+		<!-- Google Fonts: Rethink Sans (Pesos 400, 500, 600, 700, 800) -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Rethink+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&display=swap"
+			rel="stylesheet"
+		/>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Inter:wght@200;300;400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700;800;900&family=Outfit:wght@200;300;400;500&family=Plus+Jakarta+Sans:wght@300;400;700;800;900&family=Space+Grotesk:wght@300;400;700&family=Syne:wght@300;400;700;800&display=swap"
+			rel="stylesheet"
+		/>
+		<link href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700,800&display=swap" rel="stylesheet" />
+	</head>
+	<body>
+		<slot />
+
+		<script>
+			import Lenis from 'lenis';
+			import gsap from 'gsap';
+			import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+			gsap.registerPlugin(ScrollTrigger);
+
+			let tickerHandler: ((time: number) => void) | null = null;
+
+			function initLenis() {
+				if ((window as any).lenis) {
+					(window as any).lenis.destroy();
+				}
+				if (tickerHandler) {
+					gsap.ticker.remove(tickerHandler);
+				}
+
+				const lenis = new Lenis({
+					autoRaf: false,
+					duration: 1.15,
+					easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+					orientation: 'vertical',
+					gestureOrientation: 'vertical',
+					smoothWheel: true,
+					wheelMultiplier: 1.0,
+					touchMultiplier: 1.6,
+					infinite: false,
+				});
+
+				(window as any).lenis = lenis;
+
+				// Synchronize Lenis with ScrollTrigger in the exact same render frame
+				lenis.on('scroll', ScrollTrigger.update);
+
+				tickerHandler = (time: number) => {
+					lenis.raf(time * 1000);
+				};
+				gsap.ticker.add(tickerHandler);
+				// Disable GSAP lag smoothing to prevent desync and stuttering with Lenis
+				gsap.ticker.lagSmoothing(0);
+
+				// Smooth scroll to in-page anchor targets
+				document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+					anchor.addEventListener('click', (e) => {
+						const href = anchor.getAttribute('href');
+						if (href && href.length > 1) {
+							if (href === '#about') {
+								const pinTrig = ScrollTrigger.getById('globe-zoom-pin-trigger');
+								if (pinTrig) {
+									e.preventDefault();
+									const targetScroll = pinTrig.start + (pinTrig.end - pinTrig.start) * 0.95;
+									lenis.scrollTo(targetScroll, { duration: 1.2 });
+									return;
+								}
+							}
+							const target = document.querySelector(href);
+							if (target) {
+								e.preventDefault();
+								lenis.scrollTo(target as HTMLElement, { offset: 0, duration: 1.2 });
+							}
+						}
+					});
+				});
+			}
+
+			initLenis();
+			document.addEventListener('astro:after-swap', initLenis);
+		</script>
+	</body>
+</html>
+
+<style is:global>
+	*, *::before, *::after {
+		box-sizing: border-box;
+		margin: 0;
+		padding: 0;
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+	}
+
+	/* Hide default scrollbar completely across Chrome, Safari, Edge, Firefox */
+	::-webkit-scrollbar {
+		display: none !important;
+		width: 0 !important;
+		height: 0 !important;
+	}
+
+	html {
+		width: 100%;
+		height: auto;
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+	}
+
+	body {
+		width: 100%;
+		min-height: 100%;
+		background-color: #000000;
+		color: #ffffff;
+		font-family: 'Rethink Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		overflow-x: clip;
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+	}
+
+	a {
+		color: inherit;
+		text-decoration: none;
+	}
+
+	button, input, select, textarea {
+		font-family: inherit;
+		cursor: pointer;
+	}
+</style>
+

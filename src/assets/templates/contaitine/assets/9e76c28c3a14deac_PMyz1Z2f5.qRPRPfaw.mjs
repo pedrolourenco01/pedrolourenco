@@ -1,0 +1,2 @@
+import{t as e}from"./rolldown-runtime.Dh6celcD.mjs";import{I as t,Z as n}from"./framer.2jTVYWp8.mjs";var r,i,a,o=e((()=>{n(),t.loadFonts([]),r=[{explicitInter:!0,fonts:[]}],i=[`.framer-MEWp8 .framer-styles-preset-4fxzi3:not(.rich-text-wrapper), .framer-MEWp8 .framer-styles-preset-4fxzi3.rich-text-wrapper a { --framer-link-text-color: var(--token-73c81888-a8cf-437f-bca5-3a566d1bf7db, #0d3479); }`],a=`framer-MEWp8`}));export{o as i,i as n,r,a as t};
+//# sourceMappingURL=PMyz1Z2f5.qRPRPfaw.mjs.map
