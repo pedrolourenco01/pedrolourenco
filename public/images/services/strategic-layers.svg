@@ -1,0 +1,203 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 420 505"
+  fill="none"
+  class="strategy-blueprint-svg"
+  aria-label="Diagrama conceitual isométrico de arquitetura de informação e estratégia"
+>
+  <defs>
+    <!-- Soft warm glow filter for accent nodes -->
+    <filter id="nodeGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="1" stdDeviation="2.5" flood-color="#DE5A38" flood-opacity="0.25" />
+    </filter>
+
+    <!-- Translucent frosted layer gradient -->
+    <linearGradient id="planeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E8E6E0" stop-opacity="0.75" />
+      <stop offset="100%" stop-color="#E8E6E0" stop-opacity="0.35" />
+    </linearGradient>
+  </defs>
+
+  <style>
+    .strategy-blueprint-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      contain: paint;
+      cursor: pointer;
+    }
+
+    /* Plumb vertical axis with flowing dashed signal */
+    .plumb-axis-flow {
+      stroke: #DE5A38;
+      stroke-width: 1.6;
+      stroke-dasharray: 4 6;
+      stroke-linecap: round;
+      animation: axisSignalFlow 2.8s linear infinite;
+    }
+
+    @keyframes axisSignalFlow {
+      from { stroke-dashoffset: 0; }
+      to { stroke-dashoffset: -20; }
+    }
+
+    /* Core floating harmonic physics */
+    .blueprint-layer {
+      will-change: transform;
+      transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .layer-top-group {
+      animation: floatTop 4.4s ease-in-out infinite alternate;
+      transform-origin: 208px 188px;
+    }
+
+    .layer-mid-group {
+      animation: floatMid 5.2s ease-in-out infinite alternate;
+      transform-origin: 208px 274px;
+    }
+
+    .layer-bot-group {
+      animation: floatBot 6.0s ease-in-out infinite alternate;
+      transform-origin: 208px 360px;
+    }
+
+    @keyframes floatTop {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-8px); }
+    }
+
+    @keyframes floatMid {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-4px); }
+    }
+
+    @keyframes floatBot {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-2px); }
+    }
+
+    /* Interactive hover explosion: layers expand apart gracefully */
+    .strategy-blueprint-svg:hover .layer-top-group {
+      transform: translateY(-16px);
+      animation-play-state: paused;
+    }
+
+    .strategy-blueprint-svg:hover .layer-mid-group {
+      transform: translateY(-4px);
+      animation-play-state: paused;
+    }
+
+    .strategy-blueprint-svg:hover .layer-bot-group {
+      transform: translateY(10px);
+      animation-play-state: paused;
+    }
+
+    /* Breathing pulse on accent core nodes */
+    .node-pulse {
+      transform-origin: center;
+      animation: nodeBreathe 3.2s ease-in-out infinite alternate;
+    }
+
+    @keyframes nodeBreathe {
+      0% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 0 rgba(222, 90, 56, 0));
+      }
+      100% {
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 5px rgba(222, 90, 56, 0.4));
+      }
+    }
+
+    /* Shimmer stroke highlight on hover */
+    .plane-outline {
+      stroke: #DE5A38;
+      stroke-width: 1.7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: stroke-width 0.3s ease, stroke 0.3s ease;
+    }
+
+    .strategy-blueprint-svg:hover .plane-outline {
+      stroke-width: 1.85;
+      stroke: #E05430;
+    }
+  </style>
+
+  <!-- ========================================== -->
+  <!-- 1. Central Vertical Plumb Axis            -->
+  <!-- ========================================== -->
+  <line x1="210" y1="98" x2="209" y2="448" class="plumb-axis-flow" />
+
+  <!-- Top Open Ring (Concept Source) -->
+  <circle cx="212" cy="83" r="14.5" stroke="#DE5A38" stroke-width="1.75" fill="#E8E6E0" />
+
+  <!-- ========================================== -->
+  <!-- 2. Bottom Plane (Execution Ground)        -->
+  <!-- ========================================== -->
+  <g class="blueprint-layer layer-bot-group" id="layer-bot">
+    <!-- Bottom rounded isometric rectangle -->
+    <path
+      class="plane-outline"
+      d="M 206 268 
+         L 378 308 A 16 16 0 0 1 389 322 
+         L 188 410 A 22 22 0 0 1 168 410 
+         L 60 360 A 16 16 0 0 1 60 346 
+         L 194 268 A 20 20 0 0 1 206 268 Z"
+      fill="url(#planeGrad)"
+    />
+    <!-- Center Isometric Aperture / Ellipse -->
+    <ellipse cx="210" cy="354" rx="39" ry="19" class="plane-outline" fill="none" />
+  </g>
+
+  <!-- ========================================== -->
+  <!-- 3. Middle Plane (Architecture / Workflow)  -->
+  <!-- ========================================== -->
+  <g class="blueprint-layer layer-mid-group" id="layer-mid">
+    <!-- Middle rounded isometric rectangle -->
+    <path
+      class="plane-outline"
+      d="M 208 206 
+         L 302 260 A 16 16 0 0 1 310 274 
+         L 188 326 A 20 20 0 0 1 170 326 
+         L 52 274 A 16 16 0 0 1 52 260 
+         L 194 206 A 20 20 0 0 1 208 206 Z"
+      fill="url(#planeGrad)"
+    />
+    <!-- Internal Cutout (Structure / Card Tab Aperture) -->
+    <path
+      class="plane-outline"
+      d="M 98 274 
+         L 154 246 A 8 8 0 0 1 162 248 
+         L 162 258 A 4 4 0 0 0 166 262 
+         L 204 280 A 6 6 0 0 1 206 288
+         L 174 304 A 12 12 0 0 1 162 304
+         L 104 282 A 8 8 0 0 1 98 274 Z"
+      fill="none"
+    />
+  </g>
+
+  <!-- ========================================== -->
+  <!-- 4. Top Plane (Strategy & High-Level UX)   -->
+  <!-- ========================================== -->
+  <g class="blueprint-layer layer-top-group" id="layer-top">
+    <!-- Top rounded isometric rectangle -->
+    <path
+      class="plane-outline"
+      d="M 211 134 
+         L 316 186 A 14 14 0 0 1 322 198 
+         L 216 244 A 18 18 0 0 1 198 244 
+         L 96 196 A 14 14 0 0 1 96 184 
+         L 200 134 A 18 18 0 0 1 211 134 Z"
+      fill="url(#planeGrad)"
+    />
+    <!-- Center Strategy Core Node (Solid Accent) -->
+    <circle cx="208" cy="188" r="9" fill="#DE5A38" class="node-pulse" filter="url(#nodeGlow)" />
+  </g>
+
+  <!-- ========================================== -->
+  <!-- 5. Bottom Anchor Node (Output / Result)   -->
+  <!-- ========================================== -->
+  <circle cx="209" cy="448" r="9.5" fill="#DE5A38" class="node-pulse" filter="url(#nodeGlow)" />
+</svg>

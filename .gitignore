@@ -35,3 +35,9 @@ pnpm-debug.log*
 CLAUDE.md
 AGENTS.md
 
+
+.vercel
+.env*
+
+scratch/
+*.backup

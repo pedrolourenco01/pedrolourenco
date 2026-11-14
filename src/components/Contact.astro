@@ -1,569 +1,476 @@
 ---
-// Contact.astro — Seção de Contato & Rodapé inspirada fielmente na referência visual
+// Contact.astro — Rodapé minimalista e monumental com Marquee infinito "PEDRO LOURENÇO",
+// linha divisória vertical em laranja (#EE5037) e links sociais alinhados na largura da Hero.
 interface Props {
 	email?: string;
+	marqueeWord?: string;
+	talkTitlePt?: string;
+	talkTitleEn?: string;
+	whatsappLink?: string;
+	links?: Array<{ label: string; href: string; target?: string; rel?: string }>;
 }
 
-const { email = "pedroworks@gmail.com" } = Astro.props;
-
-const ctaText = "FALE COMIGO";
-
-const navLinks = [
-	{ label: "Início", href: "#hero" },
-	{ label: "Projetos", href: "#work" },
-	{ label: "Sobre", href: "#about" },
-	{ label: "Habilidades", href: "#skills" }
+const defaultLinks = [
+	{ label: "WhatsApp", href: "https://wa.me/5521971341163", target: "_blank", rel: "noopener noreferrer" },
+	{ label: "Linkedin", href: "https://linkedin.com", target: "_blank", rel: "noopener noreferrer" },
+	{ label: "Instagram", href: "https://www.instagram.com/pedrolouurenco/", target: "_blank", rel: "noopener noreferrer" },
+	{ label: "Behance", href: "https://behance.net", target: "_blank", rel: "noopener noreferrer" },
+	{ label: "Email", href: `mailto:pedrolourencowork04@gmail.com` }
 ];
 
-const serviceLinks = [
-	{ label: "Design UI/UX", href: "#skills" },
-	{ label: "Direção Criativa", href: "#skills" },
-	{ label: "Desenvolvimento Web", href: "#skills" },
-	{ label: "Identidade de Marca", href: "#skills" }
-];
-
-const socialLinks = [
-	{ label: "Instagram", href: "https://instagram.com" },
-	{ label: "LinkedIn", href: "https://linkedin.com" },
-	{ label: "Twitter / X", href: "https://twitter.com" },
-	{ label: "Behance", href: "https://behance.net" }
-];
+const {
+	email = "pedrolourencowork04@gmail.com",
+	marqueeWord = "PEDRO LOURENCO",
+	talkTitlePt = "VAMOS FALAR",
+	talkTitleEn = "LET'S TALK",
+	whatsappLink = "https://wa.me/5521971341163",
+	links = defaultLinks
+} = Astro.props;
 ---
 
-<footer class="contact-section" id="contact" aria-label="Contato e Rodapé">
+<footer class="contact-section" id="contact" aria-label="Contact & Footer">
 	<div class="contact-container">
-		<!-- Cabeçalho Superior: Tem um projeto em mente? -->
-		<header class="contact-eyebrow-wrap">
-			<h2 class="contact-eyebrow">
-				<span class="eyebrow-line">TEM UM PROJETO EM MENTE?</span>
-				<span class="eyebrow-line">VAMOS CRIAR, DESENVOLVER E</span>
-				<span class="eyebrow-line"><span class="eyebrow-accent">COLOCAR SEU PROJETO NO AR.</span></span>
-			</h2>
-		</header>
-
-		<!-- Monumental Call to Action Link -->
-		<div class="contact-cta-wrapper">
-			<a href={`mailto:${email}`} class="contact-cta-link" aria-label="Enviar email para Pedro Lourenço">
-				<span class="cta-text" aria-label={ctaText}>
-					{ctaText.split('').map((char, index) => (
-						<span class="contact-char-mask" aria-hidden="true">
-							<span class="contact-char-inner" style={`--contact-char-idx: ${index}`}>
-								<span class="char-hover-roll">
-									<span class="char-primary">{char === ' ' ? '\u00A0' : char}</span>
-									<span class="char-clone" aria-hidden="true">{char === ' ' ? '\u00A0' : char}</span>
-								</span>
-							</span>
-						</span>
-					))}
-				</span>
-				<span class="cta-arrow-wrap" aria-hidden="true">
-					<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="butt" stroke-linejoin="miter" class="cta-arrow-icon">
-						<line x1="6" y1="18" x2="17.2" y2="6.8"></line>
-						<polyline points="7 6 18 6 18 17"></polyline>
-					</svg>
-				</span>
-			</a>
+		<!-- Topo: Marquee Monumental "PEDRO LOURENCO" com altura aumentada -->
+		<div class="footer-marquee-wrapper" aria-hidden="true">
+			<div class="footer-marquee-track">
+				<!-- Grupo 1 -->
+				<span class="footer-marquee-item">PEDRO<span class="footer-marquee-dot" aria-hidden="true"></span>LOURENCO<span class="footer-marquee-dot" aria-hidden="true"></span></span>
+				<span class="footer-marquee-item">PEDRO<span class="footer-marquee-dot" aria-hidden="true"></span>LOURENCO<span class="footer-marquee-dot" aria-hidden="true"></span></span>
+				<span class="footer-marquee-item">PEDRO<span class="footer-marquee-dot" aria-hidden="true"></span>LOURENCO<span class="footer-marquee-dot" aria-hidden="true"></span></span>
+				<!-- Grupo 2 (Duplicado para loop infinito 100% contínuo) -->
+				<span class="footer-marquee-item">PEDRO<span class="footer-marquee-dot" aria-hidden="true"></span>LOURENCO<span class="footer-marquee-dot" aria-hidden="true"></span></span>
+				<span class="footer-marquee-item">PEDRO<span class="footer-marquee-dot" aria-hidden="true"></span>LOURENCO<span class="footer-marquee-dot" aria-hidden="true"></span></span>
+				<span class="footer-marquee-item">PEDRO<span class="footer-marquee-dot" aria-hidden="true"></span>LOURENCO<span class="footer-marquee-dot" aria-hidden="true"></span></span>
+			</div>
 		</div>
 
-		<!-- Grid de 3 Colunas do Rodapé (Navegação, Serviços, Social) -->
-		<div class="footer-columns-grid">
-			<!-- Coluna 1: Navegação Interna -->
-			<div class="footer-col footer-col-nav">
-				<h3 class="col-title">Navegação</h3>
-				<ul class="col-list">
-					{navLinks.map((item) => (
-						<li>
-							<a href={item.href} class="col-link">{item.label}</a>
-						</li>
-					))}
-				</ul>
+		<!-- Área Inferior: Let's talk à Esquerda + Linha Vertical Laranja (#EE5037) Alongada + Links à Direita -->
+		<div class="footer-body-grid">
+			<!-- Coluna Esquerda: Texto Let's talk / Vamos Falar Pixelizado em Laranja -->
+			<div class="footer-talk-col">
+				<a href={whatsappLink} target="_blank" rel="noopener noreferrer" class="footer-talk-text lang-en" aria-label="Let's talk on WhatsApp">
+					<span class="footer-talk-hop">{talkTitleEn}</span>
+				</a>
+				<a href={whatsappLink} target="_blank" rel="noopener noreferrer" class="footer-talk-text lang-pt" aria-label="Vamos falar no WhatsApp">
+					<span class="footer-talk-hop">{talkTitlePt}</span>
+				</a>
 			</div>
 
-			<!-- Coluna 2: Serviços / Especialidades -->
-			<div class="footer-col footer-col-services">
-				<h3 class="col-title">Serviços</h3>
-				<ul class="col-list">
-					{serviceLinks.map((item) => (
-						<li>
-							<a href={item.href} class="col-link">{item.label}</a>
-						</li>
-					))}
-				</ul>
-			</div>
+			<!-- Divisor Vertical Laranja do Site (#EE5037) Estendido até a base -->
+			<div class="footer-orange-divider" aria-hidden="true"></div>
 
-			<!-- Coluna 3: Redes Sociais -->
-			<div class="footer-col footer-col-social">
-				<h3 class="col-title">Redes Sociais</h3>
-				<ul class="col-list">
-					{socialLinks.map((item) => (
-						<li>
-							<a href={item.href} target="_blank" rel="noopener noreferrer" class="col-link">
-								{item.label}
+			<!-- Coluna Direita: Links Sociais -->
+			<nav class="footer-links-nav" aria-label="Contact & Social Links">
+				<ul class="footer-links-list">
+					{links.map((link) => (
+						<li class="footer-link-item">
+							<a
+								href={link.href}
+								target={link.target}
+								rel={link.rel}
+								class="footer-nav-link"
+							>
+								<span class="link-label">{link.label}</span>
 							</a>
 						</li>
 					))}
 				</ul>
-			</div>
-		</div>
-	</div>
-
-	<!-- Barra Inferior de Direitos Autorais -->
-	<div class="copyright-bar">
-		<div class="copyright-content">
-			<p class="copyright-text">
-				© 2026 Pedro Lourenço. Todos os direitos reservados.
-			</p>
+			</nav>
 		</div>
 	</div>
 </footer>
 
 <style>
 	/* --------------------------------------------------
-	 * Estrutura Principal da Seção (#0e0e0e Grafite Neutro Absoluto)
+	 * Estrutura Geral do Rodapé (Fundo Preto Absoluto #000000)
 	 * -------------------------------------------------- */
 	.contact-section {
 		position: relative;
 		width: 100%;
-		background-color: #0e0e0e;
-		color: #F2F1ED;
-		overflow: hidden;
+		height: 100%;
+		min-height: 100vh;
+		min-height: 100svh;
+		background-color: #000000 !important;
+		color: #FFFFFF;
+		margin: 0;
+		padding: 0;
 		box-sizing: border-box;
 		display: flex;
 		flex-direction: column;
-		z-index: 20;
+		justify-content: space-between;
+		overflow: hidden;
+		z-index: 10;
 	}
 
+	/* --------------------------------------------------
+	 * Container com a MESMA LARGURA DA HERO
+	 * -------------------------------------------------- */
 	.contact-container {
+		position: relative;
 		width: 100%;
-		max-width: 1480px;
+		max-width: 1920px;
 		margin: 0 auto;
-		padding: clamp(5.5rem, 11vh, 9.5rem) clamp(1.5rem, 5.5vw, 80px) clamp(4rem, 8vh, 6.5rem);
+		padding: 0 clamp(1.5rem, 4vw, 4.5rem);
 		box-sizing: border-box;
 		display: flex;
 		flex-direction: column;
+		flex: 1;
+		justify-content: space-between;
 	}
 
 	/* --------------------------------------------------
-	 * Cabeçalho Superior: Have A Project In Mind?
+	 * Marquee Monumental Superior "PEDRO LOURENÇO"
+	 * Posicionado colado no topo como na referência OAH MILES
+	 * Base alinhada exatamente no limite inferior do "Ç"
 	 * -------------------------------------------------- */
-	.contact-eyebrow-wrap {
-		margin-bottom: clamp(3rem, 6vh, 4.5rem);
-	}
-
-	.contact-eyebrow {
-		margin: 0;
-		font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-		font-size: clamp(1.25rem, 2.7vw, 2.5rem);
-		font-weight: 800;
-		line-height: 1.15;
-		letter-spacing: -0.02em;
-		text-transform: uppercase;
-		display: flex;
-		flex-direction: column;
-		gap: 0.15em;
-	}
-
-	.eyebrow-line {
-		color: #FFFFFF;
-		display: inline-block;
-		width: fit-content;
-		max-width: 100%;
-		opacity: 0;
-	}
-
-	.eyebrow-accent {
-		color: #C8C6BA;
-		font-weight: 700;
-	}
-
-	/* --------------------------------------------------
-	 * Monumental Call to Action: CONTACT ME ↗
-	 * -------------------------------------------------- */
-	.contact-cta-wrapper {
+	.footer-marquee-wrapper {
 		width: 100%;
-		margin-bottom: clamp(5rem, 11vh, 9rem);
-		overflow: visible;
-	}
-
-	.contact-cta-link {
-		display: inline-flex;
-		align-items: center;
-		gap: clamp(1.5rem, 3.5vw, 3.5rem);
-		text-decoration: none;
-		color: #F2F1ED;
-		cursor: pointer;
-		outline: none;
-		user-select: none;
-		transition: opacity 0.25s ease;
-		max-width: 100%;
-		flex-wrap: nowrap;
-	}
-
-	.contact-cta-link:hover {
-		opacity: 0.88;
-	}
-
-	.cta-text {
-		font-family: 'Anton', Impact, 'Arial Black', sans-serif;
-		font-size: clamp(3.2rem, 12vw, 11.5rem);
-		font-weight: 900;
-		line-height: 0.88;
-		letter-spacing: 0.01em;
-		text-transform: uppercase;
-		white-space: nowrap;
-		display: inline-flex;
-		align-items: flex-start;
-		color: #F2F1ED;
-	}
-
-	.contact-char-mask {
-		display: inline-block;
 		overflow: hidden;
-		vertical-align: bottom;
-		height: 0.9em;
-	}
-
-	.contact-char-inner {
-		display: inline-block;
-		will-change: transform, opacity;
-	}
-
-	.char-hover-roll {
+		position: relative;
 		display: flex;
-		flex-direction: column;
-		transition: transform 0.42s cubic-bezier(0.16, 1, 0.3, 1);
-		transition-delay: calc(var(--contact-char-idx, 0) * 0.022s);
-		will-change: transform;
-	}
-
-	.char-primary,
-	.char-clone {
-		display: block;
-		line-height: 0.9em;
-		color: #F2F1ED;
-		transition: color 0.3s ease;
-	}
-
-	.char-clone {
-		color: #ffffff;
-		opacity: 0.95;
-	}
-
-	.contact-cta-link:hover .char-hover-roll {
-		transform: translateY(-50%);
-	}
-
-	.cta-arrow-wrap {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		font-size: clamp(3.2rem, 12vw, 11.5rem);
-		color: #F2F1ED;
-		opacity: 0;
-		transform: translate(-45px, 45px) scale(0.5) rotate(-20deg);
-		transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.15s, transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.15s;
+		align-items: flex-start;
+		padding: 0.04em 0 0 0;
+		margin-top: -0.04em;
+		user-select: none;
 		will-change: transform, opacity;
+		opacity: 0;
+		transform: translateY(35px);
 	}
 
-	.contact-cta-wrapper.is-in-view .cta-arrow-wrap {
-		opacity: 1;
-		transform: translate(0, 0) scale(1) rotate(0deg);
+	.footer-marquee-track {
+		display: flex;
+		align-items: flex-start;
+		white-space: nowrap;
+		width: max-content;
+		will-change: transform;
+		animation: footerMarqueeInfinite 85s linear infinite;
+		/* Efeito de hover removido: o marquee nunca para */
 	}
 
-	.contact-cta-link:hover .cta-arrow-wrap {
-		transform: translate(10px, -10px) scale(1.08) rotate(0deg);
-	}
-
-	.contact-cta-link:hover {
-		opacity: 1;
-	}
-
-	@media (max-width: 1200px), (max-width: 1280px) and (orientation: portrait), (hover: none) {
-		.contact-cta-link:hover .char-hover-roll,
-		.contact-cta-link:active .char-hover-roll {
-			transform: none !important;
+	@keyframes footerMarqueeInfinite {
+		0% {
+			transform: translate3d(0, 0, 0);
 		}
-
-		.contact-cta-link:hover .cta-arrow-wrap,
-		.contact-cta-link:active .cta-arrow-wrap {
-			transform: translate(0, 0) scale(1) rotate(0deg) !important;
+		100% {
+			transform: translate3d(-50%, 0, 0);
 		}
+	}
 
-		.col-link:hover,
-		.col-link:active {
-			transform: none !important;
-		}
+	.footer-marquee-item {
+		font-family: 'Rethink Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+		font-size: clamp(8.5rem, 23vw, 26rem);
+		font-weight: 700;
+		line-height: 1.0;
+		letter-spacing: -0.04em;
+		text-transform: uppercase;
+		color: #FFFFFF;
+		white-space: nowrap;
+		display: inline-block;
+		margin-top: 0;
+		padding-bottom: 0;
+	}
+
+	.footer-marquee-spacer {
+		display: inline-block;
+		width: clamp(3rem, 7vw, 8rem);
+	}
+
+	/* Quadrado Pixel Laranja (#EE5037) separando PEDRO de LOURENCO */
+	.footer-marquee-dot {
+		display: inline-block;
+		width: 0.12em;
+		height: 0.12em;
+		background-color: #EE5037;
+		border-radius: 0;
+		margin: 0 0.22em;
+		vertical-align: 0.29em;
+		flex-shrink: 0;
 	}
 
 	/* --------------------------------------------------
-	 * Grid de Rodapé: 3 Colunas (Navigation, Services, Social)
+	 * Grid Inferior: Linha Vertical Laranja (#EE5037) + Links
+	 * Inicia exatamente colado na base das letras
 	 * -------------------------------------------------- */
-	.footer-columns-grid {
+	.footer-body-grid {
+		position: relative;
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		column-gap: clamp(2rem, 5vw, 5rem);
-		row-gap: 3.5rem;
+		grid-template-columns: 1fr auto 1fr;
+		align-items: stretch;
+		flex: 1;
+		min-height: clamp(300px, 46vh, 560px);
+		margin-top: -0.06em;
+		will-change: opacity, transform;
+		opacity: 0;
+		transform: translateY(25px);
+	}
+
+	.footer-talk-col {
 		width: 100%;
-		align-items: start;
-		padding-top: clamp(2.5rem, 5vh, 4rem);
-		border-top: 1px solid rgba(255, 255, 255, 0.12);
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+		align-items: flex-start;
+		padding-left: 0;
+		padding-right: clamp(1rem, 2vw, 2.5rem);
+		padding-bottom: clamp(3.5rem, 8vh, 6.5rem);
+		padding-top: clamp(4rem, 10vh, 8rem);
+		box-sizing: border-box;
 	}
 
-	/* Coluna 1: Bio / Resumo */
-	.footer-col-bio {
-		max-width: 480px;
+	.footer-talk-text {
+		display: inline-flex;
+		align-items: center;
+		font-family: 'Rethink Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+		font-size: clamp(3.4rem, 6.6vw, 7.6rem);
+		font-weight: 800;
+		color: #EE5037;
+		letter-spacing: 0.1em;
+		line-height: 0.92;
+		text-transform: uppercase;
+		text-decoration: none;
+		position: relative;
+		transition: opacity 0.2s ease, transform 0.2s ease;
+		cursor: pointer;
+		white-space: nowrap;
 	}
 
-	.bio-text {
+	/* Animação de pequenos pulinhos no texto LET'S TALK / VAMOS FALAR */
+	.footer-talk-hop {
+		display: inline-block;
+		will-change: transform;
+		animation: talkHop 1.9s ease-in-out infinite;
+	}
+
+	@keyframes talkHop {
+		0%, 100% {
+			transform: translateY(0);
+		}
+		18% {
+			transform: translateY(-9px);
+		}
+		36% {
+			transform: translateY(0);
+		}
+		50% {
+			transform: translateY(-4px);
+		}
+		64% {
+			transform: translateY(0);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.footer-talk-hop {
+			animation: none !important;
+		}
+	}
+
+	.footer-talk-text:hover {
+		opacity: 0.85;
+		transform: translateY(-2px);
+	}
+
+	/* Linha Laranja Oficial do Site (#EE5037) estendida até a base da tela (100% plana, sem sombra, sem neon e sem blur) */
+	.footer-orange-divider {
+		width: 2px;
+		background-color: #EE5037;
+		height: 100%;
+		min-height: clamp(260px, 42vh, 520px);
+		transform-origin: top center;
+		box-shadow: none !important;
+		filter: none !important;
 		margin: 0;
-		font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-		font-size: clamp(0.85rem, 0.95vw, 0.95rem);
-		font-weight: 400;
-		line-height: 1.65;
-		color: rgba(242, 241, 237, 0.85);
-		letter-spacing: -0.01em;
 	}
 
-	/* Títulos das Colunas */
-	.col-title {
-		margin: 0 0 1.25rem 0;
-		font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-		font-size: clamp(0.82rem, 0.95vw, 0.92rem);
-		font-weight: 700;
-		text-transform: capitalize;
-		color: #FFFFFF;
-		letter-spacing: -0.01em;
+	/* Coluna de Links à Direita da Linha */
+	.footer-links-nav {
+		padding-left: clamp(0.6rem, 0.95vw, 0.95rem);
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		align-items: flex-start;
+		padding-top: 0.25rem;
 	}
 
-	/* Listas de Links */
-	.col-list {
+	.footer-links-list {
 		list-style: none;
 		margin: 0;
 		padding: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		gap: clamp(0.35rem, 0.6vh, 0.65rem);
+		align-items: flex-start;
 	}
 
-	.col-link {
-		font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-		font-size: clamp(0.85rem, 0.95vw, 0.92rem);
-		font-weight: 400;
-		color: rgba(242, 241, 237, 0.75);
-		text-decoration: none;
-		transition: color 0.2s ease, transform 0.2s ease;
-		display: inline-block;
-	}
-
-	.col-link:hover {
-		color: #FFFFFF;
-		transform: translateX(3px);
-	}
-
-	/* --------------------------------------------------
-	 * Barra Inferior de Copyright
-	 * -------------------------------------------------- */
-	.copyright-bar {
-		width: 100%;
-		background-color: #EEECE4;
-		color: #111215;
-		padding: 1.35rem clamp(1.5rem, 5.5vw, 80px);
-		box-sizing: border-box;
-		border-top: 1px solid rgba(13, 52, 121, 0.08);
-	}
-
-	.copyright-content {
-		max-width: 1480px;
-		margin: 0 auto;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
-
-	.copyright-text {
+	.footer-link-item {
 		margin: 0;
-		font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-		font-size: clamp(0.78rem, 0.88vw, 0.88rem);
-		font-weight: 600;
-		color: #111215;
-		letter-spacing: -0.01em;
-		text-align: center;
+		padding: 0;
+		display: flex;
+	}
+
+	.footer-nav-link {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		padding: 0.25rem 0.65rem;
+		margin: -0.1rem 0;
+		font-family: 'Rethink Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+		font-size: clamp(1.15rem, 1.45vw, 1.65rem);
+		font-weight: 500;
+		color: #FFFFFF;
+		text-decoration: none;
+		letter-spacing: -0.015em;
+		line-height: 1.15;
+		transition: opacity 0.2s ease;
+		cursor: pointer;
+		white-space: nowrap;
+	}
+
+	.footer-nav-link::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		border: 1.5px dotted transparent;
+		pointer-events: none;
+		transition: border-color 0.2s ease;
+	}
+
+	.footer-nav-link:hover {
+		opacity: 0.85;
+	}
+
+	.footer-nav-link:hover::before {
+		border-color: currentColor;
 	}
 
 	/* --------------------------------------------------
-	 * Responsividade (Tablet e Mobile)
+	 * Responsividade (Mobile e Tablet)
 	 * -------------------------------------------------- */
-	@media (max-width: 1024px) {
-		.footer-columns-grid {
-			grid-template-columns: 1fr 1fr;
-			row-gap: 3rem;
+	@media (max-width: 768px) {
+		.contact-section {
+			padding: 0;
 		}
 
-		.footer-col-bio {
-			grid-column: 1 / -1;
-			max-width: 100%;
+		.footer-marquee-item {
+			font-size: clamp(4.8rem, 20vw, 8.5rem);
+			line-height: 0.96;
+			margin-top: -0.03em;
+			padding-bottom: 0;
+		}
+
+		.footer-marquee-spacer {
+			width: clamp(2rem, 5vw, 3.5rem);
+		}
+
+		.footer-body-grid {
+			grid-template-columns: 1fr;
+			gap: 1.5rem;
+			margin-top: -0.04em;
+			min-height: auto;
+		}
+
+		.footer-orange-divider {
+			display: none;
+		}
+
+		.footer-talk-col {
+			padding: 2rem 1rem 0.5rem 1rem;
+		}
+
+		.footer-talk-text {
+			font-size: clamp(2.4rem, 10vw, 4.2rem);
+		}
+
+		.footer-links-nav {
+			padding: 0 1rem 3rem 1rem;
+		}
+
+		.footer-nav-link {
+			font-size: 1.25rem;
 		}
 	}
 
-	@media (max-width: 768px) {
-		.contact-container {
-			padding: 4rem clamp(1.2rem, 4vw, 1.5rem) 3rem;
+	/* Desativa todos os efeitos de hover no mobile e touch: links e botões */
+	@media (max-width: 900px), (hover: none), (pointer: coarse) {
+		.footer-talk-text:hover,
+		.footer-talk-text:active {
+			opacity: 1 !important;
+			transform: none !important;
 		}
 
-		.contact-eyebrow-wrap {
-			margin-bottom: 2.25rem;
+		.footer-nav-link:hover,
+		.footer-nav-link:active {
+			opacity: 1 !important;
+			transform: none !important;
 		}
 
-		.contact-cta-wrapper {
-			margin-bottom: 1.75rem;
-		}
-
-		.contact-cta-link {
-			gap: 0.85rem;
-		}
-
-		.cta-text {
-			font-size: clamp(2.4rem, 14vw, 4.5rem);
-		}
-
-		.footer-columns-grid {
-			grid-template-columns: 1fr;
-			gap: 1.65rem;
-			padding-top: 1.5rem;
-		}
-
-		.col-title {
-			margin-bottom: 0.65rem;
-			font-size: 0.85rem;
-		}
-
-		.col-list {
-			gap: 0.4rem;
-		}
-
-		.col-link {
-			font-size: 0.84rem;
-		}
-
-		.copyright-bar {
-			padding: 1.15rem 1.25rem;
+		.footer-nav-link::before,
+		.footer-nav-link:hover::before,
+		.footer-nav-link:active::before {
+			display: none !important;
+			border-color: transparent !important;
 		}
 	}
 </style>
 
 <script>
 	import gsap from 'gsap';
-	import { ScrollTrigger } from 'gsap/ScrollTrigger';
-	import { initTextBlockReveal } from '../scripts/text-block-animation';
 
-	gsap.registerPlugin(ScrollTrigger);
+	function setupFooterReveal() {
+		const marquee = document.querySelector('.footer-marquee-wrapper') as HTMLElement | null;
+		const bodyGrid = document.querySelector('.footer-body-grid') as HTMLElement | null;
+		const divider = document.querySelector('.footer-orange-divider') as HTMLElement | null;
 
-	function setupContact() {
-		// 1. Text Block Revealer on Contact Eyebrow
-		initTextBlockReveal('.contact-eyebrow', {
-			blockColor: '#ffffff',
-			trigger: '#contact',
-			start: 'top 80%',
-			duration: 0.65,
-			stagger: 0.1,
-			delay: 0.1,
-		});
+		if (!marquee || !bodyGrid) return;
 
-		// Respect prefers-reduced-motion
-		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-			gsap.set(['.contact-char-inner', '.footer-col'], {
-				y: 0,
-				opacity: 1,
-				scale: 1,
-				rotate: 0,
-			});
-			return;
+		// Estado inicial
+		gsap.set(marquee, { opacity: 0, y: 35 });
+		gsap.set(bodyGrid, { opacity: 0, y: 25 });
+		if (divider) gsap.set(divider, { scaleY: 0, transformOrigin: 'top center' });
+
+		const tl = gsap.timeline({ paused: true });
+
+		tl.to(marquee, {
+			opacity: 1,
+			y: 0,
+			duration: 0.85,
+			ease: 'power3.out',
+		}, 0)
+		.to(bodyGrid, {
+			opacity: 1,
+			y: 0,
+			duration: 0.75,
+			ease: 'power3.out',
+		}, 0.15)
+		.to(divider, {
+			scaleY: 1,
+			duration: 0.95,
+			ease: 'power2.out',
+		}, 0.2);
+
+		const onReveal = () => {
+			tl.play();
+		};
+
+		const onHide = () => {
+			tl.reverse();
+		};
+
+		window.addEventListener('footer:reveal', onReveal);
+		window.addEventListener('footer:hide', onHide);
+
+		// Se a cortina já estiver revelada no carregamento
+		const shell = document.getElementById('footer-curtain-shell');
+		if (shell && shell.classList.contains('is-revealed')) {
+			tl.progress(1);
 		}
-
-		ScrollTrigger.getById('contact-entrance-trigger')?.kill();
-
-		const tl = gsap.timeline({
-			id: 'contact-entrance-trigger',
-			scrollTrigger: {
-				trigger: '#contact',
-				start: 'top 75%',
-				toggleActions: 'play none none reverse',
-			},
-		});
-
-		// 2. Staggered letter reveal for CONTACT ME
-		tl.fromTo(
-			'.contact-char-inner',
-			{
-				y: '140%',
-				opacity: 0,
-			},
-			{
-				y: '0%',
-				opacity: 1,
-				duration: 0.8,
-				stagger: 0.03,
-				ease: 'expo.out',
-			},
-			0.1
-		);
-
-		// 3. Footer columns stagger up smoothly
-		tl.fromTo(
-			'.footer-col',
-			{
-				y: 28,
-				opacity: 0,
-			},
-			{
-				y: 0,
-				opacity: 1,
-				duration: 0.65,
-				stagger: 0.06,
-				ease: 'power2.out',
-			},
-			0.45
-		);
-	}
-
-	function initFooterArrowObserver() {
-		const ctaWrap = document.querySelector('.contact-cta-wrapper');
-		if (!ctaWrap) return;
-
-		const observer = new IntersectionObserver(
-			(entries) => {
-				entries.forEach((entry) => {
-					if (entry.isIntersecting) {
-						ctaWrap.classList.add('is-in-view');
-					}
-				});
-			},
-			{ threshold: 0.15 }
-		);
-
-		observer.observe(ctaWrap);
-	}
-
-	let contactInitialized = false;
-	function initOnce() {
-		if (contactInitialized) return;
-		contactInitialized = true;
-		if (document.fonts) {
-			document.fonts.ready.then(setupContact);
-		} else {
-			setupContact();
-		}
-		initFooterArrowObserver();
 	}
 
 	if (document.readyState === 'loading') {
-		document.addEventListener('DOMContentLoaded', initOnce);
+		document.addEventListener('DOMContentLoaded', setupFooterReveal);
 	} else {
-		initOnce();
+		setupFooterReveal();
 	}
-	document.addEventListener('astro:after-swap', () => {
-		contactInitialized = false;
-		initOnce();
-	});
-</script>
 
+	document.addEventListener('astro:after-swap', setupFooterReveal);
+</script>

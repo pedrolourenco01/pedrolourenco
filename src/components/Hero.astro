@@ -1,6 +1,28 @@
 ---
 // Hero.astro - Fullscreen Dark Portrait Hero with White Monumental Typography
 import Button from './Button.astro';
+
+interface Props {
+	tagline?: string;
+	descriptionPt?: string;
+	descriptionEn?: string;
+	ctaTextPt?: string;
+	ctaTextEn?: string;
+	ctaLink?: string;
+	marqueeText?: string;
+	portraitImage?: string;
+}
+
+const {
+	tagline = "Designer & Developer",
+	descriptionPt = "Crio experiências digitais para<br />marcas que querem se destacar.",
+	descriptionEn = "I craft digital experiences for<br />brands that want to stand out.",
+	ctaTextPt = "Entrar em contato",
+	ctaTextEn = "Get in touch",
+	ctaLink = "https://wa.me/5521971341163",
+	marqueeText = "a creative digital designer",
+	portraitImage
+} = Astro.props;
 ---
 
 <section class="hero-section" id="hero">
@@ -8,13 +30,41 @@ import Button from './Button.astro';
 	<!-- Fullscreen Cover Background Image (Pedro Portrait) -->
 	<div class="hero-bg-cover-wrap" aria-hidden="true">
 		<div class="hero-img-entrance-wrap">
-			<img
-				src="/images/fotos hero/test hero.png"
-				alt="Pedro Lourenço"
-				class="hero-bg-cover-img"
-				loading="eager"
-				fetchpriority="high"
-			/>
+			{portraitImage ? (
+				<img
+					src={portraitImage}
+					alt="Pedro Lourenço"
+					class="hero-bg-cover-img"
+					width="1920"
+					height="1080"
+					loading="eager"
+					decoding="sync"
+					fetchpriority="high"
+				/>
+			) : (
+				<picture style="display: contents;">
+					<source
+						type="image/avif"
+						srcset="/images/optimized/hero-portrait-768.avif 768w, /images/optimized/hero-portrait-1280.avif 1280w, /images/optimized/hero-portrait-1920.avif 1920w"
+						sizes="100vw"
+					/>
+					<source
+						type="image/webp"
+						srcset="/images/optimized/hero-portrait-768.webp 768w, /images/optimized/hero-portrait-1280.webp 1280w, /images/optimized/hero-portrait-1920.webp 1920w"
+						sizes="100vw"
+					/>
+					<img
+						src="/images/optimized/hero-portrait-1920.jpg"
+						alt="Pedro Lourenço"
+						class="hero-bg-cover-img"
+						width="1920"
+						height="1080"
+						loading="eager"
+						decoding="sync"
+						fetchpriority="high"
+					/>
+				</picture>
+			)}
 		</div>
 		<div class="hero-bg-overlay" aria-hidden="true"></div>
 		<div class="hero-scroll-darken" id="hero-scroll-darken" aria-hidden="true"></div>
@@ -26,15 +76,23 @@ import Button from './Button.astro';
 		<div class="hero-upper-row">
 			<!-- Left Subtitle / Tagline Block (White Text) -->
 			<div class="hero-left-tagline">
-				<p class="tagline-line-1">Designer & Developer</p>
-				<p class="tagline-line-2">Crio experiências digitais para<br />marcas que querem se destacar.</p>
+				<p class="tagline-line-1">{tagline}</p>
+				<p class="tagline-line-2 lang-pt"><Fragment set:html={descriptionPt.replace(/\n/g, '<br />')} /></p>
+				<p class="tagline-line-2 lang-en"><Fragment set:html={descriptionEn.replace(/\n/g, '<br />')} /></p>
 			</div>
 
 			<!-- Right Standard Button -->
 			<div class="hero-right-btn-wrap">
-				<Button href="#contact" id="hero-cta-btn">
-					Entrar em contato
-				</Button>
+				<div class="lang-pt">
+					<Button href={ctaLink} target="_blank" rel="noopener noreferrer" id="hero-cta-btn-pt">
+						{ctaTextPt}
+					</Button>
+				</div>
+				<div class="lang-en">
+					<Button href={ctaLink} target="_blank" rel="noopener noreferrer" id="hero-cta-btn-en">
+						{ctaTextEn}
+					</Button>
+				</div>
 			</div>
 		</div>
 
@@ -43,12 +101,12 @@ import Button from './Button.astro';
 
 		<!-- Bottom Monumental Edge-to-Edge Marquee Loop: a creative digital designer -->
 		<div class="hero-bottom-monumental">
-			<h1 class="sr-only">a creative digital designer</h1>
+			<h1 class="sr-only">{marqueeText}</h1>
 			<div class="marquee-track-container" aria-hidden="true">
 				<div class="marquee-track">
 					<!-- Set 1 -->
 					<span class="marquee-item">
-						a creative digital designer
+						{marqueeText}
 						<div class="marquee-badge-wrap">
 							<svg viewBox="0 0 140 140" class="badge-svg">
 								<path id="badgePath1" d="M 70,70 m -48,0 a 48,48 0 1,1 96,0 a 48,48 0 1,1 -96,0" fill="none" />
@@ -57,14 +115,14 @@ import Button from './Button.astro';
 										<textPath href="#badgePath1" startOffset="14px" textLength="123px" lengthAdjust="spacing">PEDRO LOURENÇO</textPath>
 										<textPath href="#badgePath1" startOffset="164.8px" textLength="123px" lengthAdjust="spacing">PEDRO LOURENÇO</textPath>
 									</text>
-									<circle cx="17.5" cy="70" r="2.8" fill="#EE5037" />
-									<circle cx="122.5" cy="70" r="2.8" fill="#EE5037" />
+									<rect x="14.9" y="67.4" width="5.2" height="5.2" fill="#EE5037" />
+									<rect x="119.9" y="67.4" width="5.2" height="5.2" fill="#EE5037" />
 								</g>
 							</svg>
 						</div>
 					</span>
 					<span class="marquee-item">
-						a creative digital designer
+						{marqueeText}
 						<div class="marquee-badge-wrap">
 							<svg viewBox="0 0 140 140" class="badge-svg">
 								<path id="badgePath2" d="M 70,70 m -48,0 a 48,48 0 1,1 96,0 a 48,48 0 1,1 -96,0" fill="none" />
@@ -73,15 +131,15 @@ import Button from './Button.astro';
 										<textPath href="#badgePath2" startOffset="14px" textLength="123px" lengthAdjust="spacing">PEDRO LOURENÇO</textPath>
 										<textPath href="#badgePath2" startOffset="164.8px" textLength="123px" lengthAdjust="spacing">PEDRO LOURENÇO</textPath>
 									</text>
-									<circle cx="17.5" cy="70" r="2.8" fill="#EE5037" />
-									<circle cx="122.5" cy="70" r="2.8" fill="#EE5037" />
+									<rect x="14.9" y="67.4" width="5.2" height="5.2" fill="#EE5037" />
+									<rect x="119.9" y="67.4" width="5.2" height="5.2" fill="#EE5037" />
 								</g>
 							</svg>
 						</div>
 					</span>
 					<!-- Set 2 (Duplicate for seamless 50% loop) -->
 					<span class="marquee-item">
-						a creative digital designer
+						{marqueeText}
 						<div class="marquee-badge-wrap">
 							<svg viewBox="0 0 140 140" class="badge-svg">
 								<path id="badgePath3" d="M 70,70 m -48,0 a 48,48 0 1,1 96,0 a 48,48 0 1,1 -96,0" fill="none" />
@@ -90,14 +148,14 @@ import Button from './Button.astro';
 										<textPath href="#badgePath3" startOffset="14px" textLength="123px" lengthAdjust="spacing">PEDRO LOURENÇO</textPath>
 										<textPath href="#badgePath3" startOffset="164.8px" textLength="123px" lengthAdjust="spacing">PEDRO LOURENÇO</textPath>
 									</text>
-									<circle cx="17.5" cy="70" r="2.8" fill="#EE5037" />
-									<circle cx="122.5" cy="70" r="2.8" fill="#EE5037" />
+									<rect x="14.9" y="67.4" width="5.2" height="5.2" fill="#EE5037" />
+									<rect x="119.9" y="67.4" width="5.2" height="5.2" fill="#EE5037" />
 								</g>
 							</svg>
 						</div>
 					</span>
 					<span class="marquee-item">
-						a creative digital designer
+						{marqueeText}
 						<div class="marquee-badge-wrap">
 							<svg viewBox="0 0 140 140" class="badge-svg">
 								<path id="badgePath4" d="M 70,70 m -48,0 a 48,48 0 1,1 96,0 a 48,48 0 1,1 -96,0" fill="none" />
@@ -106,8 +164,8 @@ import Button from './Button.astro';
 										<textPath href="#badgePath4" startOffset="14px" textLength="123px" lengthAdjust="spacing">PEDRO LOURENÇO</textPath>
 										<textPath href="#badgePath4" startOffset="164.8px" textLength="123px" lengthAdjust="spacing">PEDRO LOURENÇO</textPath>
 									</text>
-									<circle cx="17.5" cy="70" r="2.8" fill="#EE5037" />
-									<circle cx="122.5" cy="70" r="2.8" fill="#EE5037" />
+									<rect x="14.9" y="67.4" width="5.2" height="5.2" fill="#EE5037" />
+									<rect x="119.9" y="67.4" width="5.2" height="5.2" fill="#EE5037" />
 								</g>
 							</svg>
 						</div>
@@ -172,8 +230,8 @@ import Button from './Button.astro';
 	.hero-bg-cover-img {
 		width: auto;
 		max-width: none;
-		height: clamp(640px, 104vh, 1220px);
-		max-height: 105vh;
+		height: clamp(680px, 97vh, 1120px);
+		max-height: 97vh;
 		object-fit: contain;
 		object-position: center bottom;
 		display: block;
@@ -260,8 +318,9 @@ import Button from './Button.astro';
 		font-style: normal;
 		font-size: clamp(1.6rem, 2.4vw, 2.35rem);
 		font-weight: 700;
-		line-height: 1.15;
+		line-height: 1.22;
 		margin: 0;
+		padding: 0.04em 0;
 		color: #FFFFFF;
 		letter-spacing: -0.03em;
 	}
@@ -339,6 +398,8 @@ import Button from './Button.astro';
 		overflow: hidden;
 		display: flex;
 		position: relative;
+		padding: 0.1em 0;
+		margin: -0.1em 0;
 	}
 
 	.marquee-track {
@@ -357,9 +418,9 @@ import Button from './Button.astro';
 		font-weight: 600;
 		text-transform: uppercase;
 		letter-spacing: -0.015em;
-		line-height: 0.95;
+		line-height: 1.04;
 		white-space: nowrap;
-		padding-right: 0.12em;
+		padding: 0.05em 0.12em 0.05em 0;
 		text-shadow: none !important;
 		filter: none !important;
 	}
@@ -391,8 +452,9 @@ import Button from './Button.astro';
 		paint-order: stroke fill;
 	}
 
-	.badge-ring-rotate circle {
-		r: 2.8px;
+	.badge-ring-rotate rect {
+		width: 5.2px;
+		height: 5.2px;
 	}
 
 	.badge-svg {
@@ -550,8 +612,8 @@ import Button from './Button.astro';
 
 	@media (max-width: 600px) {
 		.hero-bg-cover-img {
-			height: 90vh;
-			max-height: 92vh;
+			height: 88vh;
+			max-height: 90vh;
 			max-width: none;
 			width: auto;
 			position: relative;
@@ -615,6 +677,7 @@ import Button from './Button.astro';
 		}
 
 		window.addEventListener('scroll', () => {
+			if (window.innerWidth <= 768) return; // Evita overhead e repaints de transform em mobile
 			if (!ticking) {
 				window.requestAnimationFrame(updateParallax);
 				ticking = true;
@@ -624,6 +687,7 @@ import Button from './Button.astro';
 		const lenisInstance = (window as any).lenis;
 		if (lenisInstance) {
 			lenisInstance.on('scroll', () => {
+				if (window.innerWidth <= 768) return;
 				if (!ticking) {
 					window.requestAnimationFrame(updateParallax);
 					ticking = true;

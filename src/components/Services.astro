@@ -1,0 +1,212 @@
+---
+// Services.astro — Seção de Serviços & Soluções posicionada logo após a seção Work
+import { ScrollTimeline, type Milestone } from './ui/scroll-timeline';
+import { SlideUpText } from './ui/slide-up-text';
+
+interface Props {
+	titlePt?: string;
+	titleEn?: string;
+	subtitlePt?: string;
+	subtitleEn?: string;
+	milestones?: Milestone[];
+}
+
+const defaultMilestones: Milestone[] = [
+	{
+		id: "01",
+		title: "Design",
+		titleEn: "Design",
+		description: "Crio layouts que combinam com a identidade de cada marca, cuidando das cores, fontes e detalhes para deixar tudo bonito e bem organizado.",
+		descriptionEn: "I craft layouts that align with each brand's identity, carefully curating colors, typography, and details to ensure everything looks polished and well-structured."
+	},
+	{
+		id: "02",
+		title: "Desenvolvimento",
+		titleEn: "Development",
+		description: "Transformo ideias e layouts em sites reais, com páginas bem estruturadas e adaptadas para funcionar em computadores e celulares.",
+		descriptionEn: "I transform ideas and layouts into real websites, featuring well-structured pages optimized to perform seamlessly across desktops and mobile devices."
+	},
+	{
+		id: "03",
+		title: "Design e Desenvolvimento",
+		titleEn: "Design & Development",
+		description: "Cuido de todo o processo, desde a criação do visual até o desenvolvimento do site, para entregar um projeto completo e com a sua cara.",
+		descriptionEn: "I handle the entire journey, from crafting the visual identity to full website development, delivering a complete project tailored to your brand."
+	},
+	{
+		id: "04",
+		title: "Redesign de Sites",
+		titleEn: "Website Redesign",
+		description: "Seu site está precisando de uma cara nova? Renovo o visual, reorganizo os elementos e deixo tudo mais atual e fácil de navegar.",
+		descriptionEn: "Does your website need a fresh new look? I revamp the visual aesthetic, reorganize elements, and bring everything up to date for effortless navigation."
+	}
+];
+
+const {
+	titlePt = "Serviços",
+	titleEn = "Services",
+	subtitlePt = "Soluções digitais para o seu negócio.",
+	subtitleEn = "Thoughtful digital solutions for your brand.",
+	milestones = defaultMilestones
+} = Astro.props;
+---
+
+<section class="services-section" id="services" aria-label="Serviços e Soluções">
+	<div class="services-container">
+		<!-- Cabeçalho da Seção 100% Centralizado -->
+		<header class="services-header-centered">
+			<div class="lang-pt services-header-inner">
+				<SlideUpText
+					client:visible
+					inView
+					text={titlePt}
+					split="words"
+					stagger={0.04}
+					className="services-title justify-center items-center text-center w-full"
+				/>
+				<p class="services-subtitle">
+					{subtitlePt}
+				</p>
+			</div>
+			<div class="lang-en services-header-inner">
+				<SlideUpText
+					client:visible
+					inView
+					text={titleEn}
+					split="words"
+					stagger={0.04}
+					className="services-title justify-center items-center text-center w-full"
+				/>
+				<p class="services-subtitle">
+					{subtitleEn}
+				</p>
+			</div>
+		</header>
+
+		<!-- Timeline Interativa de Serviços hidratada sob demanda ao entrar no viewport -->
+		<div class="services-timeline-wrap">
+			<ScrollTimeline client:visible milestones={milestones} />
+		</div>
+	</div>
+</section>
+
+<style>
+	/* --------------------------------------------------
+	 * Estrutura da Seção: Fundo Editorial Idêntico a Work e About (#E8E6E0)
+	 * -------------------------------------------------- */
+	.services-section {
+		position: relative;
+		width: 100%;
+		background-color: transparent;
+		color: #111215;
+		padding: clamp(2.5rem, 4.5vh, 4.5rem) 0 clamp(6rem, 10vh, 9rem) 0;
+		margin: 0;
+		box-sizing: border-box;
+		z-index: 21;
+	}
+
+	.services-container {
+		position: relative;
+		width: 100%;
+		max-width: 1920px;
+		margin: 0 auto;
+		padding: 0 clamp(1.5rem, 4vw, 4.5rem);
+		box-sizing: border-box;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	/* --------------------------------------------------
+	 * Cabeçalho Centralizado com Subtítulo
+	 * -------------------------------------------------- */
+	.services-header-centered {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		width: 100%;
+		text-align: center;
+		margin-bottom: clamp(3.5rem, 6.5vh, 5.5rem);
+	}
+
+	.services-header-inner {
+		display: flex !important;
+		flex-direction: column !important;
+		align-items: center !important;
+		justify-content: center !important;
+		text-align: center !important;
+		width: 100%;
+		margin: 0 auto;
+		gap: clamp(0.5rem, 1vh, 0.85rem);
+	}
+
+	.services-title {
+		font-family: 'Rethink Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+		font-size: clamp(2.8rem, 4.5vw, 4.8rem);
+		font-weight: 700;
+		letter-spacing: 0.01em;
+		font-kerning: none;
+		font-feature-settings: "kern" 0;
+		color: #111215;
+		margin: 0 auto;
+		line-height: 1.22;
+		padding: 0.1em 0;
+		text-align: center;
+		display: flex !important;
+		justify-content: center !important;
+		align-items: center !important;
+		width: 100%;
+	}
+
+	.services-subtitle {
+		font-family: 'Rethink Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+		font-size: clamp(0.85rem, 0.95vw, 1.05rem);
+		font-weight: 450;
+		color: rgba(17, 18, 21, 0.65);
+		letter-spacing: -0.012em;
+		line-height: 1.45;
+		margin: 0;
+		text-align: center;
+	}
+
+	/* --------------------------------------------------
+	 * Container da Timeline
+	 * -------------------------------------------------- */
+	.services-timeline-wrap {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+	}
+
+	/* --------------------------------------------------
+	 * Responsividade
+	 * -------------------------------------------------- */
+	@media (max-width: 768px) {
+		.services-section {
+			padding: 1.25rem 0 3.5rem 0 !important;
+		}
+
+		.services-container {
+			padding: 0 1rem !important;
+		}
+
+		.services-header-centered {
+			margin-bottom: 1.25rem !important;
+		}
+
+		.services-header-inner {
+			gap: 0.35rem !important;
+		}
+
+		.services-title {
+			font-size: clamp(2.2rem, 7.5vw, 3rem) !important;
+			line-height: 1.15 !important;
+		}
+
+		.services-subtitle {
+			font-size: 0.88rem !important;
+			padding: 0 0.5rem !important;
+		}
+	}
+</style>

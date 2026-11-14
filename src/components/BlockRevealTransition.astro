@@ -1,0 +1,275 @@
+---
+// BlockRevealTransition.astro — VanceLib "Page Transitions #12" (Block Reveal Page Transition)
+// Implementa animação de entrada do site (Intro) e transição ao trocar de idioma.
+---
+
+<script is:inline>
+  // Intro ativa apenas uma vez por sessão
+  try {
+    if (!sessionStorage.getItem('portfolio_intro_done')) {
+      document.documentElement.classList.add('block-intro-active');
+    }
+  } catch (e) {}
+</script>
+
+<div id="block-transition-grid" class="transition-grid" aria-hidden="true"></div>
+
+<style is:global>
+  .transition-grid {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100svh;
+    pointer-events: none;
+    z-index: 9999999;
+    overflow: hidden;
+  }
+
+  html.block-intro-active #block-transition-grid {
+    background-color: #EE5037;
+    pointer-events: all;
+  }
+
+  .transition-block {
+    position: absolute;
+    background-color: #EE5037;
+    opacity: 0;
+    will-change: opacity;
+    box-sizing: border-box;
+  }
+</style>
+
+<script>
+  import gsap from 'gsap';
+
+  // Configuração fiel ao componente Page Transitions #12 (VanceLib / Codegrid)
+  // Animação de entrada e transição em onda descendente (top to bottom com dither de pixels)
+  let isTransitioning = false;
+  let blocks: HTMLElement[] = [];
+  let gridContainer: HTMLElement | null = null;
+  let currentTotalRows = 0;
+
+  function getBlockSize(): number {
+    return window.innerWidth < 640 ? 36 : 48;
+  }
+
+  function createTransitionGrid(initialCover: boolean = false) {
+    gridContainer = document.getElementById('block-transition-grid');
+    if (!gridContainer) return;
+
+    gridContainer.innerHTML = '';
+    blocks = [];
+
+    const blockSize = getBlockSize();
+    const gridWidth = window.innerWidth;
+    const gridHeight = window.innerHeight;
+    const columns = Math.ceil(gridWidth / blockSize);
+    const rows = Math.ceil(gridHeight / blockSize) + 1;
+    currentTotalRows = rows;
+
+    const offsetX = (gridWidth - columns * blockSize) / 2;
+    const offsetY = (gridHeight - rows * blockSize) / 2;
+
+    const fragment = document.createDocumentFragment();
+
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < columns; col++) {
+        const block = document.createElement('div');
+        block.className = 'transition-block';
+        // Guarda as coordenadas de linha para a onda descendente
+        (block as any)._row = row;
+        (block as any)._col = col;
+
+        // Leve overlap de 0.6px para evitar frestas causadas por arredondamento de pixels em telas retina
+        block.style.width = `${blockSize + 0.6}px`;
+        block.style.height = `${blockSize + 0.6}px`;
+        block.style.left = `${col * blockSize + offsetX}px`;
+        block.style.top = `${row * blockSize + offsetY}px`;
+
+        fragment.appendChild(block);
+        blocks.push(block);
+      }
+    }
+
+    gridContainer.appendChild(fragment);
+
+    if (initialCover) {
+      gsap.set(blocks, { opacity: 1 });
+      gridContainer.style.pointerEvents = 'all';
+      // Desativa o background plano da tela para que os blocos individuais executem a revelação
+      document.documentElement.classList.remove('block-intro-active');
+      (window as any).__blockIntroShown = true;
+    } else {
+      gsap.set(blocks, { opacity: 0 });
+      gridContainer.style.pointerEvents = 'none';
+      document.documentElement.classList.remove('block-intro-active');
+    }
+  }
+
+  // Gera o atraso de cada bloco simulando a onda descendo do topo ao rodapé com ruído de pixel
+  function getDescendingStagger(totalRows: number, sweepDuration = 0.6, jitter = 0.22) {
+    return (index: number, target: any) => {
+      const row = target._row ?? 0;
+      const progress = totalRows > 1 ? row / (totalRows - 1) : 0;
+      // progress * sweepDuration faz a onda descer; Math.random() cria o espalhamento pixelado na fronteira
+      return progress * sweepDuration + Math.random() * jitter;
+    };
+  }
+
+  // Animação de Entrada (Intro ao carregar o site — onda descendo)
+  function playIntroAnimation() {
+    if (!gridContainer || blocks.length === 0) return;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      gsap.set(blocks, { opacity: 0 });
+      gridContainer.style.pointerEvents = 'none';
+      document.body.classList.add('hero-loaded');
+      return;
+    }
+
+    // Timeout de segurança caso algum script de terceiro ou bundle demore para responder
+    setTimeout(() => {
+      document.documentElement.classList.remove('block-intro-active');
+      if (gridContainer) gridContainer.style.pointerEvents = 'none';
+      document.body.classList.add('hero-loaded');
+      try { sessionStorage.setItem('portfolio_intro_done', 'true'); } catch (e) {}
+    }, 1200);
+
+    isTransitioning = true;
+    gridContainer.style.pointerEvents = 'all';
+    gsap.set(blocks, { opacity: 1 });
+
+    // Onda descendente: blocos somem de cima para baixo com fronteira pixelada
+    gsap.to(blocks, {
+      opacity: 0,
+      duration: 0.12,
+      delay: 0.15,
+      ease: 'power2.inOut',
+      stagger: getDescendingStagger(currentTotalRows, 0.55, 0.18),
+      onComplete: () => {
+        if (gridContainer) gridContainer.style.pointerEvents = 'none';
+        isTransitioning = false;
+        document.body.classList.add('hero-loaded');
+        try { sessionStorage.setItem('portfolio_intro_done', 'true'); } catch (e) {}
+        window.dispatchEvent(new CustomEvent('portfolio:intro-complete'));
+      },
+    });
+  }
+
+  // Transição ao Mudar o Idioma (Leave descendo -> Midpoint -> Enter descendo)
+  function triggerBlockTransition(onMidpoint?: () => void) {
+    if (!gridContainer || blocks.length === 0) {
+      if (onMidpoint) onMidpoint();
+      return;
+    }
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      if (onMidpoint) onMidpoint();
+      return;
+    }
+
+    if (isTransitioning) return;
+    // Timeout de segurança caso algum script de terceiro ou bundle demore para responder
+    setTimeout(() => {
+      document.documentElement.classList.remove('block-intro-active');
+      if (gridContainer) gridContainer.style.pointerEvents = 'none';
+      document.body.classList.add('hero-loaded');
+    }, 2000);
+
+    isTransitioning = true;
+    gridContainer.style.pointerEvents = 'all';
+
+    // 1. Leave: onda laranja desce cobrindo a tela de cima para baixo
+    gsap.to(blocks, {
+      opacity: 1,
+      duration: 0.1,
+      ease: 'power2.inOut',
+      stagger: getDescendingStagger(currentTotalRows, 0.45, 0.18),
+      onComplete: () => {
+        // Ponto central: tela totalmente coberta pelos blocos
+        if (typeof onMidpoint === 'function') {
+          try {
+            onMidpoint();
+          } catch (e) {
+            console.error('Error executing transition midpoint callback:', e);
+          }
+        }
+
+        // Breve pausa para o DOM atualizar
+        setTimeout(() => {
+          // 2. Enter: onda desce revelando a tela de cima para baixo
+          gsap.to(blocks, {
+            opacity: 0,
+            duration: 0.12,
+            ease: 'power2.inOut',
+            stagger: getDescendingStagger(currentTotalRows, 0.5, 0.18),
+            onComplete: () => {
+              if (gridContainer) gridContainer.style.pointerEvents = 'none';
+              isTransitioning = false;
+              window.dispatchEvent(new CustomEvent('portfolio:transition-complete'));
+            },
+          });
+        }, 120);
+      },
+    });
+  }
+
+  // Expõe a função globalmente para ser chamada por componentes React ou scripts
+  (window as any).triggerBlockTransition = triggerBlockTransition;
+
+  // Atualiza automaticamente textos bilingues marcados com data-lang-pt e data-lang-en e atributo data-lang
+  function applyLanguage(lang: string) {
+    const isEn = lang.toUpperCase() === 'EN';
+    document.documentElement.setAttribute('data-lang', isEn ? 'en' : 'pt');
+    document.documentElement.lang = isEn ? 'en' : 'pt-BR';
+    document.title = 'Pedro Lourenço | Webdesigner';
+    document.querySelectorAll('[data-lang-pt][data-lang-en]').forEach((el) => {
+      const targetText = isEn ? el.getAttribute('data-lang-en') : el.getAttribute('data-lang-pt');
+      if (targetText !== null) {
+        el.innerHTML = targetText;
+      }
+    });
+  }
+
+  function setupLanguageListener() {
+    window.addEventListener('portfolio:language-change', ((e: CustomEvent) => {
+      const lang = e.detail?.lang || 'EN';
+      applyLanguage(lang);
+    }) as EventListener);
+
+    // Aplica o idioma salvo imediatamente na inicialização (padrão EN)
+    try {
+      const saved = localStorage.getItem('portfolio_lang') || 'EN';
+      applyLanguage(saved);
+    } catch (e) {}
+  }
+
+  // Inicialização
+  function initBlockReveal() {
+    createTransitionGrid(true); // inicia cobrindo para a animação de intro
+    setupLanguageListener();
+    playIntroAnimation();
+  }
+
+  // Recria grid ao redimensionar mantendo alinhamento
+  let resizeTimeout: any = null;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      if (!isTransitioning) {
+        createTransitionGrid(false);
+      }
+    }, 150);
+  });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initBlockReveal);
+  } else {
+    initBlockReveal();
+  }
+
+  document.addEventListener('astro:after-swap', () => {
+    createTransitionGrid(false);
+  });
+</script>

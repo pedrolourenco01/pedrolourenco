@@ -1,40 +1,46 @@
 ---
-// Button.astro — Componente oficial de botão com efeito Flow Button e suporte a link/ação
-import { FlowButton } from './ui/flow-button';
+// Button.astro — Componente oficial de botão com efeito Pixel-Broke
+import { Button03 } from './ui/pixel-broke-button';
 
 interface Props {
 	href?: string;
 	id?: string;
 	class?: string;
-	rippleColor?: string;
+	text?: string;
+	variant?: 'orange' | 'dark';
 	style?: Record<string, any>;
 	[key: string]: any;
 }
 
 const {
-	href = "#work",
+	href = "https://wa.me/5521971341163",
 	id = "main-cta-btn",
 	class: className = "",
-	rippleColor = "#C83D27",
+	text,
+	variant = "orange",
 	style = {},
 	...rest
 } = Astro.props;
+
+// Renderiza o slot default para extrair o texto limpo se disponível
+let slotText = "";
+if (Astro.slots.has('default')) {
+	const rendered = await Astro.slots.render('default');
+	slotText = rendered.replace(/<[^>]*>?/gm, '').trim();
+}
+
+const finalLabel = text || slotText || "Entrar em contato";
 ---
 
-<FlowButton
+<Button03
 	client:load
 	id={id}
 	href={href}
 	className={className}
-	rippleColor={rippleColor}
-	style={{
-		borderRadius: "8px",
-		border: "none !important",
-		outline: "none !important",
-		boxShadow: "none",
-		...style
-	}}
+	variant={variant}
+	text={finalLabel}
+	style={style}
 	{...rest}
 >
-	<slot>See my Work</slot>
-</FlowButton>
+	{finalLabel}
+</Button03>

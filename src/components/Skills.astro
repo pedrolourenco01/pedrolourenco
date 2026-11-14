@@ -1,6 +1,7 @@
 ---
 // Skills.astro — Seção de Habilidades
 import Button from './Button.astro';
+import { SlideUpText } from './ui/slide-up-text';
 
 interface Props {
 	headlinePrefix?: string;
@@ -11,99 +12,94 @@ interface Props {
 }
 
 const {
-	headlinePrefix = "Sou um ",
-	headlineAccent = "designer versátil que colabora com fundadores para transformar ideias em produtos reais.",
-	headlineSuffix = " Foco em interfaces claras, decisões certeiras e execução rápida.",
-	description = "Dando vida à sua visão de forma rápida e eficiente, seja branding ou websites, eu cuido de tudo, entregando soluções fluidas e eficazes do início ao fim.",
-	ctaText = "Ver Projetos"
+	headlinePrefix = "I am a ",
+	headlineAccent = "web designer working with brands and founders to bring ideas to life.",
+	headlineSuffix = " My focus is on crafting clear interfaces, solving problems with simplicity, and obsessing over the details across every project.",
+	description = "I work from initial concept to the final build, crafting websites and visual identities with genuine attention to what matters. I value straightforward processes, thoughtful decisions, and well-executed work.",
+	ctaText = "View Projects"
 } = Astro.props;
 ---
 
-<section class="skills-section" id="skills" data-header-theme="dark" aria-label="Habilidades e Apresentação">
+<section class="skills-section" id="skills" data-header-theme="dark" aria-label="Skills & Introduction">
 	<div class="skills-container">
-		<!-- Bloco do Título Manifesto Editorial -->
-		<div class="skills-headline-wrapper">
-			<!-- Versão Manifesto (4 Linhas) -->
-			<h2 class="skills-headline skills-headline-desktop" id="skills-headline-desktop">
-				<span class="headline-line-mask first-line">
-					<span class="headline-line-inner">
-						<span class="skills-text-white">Sou um </span><span class="skills-accent">designer versátil que colabora</span>
-					</span>
-				</span>
-				<span class="headline-line-mask">
-					<span class="headline-line-inner">
-						<span class="skills-accent">com fundadores para transformar ideias</span>
-					</span>
-				</span>
-				<span class="headline-line-mask">
-					<span class="headline-line-inner">
-						<span class="skills-accent">em produtos reais. </span><span class="skills-text-white">Foco em interfaces claras,</span>
-					</span>
-				</span>
-				<span class="headline-line-mask">
-					<span class="headline-line-inner">
-						<span class="skills-text-white">decisões certeiras e execução rápida.</span>
-					</span>
-				</span>
+		<!-- Bloco do Título Manifesto Editorial com SlideUpText (Português) -->
+		<div class="skills-headline-wrapper lang-pt">
+			<!-- Versão Manifesto Desktop (4 Linhas com Indent) -->
+			<h2 class="skills-headline skills-headline-desktop">
+				<div class="skills-headline-row first-line">
+					<SlideUpText client:visible inView split="words" stagger={0.03} delay={0.0} className="skills-text-white inline-flex">Sou um&nbsp;</SlideUpText>
+					<SlideUpText client:visible inView split="words" stagger={0.03} delay={0.06} className="skills-accent inline-flex">web designer que trabalha junto de marcas</SlideUpText>
+				</div>
+				<div class="skills-headline-row">
+					<SlideUpText client:visible inView split="words" stagger={0.03} delay={0.16} className="skills-accent inline-flex">e fundadores para tirar ideias do papel.&nbsp;</SlideUpText>
+					<SlideUpText client:visible inView split="words" stagger={0.03} delay={0.24} className="skills-text-white inline-flex">Meu foco</SlideUpText>
+				</div>
+				<div class="skills-headline-row">
+					<SlideUpText client:visible inView split="words" stagger={0.03} delay={0.32} className="skills-text-white inline-flex">está em criar interfaces claras, resolver problemas</SlideUpText>
+				</div>
+				<div class="skills-headline-row">
+					<SlideUpText client:visible inView split="words" stagger={0.03} delay={0.42} className="skills-text-white inline-flex">de forma simples e cuidar dos detalhes em cada projeto.</SlideUpText>
+				</div>
 			</h2>
 
-			<!-- Versão Mobile (Quebras de linha naturais, sem palavras isoladas como 'que', 'para', 'decisões') -->
-			<h2 class="skills-headline skills-headline-mobile" id="skills-headline-mobile">
-				<span class="headline-line-mask">
-					<span class="headline-line-inner">
-						<span class="skills-text-white">Sou um </span><span class="skills-accent">designer versátil</span>
-					</span>
-				</span>
-				<span class="headline-line-mask">
-					<span class="headline-line-inner">
-						<span class="skills-accent">que colabora</span>
-					</span>
-				</span>
-				<span class="headline-line-mask">
-					<span class="headline-line-inner">
-						<span class="skills-accent">com fundadores</span>
-					</span>
-				</span>
-				<span class="headline-line-mask">
-					<span class="headline-line-inner">
-						<span class="skills-accent">para transformar ideias</span>
-					</span>
-				</span>
-				<span class="headline-line-mask">
-					<span class="headline-line-inner">
-						<span class="skills-accent">em produtos reais.</span>
-					</span>
-				</span>
-				<span class="headline-line-mask">
-					<span class="headline-line-inner">
-						<span class="skills-text-white">Foco em interfaces claras,</span>
-					</span>
-				</span>
-				<span class="headline-line-mask">
-					<span class="headline-line-inner">
-						<span class="skills-text-white">decisões certeiras</span>
-					</span>
-				</span>
-				<span class="headline-line-mask">
-					<span class="headline-line-inner">
-						<span class="skills-text-white">e execução rápida.</span>
-					</span>
-				</span>
+			<!-- Versão Mobile (Adaptação fluida) -->
+			<h2 class="skills-headline skills-headline-mobile">
+				<SlideUpText client:visible inView split="words" stagger={0.03} delay={0.0} className="skills-accent">
+					Sou um web designer que trabalha junto de marcas e fundadores para tirar ideias do papel. Meu foco está em criar interfaces claras, resolver problemas de forma simples e cuidar dos detalhes em cada projeto.
+				</SlideUpText>
 			</h2>
 		</div>
 
-		<!-- Linha Inferior: Subtexto editorial alinhado na metade direita -->
+		<!-- Bloco do Título Manifesto Editorial com SlideUpText (English) -->
+		<div class="skills-headline-wrapper lang-en">
+			<!-- Versão Manifesto Desktop (4 Linhas com Indent) -->
+			<h2 class="skills-headline skills-headline-desktop">
+				<div class="skills-headline-row first-line">
+					<SlideUpText client:visible inView split="words" stagger={0.03} delay={0.0} className="skills-text-white inline-flex">I am a&nbsp;</SlideUpText>
+					<SlideUpText client:visible inView split="words" stagger={0.03} delay={0.06} className="skills-accent inline-flex">web designer working with brands and founders</SlideUpText>
+				</div>
+				<div class="skills-headline-row">
+					<SlideUpText client:visible inView split="words" stagger={0.03} delay={0.16} className="skills-accent inline-flex">to bring ideas to life.&nbsp;</SlideUpText>
+					<SlideUpText client:visible inView split="words" stagger={0.03} delay={0.24} className="skills-text-white inline-flex">My focus is on crafting</SlideUpText>
+				</div>
+				<div class="skills-headline-row">
+					<SlideUpText client:visible inView split="words" stagger={0.03} delay={0.32} className="skills-text-white inline-flex">clear interfaces, solving problems with simplicity,</SlideUpText>
+				</div>
+				<div class="skills-headline-row">
+					<SlideUpText client:visible inView split="words" stagger={0.03} delay={0.42} className="skills-text-white inline-flex">and obsessing over the details across every project.</SlideUpText>
+				</div>
+			</h2>
+
+			<!-- Versão Mobile (Adaptação fluida) -->
+			<h2 class="skills-headline skills-headline-mobile">
+				<SlideUpText client:visible inView split="words" stagger={0.03} delay={0.0} className="skills-accent">
+					I am a web designer working with brands and founders to bring ideas to life. My focus is on crafting clear interfaces, solving problems with simplicity, and obsessing over the details across every project.
+				</SlideUpText>
+			</h2>
+		</div>
+
+		<!-- Linha Inferior: Subtexto editorial alinhado na metade direita com SlideUpText -->
 		<div class="skills-bottom-row">
 			<div class="skills-col-spacer" aria-hidden="true"></div>
 			<div class="skills-col-content">
-				<p class="skills-description">
-					<span class="desc-line">Dando vida à sua visão de forma rápida e eficiente,</span>
-					<span class="desc-line">seja branding ou websites, eu cuido de tudo, entregando</span>
-					<span class="desc-line">soluções fluidas e eficazes do início ao fim.</span>
-				</p>
-				<div class="skills-cta-wrap">
-					<Button href="#work" id="skills-cta-btn">
-						{ctaText}
+				<div class="skills-description lang-pt">
+					<SlideUpText client:visible inView split="words" stagger={0.018} delay={0.35}>
+						Trabalho desde a primeira ideia até a versão final, criando websites e identidades visuais com atenção ao que realmente importa. Gosto de processos simples, boas decisões e projetos bem executados.
+					</SlideUpText>
+				</div>
+				<div class="skills-description lang-en">
+					<SlideUpText client:visible inView split="words" stagger={0.018} delay={0.35}>
+						I work from initial concept to the final build, crafting websites and visual identities with genuine attention to what matters. I value straightforward processes, thoughtful decisions, and well-executed work.
+					</SlideUpText>
+				</div>
+				<div class="skills-cta-wrap lang-pt">
+					<Button href="#work" id="skills-cta-btn-pt">
+						Ver Projetos
+					</Button>
+				</div>
+				<div class="skills-cta-wrap lang-en">
+					<Button href="#work" id="skills-cta-btn-en">
+						View Projects
 					</Button>
 				</div>
 			</div>
@@ -113,12 +109,12 @@ const {
 
 <style>
 	/* --------------------------------------------------
-	 * Estrutura Geral da Seção (#0e0e0e — Grafite Neutro Absoluto)
+	 * Estrutura Geral da Seção (#000000 — Preto Puro Idêntico à Hero)
 	 * -------------------------------------------------- */
 	.skills-section {
 		position: relative;
 		width: 100%;
-		background-color: #0e0e0e;
+		background-color: #000000;
 		color: #ffffff;
 		padding: clamp(5.5rem, 11vh, 9rem) clamp(1.5rem, 5.5vw, 80px);
 		box-sizing: border-box;
@@ -129,7 +125,7 @@ const {
 
 	.skills-container {
 		width: 100%;
-		max-width: 1320px;
+		max-width: 1480px;
 		margin: 0 auto;
 		display: flex;
 		flex-direction: column;
@@ -139,19 +135,20 @@ const {
 	 * Título Manifesto Editorial (4 Linhas Mascaradas)
 	 * -------------------------------------------------- */
 	.skills-headline-wrapper {
-		width: 100%;
-		max-width: 1320px;
+		width: fit-content;
+		max-width: 100%;
 		margin: 0 auto;
 	}
 
 	.skills-headline {
 		margin: 0;
 		font-family: 'Rethink Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-		font-size: clamp(2.35rem, 4.4vw, 4.25rem);
+		font-size: clamp(1.95rem, 3.1vw, 3.35rem);
 		font-weight: 700;
-		line-height: 1.15;
+		line-height: 1.25;
 		letter-spacing: -0.038em;
 		color: #ffffff;
+		padding: 0.15em 0;
 	}
 
 	.skills-headline-desktop {
@@ -162,24 +159,17 @@ const {
 		display: none;
 	}
 
-	/* VanceLib #17 Máscaras e Linhas */
-	.headline-line-mask {
-		display: block;
-		width: fit-content;
-		max-width: 100%;
-		overflow: hidden;
-		padding-bottom: 0.08em;
-		margin-bottom: -0.08em;
-	}
-
-	.headline-line-mask.first-line {
-		padding-left: clamp(3.2rem, 7.8vw, 6.8rem);
-	}
-
-	.headline-line-inner {
-		display: inline-block;
+	.skills-headline-row {
+		display: flex;
+		flex-wrap: nowrap;
 		white-space: nowrap;
-		opacity: 0;
+		align-items: baseline;
+		width: 100%;
+		max-width: 100%;
+	}
+
+	.skills-headline-row.first-line {
+		padding-left: clamp(2.5rem, 5.5vw, 5.8rem);
 	}
 
 	.skills-text-white {
@@ -222,9 +212,6 @@ const {
 		color: #D6D4CA;
 		margin: 0 0 1.75rem 0;
 		letter-spacing: -0.012em;
-		opacity: 0;
-		transform: translateY(25px);
-		will-change: transform, opacity;
 		display: flex;
 		flex-direction: column;
 		gap: 0.18em;
@@ -260,12 +247,12 @@ const {
 		}
 
 		.skills-headline-desktop {
-			font-size: clamp(2rem, 4.35vw, 3.25rem);
-			line-height: 1.16;
+			font-size: clamp(1.75rem, 2.8vw, 2.45rem);
+			line-height: 1.25;
 		}
 
-		.headline-line-mask.first-line {
-			padding-left: clamp(1.2rem, 2.8vw, 2.4rem);
+		.skills-headline-row.first-line {
+			padding-left: clamp(1.5rem, 3.5vw, 3rem);
 		}
 	}
 
@@ -284,9 +271,9 @@ const {
 		}
 	}
 
-	@media (max-width: 580px) {
+	@media (max-width: 768px) {
 		.skills-section {
-			padding: 4.5rem clamp(1rem, 3.5vw, 1.25rem);
+			padding: 4.5rem clamp(1rem, 3.5vw, 1.5rem);
 		}
 
 		.skills-headline-desktop {
@@ -297,20 +284,9 @@ const {
 			display: block;
 			width: 100%;
 			max-width: 100%;
-			font-size: clamp(1.68rem, 7.5vw, 2.35rem);
-			line-height: 1.18;
+			font-size: clamp(1.68rem, 6.5vw, 2.4rem);
+			line-height: 1.2;
 			letter-spacing: -0.035em;
-		}
-
-		.skills-headline-mobile .headline-line-mask {
-			padding-left: 0;
-			margin-bottom: 0.06em;
-			width: fit-content;
-			max-width: 100%;
-		}
-
-		.skills-headline-mobile .headline-line-inner {
-			white-space: nowrap;
 		}
 
 		.skills-bottom-row {
@@ -334,59 +310,37 @@ const {
 <script>
 	import gsap from 'gsap';
 	import { ScrollTrigger } from 'gsap/ScrollTrigger';
-	import { initTextBlockReveal } from '../scripts/text-block-animation';
 
 	gsap.registerPlugin(ScrollTrigger);
 
 	function setup() {
-		// 1. Text Block Revealer Animation on Skills Headline
-		initTextBlockReveal(['#skills-headline-desktop', '#skills-headline-mobile'], {
-			blockColor: '#ffffff',
-			duration: 0.65,
-			stagger: 0.1,
-			trigger: '#skills',
-			start: 'top 75%',
-		});
-
-		// 2. Animação de Entrada do Subtexto e do Botão (Idêntica à seção About)
+		// Animação de Entrada do Botão (o texto agora é controlado por SlideUpText)
 		const bottomRow = document.querySelector('.skills-bottom-row') as HTMLElement | null;
-		const descEl = document.querySelector('.skills-description') as HTMLElement | null;
 		const btnWrap = document.querySelector('.skills-cta-wrap') as HTMLElement | null;
 
-		if (!descEl || !btnWrap) return;
+		if (!btnWrap) return;
 
-		// Reseta estados iniciais
-		gsap.set(descEl, { opacity: 0, y: 25 });
+		// Reseta estado inicial
 		gsap.set(btnWrap, { opacity: 0, y: 20, scale: 0.96 });
 
 		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-			gsap.set([descEl, btnWrap], { opacity: 1, y: 0, scale: 1 });
+			gsap.set(btnWrap, { opacity: 1, y: 0, scale: 1 });
 			return;
 		}
 
-		const bottomTl = gsap.timeline({
-			scrollTrigger: {
-				trigger: bottomRow || descEl,
-				start: 'top 85%',
-				toggleActions: 'play none none none',
-				once: true,
-			},
-		});
-
-		// Revelação do parágrafo e do botão entrando juntos em perfeita sincronia
-		bottomTl.to(descEl, {
-			opacity: 1,
-			y: 0,
-			duration: 0.55,
-			ease: 'power2.out',
-		}, 0)
-		.to(btnWrap, {
+		gsap.to(btnWrap, {
 			opacity: 1,
 			y: 0,
 			scale: 1,
 			duration: 0.55,
 			ease: 'power2.out',
-		}, 0);
+			scrollTrigger: {
+				trigger: bottomRow || btnWrap,
+				start: 'top 85%',
+				toggleActions: 'play none none none',
+				once: true,
+			},
+		});
 	}
 
 	// Run after DOM loaded & fonts ready

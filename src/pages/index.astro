@@ -2,19 +2,90 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
-import Skills from '../components/Skills.astro';
 import Work from '../components/Work.astro';
+import Services from '../components/Services.astro';
+import About from '../components/About.astro';
 import Contact from '../components/Contact.astro';
+import { getSanityData, urlForImage } from '../lib/sanity';
+import { defaultProjects, mergeProjects } from '../data/projects';
+
+const sanity = await getSanityData();
+
+// 1. Hero Content
+const heroProps = sanity?.hero ? {
+	...(sanity.hero.tagline && { tagline: sanity.hero.tagline }),
+	...(sanity.hero.descriptionPt && { descriptionPt: sanity.hero.descriptionPt }),
+	...(sanity.hero.descriptionEn && { descriptionEn: sanity.hero.descriptionEn }),
+	...(sanity.hero.ctaTextPt && { ctaTextPt: sanity.hero.ctaTextPt }),
+	...(sanity.hero.ctaTextEn && { ctaTextEn: sanity.hero.ctaTextEn }),
+	...(sanity.hero.ctaLink && { ctaLink: sanity.hero.ctaLink }),
+	...(sanity.hero.marqueeText && { marqueeText: sanity.hero.marqueeText }),
+	...(sanity.hero.portraitImage && { portraitImage: urlForImage(sanity.hero.portraitImage)?.url() })
+} : {};
+
+// 2. Projects (Selected Work) — Mesclagem inteligente dos projetos originais com Sanity
+const mergedProjects = mergeProjects(defaultProjects, sanity?.projects, urlForImage);
+const workProps = {
+	projects: mergedProjects
+};
+
+// 3. Services Content
+const servicesProps = sanity?.services ? {
+	...(sanity.services.titlePt && { titlePt: sanity.services.titlePt }),
+	...(sanity.services.titleEn && { titleEn: sanity.services.titleEn }),
+	...(sanity.services.subtitlePt && { subtitlePt: sanity.services.subtitlePt }),
+	...(sanity.services.subtitleEn && { subtitleEn: sanity.services.subtitleEn }),
+	...(sanity.services.items && sanity.services.items.length > 0 && {
+		milestones: sanity.services.items.map((m: any) => ({
+			id: m.id || '01',
+			title: m.titlePt || '',
+			titleEn: m.titleEn || '',
+			description: m.descriptionPt || '',
+			descriptionEn: m.descriptionEn || ''
+		}))
+	})
+} : {};
+
+// 4. About Content
+const aboutProps = sanity?.about ? {
+	...(sanity.about.headlinePt && { headline: sanity.about.headlinePt }),
+	...(sanity.about.headlineEn && { headlineEn: sanity.about.headlineEn }),
+	...(sanity.about.paragraph1Pt && { paragraph1Pt: sanity.about.paragraph1Pt }),
+	...(sanity.about.paragraph1En && { paragraph1En: sanity.about.paragraph1En }),
+	...(sanity.about.paragraph2Pt && { paragraph2Pt: sanity.about.paragraph2Pt }),
+	...(sanity.about.paragraph2En && { paragraph2En: sanity.about.paragraph2En }),
+	...(sanity.about.portraitImage && { portraitImage: urlForImage(sanity.about.portraitImage)?.url() }),
+	...(sanity.about.portraitAlt && { imageAlt: sanity.about.portraitAlt }),
+	...(sanity.about.ctaTextPt && { buttonText: sanity.about.ctaTextPt }),
+	...(sanity.about.ctaTextEn && { buttonTextEn: sanity.about.ctaTextEn }),
+	...(sanity.about.ctaLink && { buttonHref: sanity.about.ctaLink })
+} : {};
+
+// 5. Contact Content
+const contactProps = sanity?.contact ? {
+	...(sanity.contact.marqueeWord && { marqueeWord: sanity.contact.marqueeWord }),
+	...(sanity.contact.talkTitlePt && { talkTitlePt: sanity.contact.talkTitlePt }),
+	...(sanity.contact.talkTitleEn && { talkTitleEn: sanity.contact.talkTitleEn }),
+	...(sanity.contact.email && { email: sanity.contact.email }),
+	...(sanity.contact.whatsappLink && { whatsappLink: sanity.contact.whatsappLink }),
+	...(sanity.contact.links && sanity.contact.links.length > 0 && { links: sanity.contact.links })
+} : {};
 ---
 
 <Layout>
 	<Header />
 	<main class="page-main">
-		<Hero />
+		<Hero {...heroProps} />
 		<div class="content-overlap-hero">
-			<Skills />
-			<Work />
-			<Contact />
+			<Work {...workProps} />
+			<Services {...servicesProps} />
+			<About {...aboutProps} />
+		</div>
+		<!-- Spacer no fluxo de scroll que permite à última seção subir revelando o footer -->
+		<div class="footer-curtain-spacer" id="footer-curtain-spacer" aria-hidden="true"></div>
+		<!-- Shell do Rodapé fixado no fundo (efeito cortina revelado por baixo) -->
+		<div class="footer-curtain-shell" id="footer-curtain-shell">
+			<Contact {...contactProps} />
 		</div>
 	</main>
 </Layout>
@@ -24,10 +95,93 @@ import Contact from '../components/Contact.astro';
 		position: relative;
 		width: 100%;
 	}
-
-	.content-overlap-hero {
-		position: relative;
-		z-index: 20;
-		box-shadow: none;
-	}
 </style>
+
+<script>
+	import gsap from 'gsap';
+	import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+	gsap.registerPlugin(ScrollTrigger);
+
+	function initFooterCurtain() {
+		const spacer = document.getElementById('footer-curtain-spacer');
+		const shell = document.getElementById('footer-curtain-shell');
+		const contact = document.getElementById('contact');
+		if (!spacer || !shell || !contact) return;
+
+		// Respeita acessibilidade: movimento reduzido
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+			shell.style.position = 'relative';
+			shell.style.visibility = 'visible';
+			shell.style.pointerEvents = 'auto';
+			spacer.style.display = 'none';
+			return;
+		}
+
+		function syncCurtainHeight() {
+			const winH = window.innerHeight;
+			const contactH = contact.offsetHeight;
+			const requiredH = Math.max(winH, contactH);
+			spacer.style.height = `${requiredH}px`;
+			shell.style.height = `${winH}px`;
+			ScrollTrigger.refresh();
+		}
+
+		syncCurtainHeight();
+		window.addEventListener('resize', syncCurtainHeight);
+
+		ScrollTrigger.create({
+			id: 'footer-curtain-trigger',
+			trigger: spacer,
+			start: 'top bottom',
+			end: 'bottom bottom',
+			onUpdate: (self) => {
+				const p = self.progress;
+
+				// Ativa visibilidade assim que a cortina começa a subir
+				if (p > 0.005) {
+					shell.classList.add('is-visible');
+				} else {
+					shell.classList.remove('is-visible');
+				}
+
+				// Dispara animações de texto do footer quando a section About sobe revelando o footer
+				if (p > 0.25) {
+					if (!shell.classList.contains('is-revealed')) {
+						shell.classList.add('is-revealed');
+						window.dispatchEvent(new CustomEvent('footer:reveal'));
+					}
+				} else if (p < 0.15) {
+					if (shell.classList.contains('is-revealed')) {
+						shell.classList.remove('is-revealed');
+						window.dispatchEvent(new CustomEvent('footer:hide'));
+					}
+				}
+
+				// Ativa interatividade quando o footer estiver amplamente visível
+				if (p > 0.6) {
+					shell.classList.add('is-interactive');
+				} else {
+					shell.classList.remove('is-interactive');
+				}
+
+				// Se o conteúdo do rodapé for maior que a tela, move suavemente o rodapé acompanhando a subida
+				const winH = window.innerHeight;
+				const contactH = contact.offsetHeight;
+				if (contactH > winH) {
+					const excess = contactH - winH;
+					gsap.set(contact, { y: -excess * (1 - p) });
+				} else {
+					gsap.set(contact, { y: 0 });
+				}
+			},
+		});
+	}
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', initFooterCurtain);
+	} else {
+		initFooterCurtain();
+	}
+	document.addEventListener('astro:after-swap', initFooterCurtain);
+</script>

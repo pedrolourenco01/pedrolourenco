@@ -1,33 +1,52 @@
 ---
 import '../styles/globals.css';
 import 'lenis/dist/lenis.css';
+import BlockRevealTransition from '../components/BlockRevealTransition.astro';
+import PixelCursorTrail from '../components/ui/pixel-trail';
 ---
 
 <!doctype html>
-<html lang="pt-BR">
+<html lang="en" data-lang="en" style="background-color: #EE5037;">
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg?v=7" />
+		<link rel="icon" href="/favicon.ico?v=7" sizes="16x16 32x32" />
 		<meta name="generator" content={Astro.generator} />
-		<meta name="description" content="Pedro Lourenço — Exibindo conteúdo autêntico, colaborações e campanhas criativas em um só lugar." />
-		<title>Pedro Lourenço — Portfólio</title>
+		<meta name="description" content="Pedro Lourenço — Web designer creating clear interfaces, refined websites, and digital experiences." />
+		<title>Pedro Lourenço | Webdesigner</title>
 
-		<!-- Google Fonts: Rethink Sans (Pesos 400, 500, 600, 700, 800) -->
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<script is:inline>
+			(function() {
+				try {
+					// Garante que o site inicie em EN por padrão
+					if (!localStorage.getItem('portfolio_default_en_set')) {
+						localStorage.setItem('portfolio_default_en_set', 'true');
+						localStorage.setItem('portfolio_lang', 'EN');
+					}
+					var saved = (localStorage.getItem('portfolio_lang') || 'EN').toUpperCase();
+					var isPt = saved === 'PT';
+					document.documentElement.setAttribute('data-lang', isPt ? 'pt' : 'en');
+					document.documentElement.lang = isPt ? 'pt-BR' : 'en';
+				} catch (e) {}
+			})();
+		</script>
+
+		<!-- Critical Font Preload (self-hosted WOFF2) & Hero LCP Image Preload -->
+		<link rel="preload" as="font" type="font/woff2" href="/fonts/rethink-sans-latin.woff2" crossorigin />
 		<link
-			href="https://fonts.googleapis.com/css2?family=Rethink+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&display=swap"
-			rel="stylesheet"
+			rel="preload"
+			as="image"
+			href="/images/optimized/hero-portrait-1920.avif"
+			type="image/avif"
+			imagesrcset="/images/optimized/hero-portrait-768.avif 768w, /images/optimized/hero-portrait-1280.avif 1280w, /images/optimized/hero-portrait-1920.avif 1920w"
+			imagesizes="100vw"
+			fetchpriority="high"
 		/>
-		<link
-			href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Inter:wght@200;300;400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700;800;900&family=Outfit:wght@200;300;400;500&family=Plus+Jakarta+Sans:wght@300;400;700;800;900&family=Space+Grotesk:wght@300;400;700&family=Syne:wght@300;400;700;800&display=swap"
-			rel="stylesheet"
-		/>
-		<link href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700,800&display=swap" rel="stylesheet" />
 	</head>
-	<body>
+	<body style="background-color: #EE5037;">
+		<PixelCursorTrail client:media="(hover: hover) and (pointer: fine)" />
+		<BlockRevealTransition />
 		<slot />
 
 		<script>
@@ -47,15 +66,56 @@ import 'lenis/dist/lenis.css';
 					gsap.ticker.remove(tickerHandler);
 				}
 
+				// No mobile/touch: desativa smooth scroll interceptado do Lenis para usar o scroll nativo a 120Hz/60Hz com inércia física do sistema operacional
+				const isTouchDevice =
+					typeof window !== 'undefined' &&
+					(window.matchMedia('(max-width: 900px)').matches ||
+						window.matchMedia('(hover: none) and (pointer: coarse)').matches ||
+						'ontouchstart' in window ||
+						navigator.maxTouchPoints > 0);
+
+				if (isTouchDevice) {
+					(window as any).lenis = null;
+					document.documentElement.style.scrollBehavior = 'smooth';
+
+					document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+						anchor.addEventListener('click', (e) => {
+							const href = anchor.getAttribute('href');
+							if (href && href.length > 1) {
+								if (href === '#about') {
+									const pinTrig = ScrollTrigger.getById('globe-zoom-pin-trigger');
+									if (pinTrig) {
+										e.preventDefault();
+										const targetScroll = pinTrig.start + (pinTrig.end - pinTrig.start) * 0.95;
+										window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+										return;
+									}
+								}
+								if (href === '#contact') {
+									e.preventDefault();
+									window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+									return;
+								}
+								const target = document.querySelector(href);
+								if (target) {
+									e.preventDefault();
+									target.scrollIntoView({ behavior: 'smooth' });
+								}
+							}
+						});
+					});
+					return;
+				}
+
 				const lenis = new Lenis({
 					autoRaf: false,
-					duration: 1.15,
+					duration: 1.2,
 					easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
 					orientation: 'vertical',
 					gestureOrientation: 'vertical',
 					smoothWheel: true,
-					wheelMultiplier: 1.0,
-					touchMultiplier: 1.6,
+					wheelMultiplier: 1.1,
+					touchMultiplier: 1.0,
 					infinite: false,
 				});
 
@@ -85,6 +145,11 @@ import 'lenis/dist/lenis.css';
 									return;
 								}
 							}
+							if (href === '#contact') {
+								e.preventDefault();
+								lenis.scrollTo(document.documentElement.scrollHeight, { duration: 1.4 });
+								return;
+							}
 							const target = document.querySelector(href);
 							if (target) {
 								e.preventDefault();
@@ -102,6 +167,38 @@ import 'lenis/dist/lenis.css';
 </html>
 
 <style is:global>
+	@font-face {
+		font-family: 'Rethink Sans';
+		font-style: normal;
+		font-weight: 400 800;
+		font-display: swap;
+		src: url('/fonts/rethink-sans-latin.woff2') format('woff2');
+	}
+
+	@font-face {
+		font-family: 'JetBrains Mono';
+		font-style: normal;
+		font-weight: 400 800;
+		font-display: swap;
+		src: url('/fonts/jetbrains-mono-latin.woff2') format('woff2');
+	}
+
+	@font-face {
+		font-family: 'Silkscreen';
+		font-style: normal;
+		font-weight: 400;
+		font-display: swap;
+		src: url('/fonts/silkscreen-400-latin.woff2') format('woff2');
+	}
+
+	@font-face {
+		font-family: 'Silkscreen';
+		font-style: normal;
+		font-weight: 700;
+		font-display: swap;
+		src: url('/fonts/silkscreen-700-latin.woff2') format('woff2');
+	}
+
 	*, *::before, *::after {
 		box-sizing: border-box;
 		margin: 0;
@@ -120,6 +217,7 @@ import 'lenis/dist/lenis.css';
 	html {
 		width: 100%;
 		height: auto;
+		background-color: #EE5037;
 		scrollbar-width: none;
 		-ms-overflow-style: none;
 	}
@@ -127,7 +225,7 @@ import 'lenis/dist/lenis.css';
 	body {
 		width: 100%;
 		min-height: 100%;
-		background-color: #000000;
+		background-color: #EE5037;
 		color: #ffffff;
 		font-family: 'Rethink Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 		-webkit-font-smoothing: antialiased;

@@ -17,12 +17,64 @@ export function SterlingGateKineticNavigation() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const navItems: NavItem[] = [
-    { number: "01", label: "INICIO", href: "#hero" },
-    { number: "02", label: "SOBRE", href: "#about" },
-    { number: "03", label: "PROJETOS", href: "#work" },
-    { number: "04", label: "CONTATO", href: "#contact" },
+  // Discreet Language Switcher State
+  const [isLangOpen, setIsLangOpen] = useState(false);
+  const [currentLang, setCurrentLang] = useState<"EN" | "PT">(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("portfolio_lang") as "EN" | "PT" | null;
+      if (saved === "EN" || saved === "PT") return saved;
+    }
+    return "PT";
+  });
+  const langDropdownRef = useRef<HTMLDivElement>(null);
+
+  const navItems: NavItem[] = currentLang === "PT" ? [
+    { number: "01", label: "INÍCIO", href: "#hero" },
+    { number: "02", label: "PROJETOS", href: "#work" },
+    { number: "03", label: "SERVIÇOS", href: "#services" },
+    { number: "04", label: "SOBRE", href: "#about" },
+    { number: "05", label: "CONTATO", href: "#contact" },
+  ] : [
+    { number: "01", label: "HOME", href: "#hero" },
+    { number: "02", label: "PROJECTS", href: "#work" },
+    { number: "03", label: "SERVICES", href: "#services" },
+    { number: "04", label: "ABOUT", href: "#about" },
+    { number: "05", label: "CONTACT", href: "#contact" },
   ];
+
+  const handleLanguageSwitch = (newLang: "EN" | "PT") => {
+    setIsLangOpen(false);
+    if (newLang === currentLang) return;
+
+    const applySwitch = () => {
+      setCurrentLang(newLang);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("portfolio_lang", newLang);
+        const langCode = newLang.toLowerCase();
+        document.documentElement.lang = langCode === 'en' ? 'en' : 'pt-BR';
+        document.documentElement.setAttribute('data-lang', langCode);
+        window.dispatchEvent(new CustomEvent("portfolio:language-change", { detail: { lang: newLang } }));
+      }
+    };
+
+    if (typeof window !== "undefined" && (window as any).triggerBlockTransition) {
+      (window as any).triggerBlockTransition(applySwitch);
+    } else {
+      applySwitch();
+    }
+  };
+
+  // Sync state if language changed externally
+  useEffect(() => {
+    const handleLangSync = (e: any) => {
+      const l = e.detail?.lang;
+      if (l === "EN" || l === "PT") {
+        setCurrentLang(l);
+      }
+    };
+    window.addEventListener("portfolio:language-change", handleLangSync);
+    return () => window.removeEventListener("portfolio:language-change", handleLangSync);
+  }, []);
 
   const tlRef = useRef<gsap.core.Timeline | null>(null);
 
@@ -204,13 +256,29 @@ export function SterlingGateKineticNavigation() {
   // Keydown Escape handling
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isMenuOpen) {
-        setIsMenuOpen(false);
+      if (e.key === "Escape") {
+        if (isLangOpen) setIsLangOpen(false);
+        if (isMenuOpen) setIsMenuOpen(false);
       }
     };
     window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
-  }, [isMenuOpen]);
+  }, [isMenuOpen, isLangOpen]);
+
+  // Close language dropdown when clicking outside
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (langDropdownRef.current && !langDropdownRef.current.contains(e.target as Node)) {
+        setIsLangOpen(false);
+      }
+    };
+    if (isLangOpen) {
+      document.addEventListener("mousedown", handleOutsideClick);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [isLangOpen]);
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
   const closeMenu = () => setIsMenuOpen(false);
@@ -250,7 +318,7 @@ export function SterlingGateKineticNavigation() {
         <div className="header-nav-container">
           {/* Brand Logo */}
           <a href="#" onClick={(e) => { e.preventDefault(); handleLinkClick("#hero"); }} className="header-brand-logo">
-            <span className="brand-text">Pedro Lourenço</span>
+            <span className="brand-text">PEDRO LOURENÇO</span>
           </a>
 
           {/* Location & Real-Time Clock */}
@@ -261,23 +329,69 @@ export function SterlingGateKineticNavigation() {
 
           {/* Availability Status & Email */}
           <div className="header-info-block header-contact-block">
-            <span className="info-top">Disponível para Projetos</span>
-            <a href="mailto:pedroworks@gmail.com" className="info-bottom info-email-link">
-              pedroworks@gmail.com
+            <span className="info-top">{currentLang === "PT" ? "Disponível para Projetos" : "Available for Projects"}</span>
+            <a href="mailto:pedrolourencowork04@gmail.com" className="info-bottom info-email-link">
+              pedrolourencowork04@gmail.com
             </a>
           </div>
 
-          {/* Hamburger Menu Toggle Button */}
-          <button
-            type="button"
-            className="nav-close-btn"
-            onClick={toggleMenu}
-            aria-label={isMenuOpen ? "Fechar Menu" : "Abrir Menu"}
-            aria-expanded={isMenuOpen}
-          >
-            <span className="menu-line line-1"></span>
-            <span className="menu-line line-2"></span>
-          </button>
+          {/* Right Actions: Language Switcher + Hamburger Menu Toggle */}
+          <div className="header-right-actions">
+            {/* Discreet Language Dropdown */}
+            <div className="header-lang-switcher" ref={langDropdownRef}>
+              <button
+                type="button"
+                className={`lang-trigger-btn ${isLangOpen ? "is-active" : ""}`}
+                onClick={() => setIsLangOpen((prev) => !prev)}
+                aria-expanded={isLangOpen}
+                aria-label="Selecionar idioma"
+              >
+                <span className="lang-current">{currentLang}</span>
+                <svg
+                  className={`lang-chevron ${isLangOpen ? "is-open" : ""}`}
+                  width="8"
+                  height="5"
+                  viewBox="0 0 8 5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M1 1L4 4L7 1" />
+                </svg>
+              </button>
+
+              {isLangOpen && (
+                <div className="lang-dropdown-menu">
+                  {(["EN", "PT"] as const)
+                    .filter((lang) => lang !== currentLang)
+                    .map((lang) => (
+                      <button
+                        key={lang}
+                        type="button"
+                        className="lang-option-btn"
+                        onClick={() => handleLanguageSwitch(lang)}
+                      >
+                        {lang}
+                      </button>
+                    ))}
+                </div>
+              )}
+            </div>
+
+            {/* Hamburger Menu Toggle Button */}
+            <button
+              type="button"
+              className="nav-close-btn"
+              onClick={toggleMenu}
+              aria-label={isMenuOpen ? "Fechar Menu" : "Abrir Menu"}
+              aria-expanded={isMenuOpen}
+            >
+              <span className="menu-line line-1"></span>
+              <span className="menu-line line-2"></span>
+            </button>
+          </div>
         </div>
       </header>
 
@@ -295,7 +409,7 @@ export function SterlingGateKineticNavigation() {
                 type="button"
                 className="nav-close-btn"
                 onClick={closeMenu}
-                aria-label="Fechar Menu"
+                aria-label="Close menu"
               >
                 <span className="menu-line line-1"></span>
                 <span className="menu-line line-2"></span>
@@ -340,7 +454,7 @@ export function SterlingGateKineticNavigation() {
                   </svg>
                 </a>
                 <a
-                  href="https://instagram.com"
+                  href="https://www.instagram.com/pedrolouurenco/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="social-icon-btn"

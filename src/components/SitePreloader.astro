@@ -1,24 +1,19 @@
 ---
-// SitePreloader.astro — Animação visual de loading/barra de progresso fiel ao VanceLib #18
+// SitePreloader.astro — Intro refinada: "PEDRO LOURENÇO" em escala editorial elegante com revelação letra a letra
+const title = "PEDRO LOURENÇO";
 ---
 
 <div class="site-preloader" id="site-preloader" aria-hidden="true">
-	<!-- Fundo preto opaco independente para permitir fadeout suave mantendo o logo visível -->
-	<div class="preloader-backdrop"></div>
-
-	<!-- Topo Centralizado: Marca Pedro Lourenço -->
-	<div class="preloader-top-brand" id="preloader-top-brand">
-		<span class="brand-text">Pedro Lourenço</span>
-	</div>
-
-	<!-- Fenda Central com Barra de Progresso VanceLib #18 -->
-	<div class="preloader-slit-track">
-		<div class="preloader-slit-bar">
-			<div class="progress-bar">
-				<p class="loader-label">loading</p>
-				<p class="loader-counter">/<span id="counter">0</span></p>
-			</div>
-		</div>
+	<div class="preloader-content">
+		<h1 class="intro-title" aria-label={title}>
+			{title.split('').map((char, index) => (
+				<span class={`intro-char-mask ${char === ' ' ? 'char-space' : ''}`} aria-hidden="true">
+					<span class="intro-char-inner" style={`--char-idx: ${index}`}>
+						{char === ' ' ? '\u00A0' : char}
+					</span>
+				</span>
+			))}
+		</h1>
 	</div>
 </div>
 
@@ -29,123 +24,110 @@
 		width: 100vw;
 		height: 100svh;
 		z-index: 99999;
-		background-color: transparent;
+		background-color: #000000;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		pointer-events: all;
 		overflow: hidden;
-		font-family: 'Montserrat', sans-serif;
+		user-select: none;
+		will-change: transform;
 	}
 
-	.preloader-backdrop {
-		position: absolute;
-		inset: 0;
-		background-color: #000000;
-		z-index: 1;
-		will-change: opacity;
+	.preloader-content {
+		width: 100%;
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 clamp(1.25rem, 5vw, 3rem);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		box-sizing: border-box;
 	}
 
-	/* Topo Centralizado — Pedro Lourenço (mesmo tamanho e alinhamento vertical da navbar) */
-	.preloader-top-brand {
-		position: absolute;
-		top: 0;
-		height: clamp(72px, 8.5vh, 88px);
-		left: 50%;
+	/* Texto proporcional e equilibrado no centro do canvas preto */
+	.intro-title {
+		margin: 0 auto;
+		padding: 0.1em 0;
+		font-family: 'Rethink Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+		font-weight: 800;
+		font-size: clamp(1.75rem, 3.8vw, 3.6rem);
+		line-height: 1.1;
+		letter-spacing: -0.018em;
+		text-transform: uppercase;
+		color: #FFFFFF;
 		display: inline-flex;
 		align-items: center;
-		font-family: 'Rethink Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-		font-size: clamp(1.2rem, 1.5vw, 1.45rem);
-		font-weight: 700;
-		letter-spacing: -0.03em;
-		color: #ffffff;
-		z-index: 25;
+		justify-content: center;
+		text-align: center;
 		white-space: nowrap;
-		user-select: none;
-		pointer-events: none;
-		opacity: 0;
-		will-change: opacity, transform;
+		overflow: visible;
+		transform: scaleY(1.2);
+		transform-origin: center;
+		will-change: transform;
 	}
 
-	/* Faixa Central (10svh de altura, exatamente no meio da tela entre 45% e 55%) */
-	.preloader-slit-track {
-		position: absolute;
-		top: 45svh;
-		left: 0;
-		width: 100vw;
-		height: 10svh;
-		background-color: #000000;
+	/* Máscara de cada letra com respiro vertical para não cortar glifos */
+	.intro-char-mask {
+		display: inline-block;
 		overflow: hidden;
-		z-index: 10;
+		vertical-align: middle;
+		line-height: 1.1;
+		padding: 0.18em 0.02em;
+		margin: -0.18em -0.02em;
 	}
 
-	.preloader-slit-bar {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100vw;
-		height: 100%;
-		background-color: #0e0e0e;
-		clip-path: polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%);
-		will-change: clip-path;
+	/* Espaço proporcional e equilibrado entre as palavras */
+	.char-space {
+		width: clamp(0.45rem, 1.1vw, 1rem);
+		display: inline-block;
 	}
 
-	.progress-bar {
-		position: absolute;
-		top: 50%;
-		left: 0;
-		transform: translateY(-50%);
-		width: 25vw;
-		padding: 0 2em;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		color: #ffffff;
-		z-index: 15;
-		box-sizing: border-box;
-		will-change: width, opacity;
+	.intro-char-inner {
+		display: inline-block;
+		transform: translateY(135%);
+		opacity: 0;
+		will-change: transform, opacity;
+		line-height: inherit;
 	}
 
-	.site-preloader p {
-		position: relative;
-		font-size: 14px;
-		font-weight: 500;
-		text-transform: uppercase;
-		-webkit-font-smoothing: antialiased;
-		-moz-osx-font-smoothing: grayscale;
-		margin: 0;
-		letter-spacing: 0.05em;
-	}
-
-	.loader-counter {
-		font-feature-settings: 'tnum';
-		font-variant-numeric: tabular-nums;
-	}
-
-	@media (max-width: 900px) {
-		.site-preloader p {
-			font-size: 13px;
+	@media (max-width: 640px) {
+		.intro-title {
+			font-size: clamp(1.35rem, 5.8vw, 1.95rem);
 		}
 
-		.progress-bar {
-			padding: 0 1.25em;
-			justify-content: flex-end;
-		}
-
-		.progress-bar p.loader-label {
-			display: none;
+		.char-space {
+			width: 0.45rem;
 		}
 	}
 </style>
 
 <script>
 	import gsap from 'gsap';
-	import { CustomEase } from 'gsap/CustomEase';
+	import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-	gsap.registerPlugin(CustomEase);
+	gsap.registerPlugin(ScrollTrigger);
 
-	function runPreloader() {
+	function fitIntroTitle() {
+		const content = document.querySelector('.preloader-content') as HTMLElement | null;
+		const title = document.querySelector('.intro-title') as HTMLElement | null;
+		if (!content || !title) return;
+
+		// Em telas ultra compactas, apenas evita quebra de linha mantendo a proporção
+		const maxWidth = content.clientWidth * 0.94;
+		if (title.scrollWidth > maxWidth && maxWidth > 0) {
+			const scale = maxWidth / title.scrollWidth;
+			title.style.transform = `scale(${scale * 0.98}) scaleY(1.2)`;
+		} else {
+			title.style.transform = 'scaleY(1.2)';
+		}
+	}
+
+	function runIntro() {
 		const preloader = document.getElementById('site-preloader');
 		if (!preloader) return;
 
-		// Trava rolagem durante a execução do preloader
+		// 1. Trava a rolagem da página durante a reprodução da intro
 		document.body.style.overflow = 'hidden';
 		if ((window as any).lenis) {
 			try {
@@ -153,171 +135,115 @@
 			} catch (e) {}
 		}
 
-		let customEase: string | gsap.EaseFunction;
-		try {
-			customEase = CustomEase.create('customPreloader', '.87,0,.13,1');
-		} catch (e) {
-			customEase = 'power4.inOut';
-		}
+		// Garante que o Hero permaneça pausado no estado inicial
+		document.body.classList.remove('hero-loaded');
 
-		const counter = document.getElementById('counter');
-		const slitBar = preloader.querySelector('.preloader-slit-bar');
-		const progressBar = preloader.querySelector('.progress-bar');
-		const topBrand = preloader.querySelector('.preloader-top-brand');
-		const backdrop = preloader.querySelector('.preloader-backdrop');
+		// Garante dimensões proporcionais
+		fitIntroTitle();
 
-		// Reset inicial
-		gsap.set(slitBar, {
-			clipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)',
-		});
-		gsap.set(progressBar, {
-			width: '25vw',
-			opacity: 1,
-		});
-		if (backdrop) {
-			gsap.set(backdrop, { opacity: 1 });
-		}
-		if (topBrand) {
-			gsap.set(topBrand, {
-				xPercent: -50,
-				x: 0,
-				y: -8,
-				opacity: 0,
-			});
-		}
-		if (counter) counter.innerHTML = '0';
-
-		// Timeline orquestrada VanceLib #18
-		const tl = gsap.timeline({
-			defaults: { ease: customEase },
-			onComplete: () => {
-				document.body.classList.add('brand-docked');
-				const targetLogo = document.querySelector('.header-brand-logo') as HTMLElement | null;
-				if (targetLogo) targetLogo.style.opacity = '1';
-
-				// Libera rolagem e remove o preloader do DOM
-				document.body.style.overflow = '';
-				if ((window as any).lenis) {
-					try {
-						(window as any).lenis.start();
-					} catch (e) {}
-				}
-				preloader.style.display = 'none';
-			},
-		});
-
-		// Revela suavemente Pedro Lourenço no topo centralizado
-		if (topBrand) {
-			tl.to(
-				topBrand,
-				{
-					opacity: 1,
-					y: 0,
-					duration: 0.9,
-					ease: 'power2.out',
-				},
-				0.15
-			);
-		}
-
-		// 1. Abertura inicial da barra em 25% da largura da tela
-		tl.to(slitBar, {
-			clipPath: 'polygon(0% 0%, 25% 0%, 25% 100%, 0% 100%)',
-			duration: 1.2,
-			delay: 0.3,
-		});
-
-		// 2. Expansão horizontal da barra para 100% com contador 0 -> 100
-		tl.to(
-			slitBar,
-			{
-				clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-				duration: 1.8,
-			},
-			'+=0.1'
-		);
-
-		tl.to(
-			progressBar,
-			{
-				width: '100vw',
-				duration: 1.8,
-			},
-			'<'
-		);
-
-		if (counter) {
-			tl.to(
-				counter,
-				{
-					innerHTML: 100,
-					duration: 1.8,
-					snap: { innerHTML: 1 },
-					ease: customEase,
-				},
-				'<'
-			);
-		}
-
-		// 3. Ao atingir 100%, desvanece suavemente a barra de progresso central
-		tl.to(
-			[progressBar, slitBar],
-			{
-				opacity: 0,
-				duration: 0.3,
-				ease: 'power2.out',
-			},
-			'+=0.08'
-		);
-
-		// 4. Glide de "Pedro Lourenço" do centro diretamente para a esquerda (posição exata da navbar)
-		tl.to(
-			{},
-			{
-				duration: 1.15,
-				onStart: () => {
-					const targetLogo = document.querySelector('.header-brand-logo') as HTMLElement | null;
-
-					let deltaX = -(window.innerWidth * 0.5 - 40);
-					let deltaY = 0;
-
-					if (targetLogo && topBrand) {
-						const targetRect = targetLogo.getBoundingClientRect();
-						const currentRect = topBrand.getBoundingClientRect();
-						deltaX = targetRect.left - currentRect.left;
-						deltaY = targetRect.top - currentRect.top;
-					}
-
-					if (topBrand) {
-						gsap.to(topBrand, {
-							x: deltaX,
-							y: deltaY,
-							duration: 1.05,
-							ease: 'power3.inOut',
-						});
-					}
-
-					if (backdrop) {
-						gsap.to(backdrop, {
-							opacity: 0,
-							duration: 0.85,
-							ease: 'power2.out',
-							delay: 0.08,
-						});
-					}
-
-					setTimeout(() => {
-						document.body.classList.add('hero-loaded');
-					}, 160);
-				},
+		// Acessibilidade: respeita quem prefere movimento reduzido
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+			document.body.classList.add('hero-loaded');
+			document.body.style.overflow = '';
+			if ((window as any).lenis) {
+				try {
+					(window as any).lenis.start();
+				} catch (e) {}
 			}
+			preloader.style.display = 'none';
+			ScrollTrigger.refresh();
+			return;
+		}
+
+		const tl = gsap.timeline();
+
+		// 1. Animação de entrada idêntica a PROJETOS: letras sobem de 135% com expo.out e stagger
+		tl.fromTo(
+			'.intro-char-inner',
+			{
+				y: '135%',
+				opacity: 0,
+			},
+			{
+				y: '0%',
+				opacity: 1,
+				duration: 0.95,
+				stagger: 0.045,
+				ease: 'expo.out',
+			},
+			0.15
+		);
+
+		// 2. Transição cinematográfica: o background preto sobe (translateY: -100%)
+		// e a Hero inicia sua animação de entrada exatamente quando a cortina começa a subir!
+		tl.to(
+			preloader,
+			{
+				yPercent: -100,
+				duration: 1.15,
+				ease: 'power4.inOut',
+				onStart: () => {
+					// Dispara as animações de entrada da Hero enquanto o background está subindo
+					document.body.classList.add('hero-loaded');
+				},
+				onComplete: () => {
+					// Libera o scroll e reativa a rolagem suave do Lenis
+					document.body.style.overflow = '';
+					if ((window as any).lenis) {
+						try {
+							(window as any).lenis.start();
+						} catch (e) {}
+					}
+					preloader.style.display = 'none';
+					// Atualiza os pontos de rolagem das demais seções com a página liberada
+					ScrollTrigger.refresh();
+				},
+			},
+			'+=0.45'
+		);
+
+		// Efeito sutil de aceleração no texto subindo com a cortina
+		tl.to(
+			'.intro-title',
+			{
+				y: -30,
+				opacity: 0.9,
+				duration: 0.8,
+				ease: 'power3.in',
+			},
+			'<0.05'
 		);
 	}
 
-	if (document.readyState === 'loading') {
-		document.addEventListener('DOMContentLoaded', runPreloader);
-	} else {
-		runPreloader();
+	let introInitialized = false;
+	function initIntroOnce() {
+		if (introInitialized) return;
+		introInitialized = true;
+
+		if (document.fonts) {
+			document.fonts.ready.then(() => {
+				fitIntroTitle();
+				runIntro();
+			});
+		} else {
+			fitIntroTitle();
+			runIntro();
+		}
+
+		window.addEventListener('resize', () => {
+			fitIntroTitle();
+		});
 	}
-	document.addEventListener('astro:after-swap', runPreloader);
+
+	if (typeof window !== 'undefined') {
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', initIntroOnce);
+		} else {
+			initIntroOnce();
+		}
+		document.addEventListener('astro:after-swap', () => {
+			introInitialized = false;
+			initIntroOnce();
+		});
+	}
 </script>
