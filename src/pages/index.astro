@@ -118,10 +118,13 @@ const contactProps = sanity?.contact ? {
 			return;
 		}
 
+		let cachedExcess = 0;
+
 		function syncCurtainHeight() {
 			const winH = window.innerHeight;
 			const contactH = contact.offsetHeight;
 			const requiredH = Math.max(winH, contactH);
+			cachedExcess = Math.max(0, contactH - winH);
 			spacer.style.height = `${requiredH}px`;
 			shell.style.height = `${winH}px`;
 			ScrollTrigger.refresh();
@@ -166,11 +169,8 @@ const contactProps = sanity?.contact ? {
 				}
 
 				// Se o conteúdo do rodapé for maior que a tela, move suavemente o rodapé acompanhando a subida
-				const winH = window.innerHeight;
-				const contactH = contact.offsetHeight;
-				if (contactH > winH) {
-					const excess = contactH - winH;
-					gsap.set(contact, { y: -excess * (1 - p) });
+				if (cachedExcess > 0) {
+					gsap.set(contact, { y: -cachedExcess * (1 - p) });
 				} else {
 					gsap.set(contact, { y: 0 });
 				}

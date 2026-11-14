@@ -31,6 +31,9 @@ export function Navbar() {
   const [isLightSection, setIsLightSection] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isFooterVisible, setIsFooterVisible] = useState(false);
+  const isScrolledRef = useRef(false);
+  const isLightSectionRef = useRef(false);
+  const isFooterVisibleRef = useRef(false);
   const langDropdownRef = useRef<HTMLDivElement>(null);
   const mobileMenuBtnRef = useRef<HTMLButtonElement>(null);
 
@@ -201,17 +204,22 @@ export function Navbar() {
   };
 
   // Scroll theme observer: switches navbar colors when over light sections (#services, #about)
-  // and hides the navbar completely at the bottom/footer
+  // and hides the navbar completely at the bottom/footer (ultra-otimizado com RAF e checagem de refs para evitar re-renders desnecessários)
   useEffect(() => {
+    let ticking = false;
+
     const checkScrollState = () => {
       const scrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
-      setIsScrolled(scrollY > 20);
+      const newScrolled = scrollY > 20;
+      if (isScrolledRef.current !== newScrolled) {
+        isScrolledRef.current = newScrolled;
+        setIsScrolled(newScrolled);
+      }
 
       const work = document.getElementById("work");
       const services = document.getElementById("services");
       const about = document.getElementById("about");
       const spacer = document.getElementById("footer-curtain-spacer");
-      const contact = document.getElementById("contact");
 
       const winH = window.innerHeight;
       const docH = document.documentElement.scrollHeight;
@@ -221,7 +229,6 @@ export function Navbar() {
       let inFooter = false;
       if (spacer) {
         const spacerRect = spacer.getBoundingClientRect();
-        // Quando o topo do spacer do footer entra nos 80% inferiores da tela
         if (spacerRect.top <= winH * 0.8) {
           inFooter = true;
         }
@@ -229,32 +236,53 @@ export function Navbar() {
         inFooter = true;
       }
 
-      setIsFooterVisible(inFooter);
+      if (isFooterVisibleRef.current !== inFooter) {
+        isFooterVisibleRef.current = inFooter;
+        setIsFooterVisible(inFooter);
+      }
 
       // Detecta se a barra está sobre qualquer seção clara (#work, #services, #about)
       let light = false;
       const navCheckY = 50;
 
-      [work, services, about].forEach((sec) => {
-        if (!sec) return;
+      const sections = [work, services, about];
+      for (let i = 0; i < sections.length; i++) {
+        const sec = sections[i];
+        if (!sec) continue;
         const rect = sec.getBoundingClientRect();
         if (rect.top <= navCheckY && rect.bottom >= navCheckY) {
           light = true;
+          break;
         }
-      });
+      }
 
-      setIsLightSection(light);
+      if (isLightSectionRef.current !== light) {
+        isLightSectionRef.current = light;
+        setIsLightSection(light);
+      }
+
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(checkScrollState);
+      }
     };
 
     checkScrollState();
-    window.addEventListener("scroll", checkScrollState, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
 
     if ((window as any).lenis) {
-      (window as any).lenis.on("scroll", checkScrollState);
+      (window as any).lenis.on("scroll", onScroll);
     }
 
     return () => {
-      window.removeEventListener("scroll", checkScrollState);
+      window.removeEventListener("scroll", onScroll);
+      if ((window as any).lenis && (window as any).lenis.off) {
+        (window as any).lenis.off("scroll", onScroll);
+      }
     };
   }, []);
 

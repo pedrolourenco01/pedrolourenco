@@ -646,43 +646,75 @@ const {
 			return;
 		}
 
-		// Animação de cada linha de cards (agrupados em pares com stagger refinado)
-		for (let i = 0; i < allCards.length; i += 2) {
-			const rowCards = allCards.slice(i, i + 2);
-			if (!rowCards.length) continue;
+		const isMobile = window.innerWidth <= 900;
 
-			gsap.fromTo(
-				rowCards,
-				{
-					opacity: 0,
-					y: 55,
-					scale: 0.97,
-				},
-				{
-					opacity: 1,
-					y: 0,
-					scale: 1,
-					duration: 0.95,
-					stagger: 0.14,
-					ease: 'power3.out',
-					clearProps: 'transform',
-					scrollTrigger: {
-						trigger: rowCards[0],
-						start: 'top 85%',
-						toggleActions: 'play none none none',
-						once: true,
+		if (isMobile) {
+			// No mobile: cada card sobe suavemente conforme o usuário rola até ele
+			allCards.forEach((card) => {
+				gsap.fromTo(
+					card,
+					{
+						opacity: 0,
+						y: 45,
+						scale: 0.98,
 					},
-				}
-			);
+					{
+						opacity: 1,
+						y: 0,
+						scale: 1,
+						duration: 0.85,
+						ease: 'power3.out',
+						clearProps: 'transform',
+						scrollTrigger: {
+							trigger: card,
+							start: 'top 88%',
+							toggleActions: 'play none none none',
+							once: true,
+						},
+					}
+				);
+			});
+		} else {
+			// No desktop: agrupados em pares com stagger refinado
+			for (let i = 0; i < allCards.length; i += 2) {
+				const rowCards = allCards.slice(i, i + 2);
+				if (!rowCards.length) continue;
+
+				gsap.fromTo(
+					rowCards,
+					{
+						opacity: 0,
+						y: 55,
+						scale: 0.97,
+					},
+					{
+						opacity: 1,
+						y: 0,
+						scale: 1,
+						duration: 0.95,
+						stagger: 0.14,
+						ease: 'power3.out',
+						clearProps: 'transform',
+						scrollTrigger: {
+							trigger: rowCards[0],
+							start: 'top 85%',
+							toggleActions: 'play none none none',
+							once: true,
+						},
+					}
+				);
+			}
 		}
 
-		// Garante reprodução contínua e suave de vídeos nos cards
-		const videos = document.querySelectorAll('.work-card-video, .work-card-mini-video');
-		videos.forEach((v) => {
-			const video = v as HTMLVideoElement;
-			video.muted = true;
-			video.play().catch(() => {});
-		});
+		// No desktop: reprodução contínua. No mobile: controlado por demanda via initLazyVideos()
+		if (!isMobile) {
+			const videos = document.querySelectorAll('.work-card-video, .work-card-mini-video');
+			videos.forEach((v) => {
+				const video = v as HTMLVideoElement;
+				video.muted = true;
+				video.play().catch(() => {});
+			});
+		}
 
 		// Sincroniza o vídeo miniatura com o vídeo de fundo no hover
 		document.querySelectorAll('.work-card').forEach((card) => {

@@ -82,6 +82,10 @@ import PixelCursorTrail from '../components/ui/pixel-trail';
 					document.documentElement.classList.remove('lenis', 'lenis-smooth', 'lenis-stopped');
 					document.documentElement.style.scrollBehavior = '';
 
+					// Impede que a alteração da barra de endereços do mobile dispare recálculos bruscos de layout
+					ScrollTrigger.config({ ignoreMobileResize: true });
+					setTimeout(() => ScrollTrigger.refresh(), 100);
+
 					document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
 						anchor.addEventListener('click', (e) => {
 							const href = anchor.getAttribute('href');
