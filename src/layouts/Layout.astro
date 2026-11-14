@@ -66,7 +66,6 @@ import PixelCursorTrail from '../components/ui/pixel-trail';
 					gsap.ticker.remove(tickerHandler);
 				}
 
-				// No mobile/touch: desativa smooth scroll interceptado do Lenis para usar o scroll nativo a 120Hz/60Hz com inércia física do sistema operacional
 				const isTouchDevice =
 					typeof window !== 'undefined' &&
 					(window.matchMedia('(max-width: 900px)').matches ||
@@ -74,57 +73,20 @@ import PixelCursorTrail from '../components/ui/pixel-trail';
 						'ontouchstart' in window ||
 						navigator.maxTouchPoints > 0);
 
-				if (isTouchDevice) {
-					if ((window as any).lenis) {
-						(window as any).lenis.destroy();
-					}
-					(window as any).lenis = null;
-					document.documentElement.classList.remove('lenis', 'lenis-smooth', 'lenis-stopped');
-					document.documentElement.style.scrollBehavior = '';
-
-					// Impede que a alteração da barra de endereços do mobile dispare recálculos bruscos de layout
-					ScrollTrigger.config({ ignoreMobileResize: true });
-					setTimeout(() => ScrollTrigger.refresh(), 100);
-
-					document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-						anchor.addEventListener('click', (e) => {
-							const href = anchor.getAttribute('href');
-							if (href && href.length > 1) {
-								if (href === '#about') {
-									const pinTrig = ScrollTrigger.getById('globe-zoom-pin-trigger');
-									if (pinTrig) {
-										e.preventDefault();
-										const targetScroll = pinTrig.start + (pinTrig.end - pinTrig.start) * 0.95;
-										window.scrollTo({ top: targetScroll, behavior: 'smooth' });
-										return;
-									}
-								}
-								if (href === '#contact') {
-									e.preventDefault();
-									window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
-									return;
-								}
-								const target = document.querySelector(href);
-								if (target) {
-									e.preventDefault();
-									target.scrollIntoView({ behavior: 'smooth' });
-								}
-							}
-						});
-					});
-					return;
-				}
+				// Impede que a alteração da barra de endereços do mobile dispare saltos de layout
+				ScrollTrigger.config({ ignoreMobileResize: true });
 
 				const lenis = new Lenis({
 					autoRaf: false,
-					duration: 1.2,
+					duration: isTouchDevice ? 0.95 : 1.2,
 					easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
 					orientation: 'vertical',
 					gestureOrientation: 'vertical',
 					smoothWheel: true,
-					wheelMultiplier: 1.1,
-					touchMultiplier: 1.0,
+					wheelMultiplier: 1.05,
+					touchMultiplier: isTouchDevice ? 1.2 : 1.0,
 					infinite: false,
+					syncTouch: isTouchDevice,
 				});
 
 				(window as any).lenis = lenis;
@@ -136,8 +98,10 @@ import PixelCursorTrail from '../components/ui/pixel-trail';
 					lenis.raf(time * 1000);
 				};
 				gsap.ticker.add(tickerHandler);
-				// Disable GSAP lag smoothing to prevent desync and stuttering with Lenis
-				gsap.ticker.lagSmoothing(0);
+				// Suavização inteligente de micro-quedas de frame para manter fluidez contínua
+				gsap.ticker.lagSmoothing(500, 33);
+
+				setTimeout(() => ScrollTrigger.refresh(), 100);
 
 				// Smooth scroll to in-page anchor targets
 				document.querySelectorAll('a[href^="#"]').forEach((anchor) => {

@@ -122,11 +122,18 @@ export default function Component({ milestones, className = "" }: TimelineProps)
           onUpdate: (self) => {
             const p = self.progress;
             const ratios = dotRatiosRef.current;
+            const activeStates = (self as any)._activeStates || [];
+            (self as any)._activeStates = activeStates;
 
             dots.forEach((dot, i) => {
               const targetRatio = ratios[i] ?? (i / (dots.length - 1));
               // Acende no instante exato em que a linha toca a borda do ponto
               const isActive = p >= targetRatio - 0.008;
+
+              // Otimização crucial: só dispara animações quando o estado do ponto realmente mudar
+              if (activeStates[i] === isActive) return;
+              activeStates[i] = isActive;
+
               const card = cards[i];
 
               if (isActive) {
@@ -134,21 +141,21 @@ export default function Component({ milestones, className = "" }: TimelineProps)
                   scale: 1.25,
                   backgroundColor: "#EE5037",
                   borderColor: "#EE5037",
-                  duration: 0.08,
-                  ease: "power1.out",
+                  duration: 0.15,
+                  ease: "power2.out",
                   overwrite: "auto",
                 });
                 if (card) {
                   gsap.to(card, {
                     opacity: 1,
                     y: 0,
-                    duration: 0.25,
+                    duration: 0.3,
                     ease: "power2.out",
                     overwrite: "auto",
                   });
                   const numSpan = card.querySelector(".milestone-num");
                   if (numSpan) {
-                    gsap.to(numSpan, { color: "#EE5037", duration: 0.08, overwrite: "auto" });
+                    gsap.to(numSpan, { color: "#EE5037", duration: 0.15, overwrite: "auto" });
                   }
                 }
               } else {
@@ -156,21 +163,21 @@ export default function Component({ milestones, className = "" }: TimelineProps)
                   scale: 1,
                   backgroundColor: "#E8E6E0",
                   borderColor: "#a3a3a3",
-                  duration: 0.08,
-                  ease: "power1.out",
+                  duration: 0.15,
+                  ease: "power2.out",
                   overwrite: "auto",
                 });
                 if (card) {
                   gsap.to(card, {
                     opacity: 0.35,
                     y: 16,
-                    duration: 0.25,
+                    duration: 0.3,
                     ease: "power2.out",
                     overwrite: "auto",
                   });
                   const numSpan = card.querySelector(".milestone-num");
                   if (numSpan) {
-                    gsap.to(numSpan, { color: "#a3a3a3", duration: 0.08, overwrite: "auto" });
+                    gsap.to(numSpan, { color: "#a3a3a3", duration: 0.15, overwrite: "auto" });
                   }
                 }
               }
