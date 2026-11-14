@@ -75,8 +75,12 @@ import PixelCursorTrail from '../components/ui/pixel-trail';
 						navigator.maxTouchPoints > 0);
 
 				if (isTouchDevice) {
+					if ((window as any).lenis) {
+						(window as any).lenis.destroy();
+					}
 					(window as any).lenis = null;
-					document.documentElement.style.scrollBehavior = 'smooth';
+					document.documentElement.classList.remove('lenis', 'lenis-smooth', 'lenis-stopped');
+					document.documentElement.style.scrollBehavior = '';
 
 					document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
 						anchor.addEventListener('click', (e) => {
@@ -231,6 +235,7 @@ import PixelCursorTrail from '../components/ui/pixel-trail';
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
 		overflow-x: clip;
+		overflow-y: visible;
 		scrollbar-width: none;
 		-ms-overflow-style: none;
 	}

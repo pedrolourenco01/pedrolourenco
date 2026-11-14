@@ -61,6 +61,11 @@ export function Navbar() {
   const handleCloseMenu = (targetId?: string) => {
     setIsMenuAnimActive(false);
 
+    // Se houver alvo de navegação, restaura o scroll imediatamente para permitir o deslocamento suave
+    if (targetId) {
+      document.body.style.overflow = "";
+    }
+
     setTimeout(() => {
       setIsMenuOpen(false);
       document.body.style.overflow = "";
@@ -117,14 +122,35 @@ export function Navbar() {
     return () => window.removeEventListener("keydown", handleEsc);
   }, [isLangOpen, isMenuOpen]);
 
-  // Bloqueio do scroll do body durante a exibição do menu
+  // Bloqueio do scroll do body durante a exibição do menu com garantia de desbloqueio
   useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
     }
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [isMenuOpen]);
+
+  // Garantia adicional: restaura o overflow se a tela for redimensionada para desktop (> 900px) ou rotacionada
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 900) {
+        setIsMenuOpen(false);
+        setIsMenuAnimActive(false);
+        document.body.style.overflow = "";
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    window.addEventListener("orientationchange", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("orientationchange", handleResize);
+      document.body.style.overflow = "";
+    };
+  }, []);
 
   // Language switch handler with smooth block transition
   const handleLanguageSwitch = (newLang: "PT" | "EN") => {
@@ -284,6 +310,7 @@ export function Navbar() {
                 className={`lang-trigger-btn ${isLangOpen ? "is-active" : ""}`}
                 onClick={() => {
                   setIsMenuOpen(false);
+                  document.body.style.overflow = "";
                   setIsLangOpen((prev) => !prev);
                 }}
                 aria-expanded={isLangOpen}
