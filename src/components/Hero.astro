@@ -680,24 +680,25 @@ const {
 			ticking = false;
 		}
 
-		window.addEventListener('scroll', () => {
-			if (window.innerWidth <= 768) return; // Evita overhead e repaints de transform em mobile
+		const onScroll = () => {
 			if (!ticking) {
 				window.requestAnimationFrame(updateParallax);
 				ticking = true;
 			}
-		}, { passive: true });
+		};
 
-		const lenisInstance = (window as any).lenis;
-		if (lenisInstance) {
-			lenisInstance.on('scroll', () => {
-				if (window.innerWidth <= 768) return;
-				if (!ticking) {
-					window.requestAnimationFrame(updateParallax);
-					ticking = true;
-				}
-			});
-		}
+		window.addEventListener('scroll', onScroll, { passive: true });
+
+		// Sincroniza o parallax com o Lenis para fluidez máxima tanto em desktop quanto mobile
+		const attachLenis = () => {
+			const lenis = (window as any).lenis;
+			if (lenis && lenis.on) {
+				lenis.on('scroll', onScroll);
+			} else if (typeof window !== 'undefined') {
+				setTimeout(attachLenis, 60);
+			}
+		};
+		attachLenis();
 
 		updateParallax();
 	}
