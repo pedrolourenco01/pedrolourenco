@@ -130,6 +130,9 @@ const contactProps = sanity?.contact ? {
 			shell.style.height = `${winH}px`;
 			if (forceRefresh) {
 				ScrollTrigger.refresh();
+				if ((window as any).lenis && typeof (window as any).lenis.resize === 'function') {
+					(window as any).lenis.resize();
+				}
 			}
 		}
 
@@ -179,18 +182,18 @@ const contactProps = sanity?.contact ? {
 					window.dispatchEvent(new CustomEvent('footer:hide'));
 				}
 
-				// Ativa interatividade quando o footer estiver amplamente visível
-				const shouldBeInteractive = p > 0.6;
+				// Ativa interatividade SOMENTE quando o footer estiver amplamente visível no final (p >= 0.95),
+				// impedindo que o elemento fixo intercepte e quebre o gesto de scroll no mobile
+				const shouldBeInteractive = p >= 0.95;
 				if (shouldBeInteractive !== isInteractive) {
 					isInteractive = shouldBeInteractive;
 					shell.classList.toggle('is-interactive', shouldBeInteractive);
 				}
 
-				// Se o conteúdo do rodapé for maior que a tela, move suavemente com translate3d direto
-				const targetY = cachedExcess > 0 ? -cachedExcess * (1 - p) : 0;
-				if (Math.abs(targetY - lastContactY) > 0.05) {
+				// Se o conteúdo do rodapé for maior que a tela em telas pequenas, acompanha na direção natural do scroll
+				if (cachedExcess > 0) {
+					const targetY = -cachedExcess * p;
 					contact.style.transform = `translate3d(0, ${targetY.toFixed(2)}px, 0)`;
-					lastContactY = targetY;
 				}
 			},
 		});
