@@ -597,10 +597,13 @@ const {
 	}
 
 	document.addEventListener('astro:after-swap', setupAboutComponent);
+	let lastAboutWinWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
 	window.addEventListener('resize', () => {
+		if (typeof window !== 'undefined' && window.innerWidth === lastAboutWinWidth) return;
+		lastAboutWinWidth = window.innerWidth;
 		fitAboutHeadline();
 		ScrollTrigger.refresh();
-	});
+	}, { passive: true });
 	window.addEventListener('portfolio:language-change', () => {
 		setTimeout(fitAboutHeadline, 30);
 	});

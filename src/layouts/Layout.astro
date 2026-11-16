@@ -98,8 +98,8 @@ import PixelCursorTrail from '../components/ui/pixel-trail';
 					lenis.raf(time * 1000);
 				};
 				gsap.ticker.add(tickerHandler);
-				// Suavização inteligente de micro-quedas de frame para manter fluidez contínua
-				gsap.ticker.lagSmoothing(500, 33);
+				// Desativa lagSmoothing no GSAP para eliminar qualquer salto ou pausa brusca no scroll do Lenis
+				gsap.ticker.lagSmoothing(0);
 
 				setTimeout(() => ScrollTrigger.refresh(), 100);
 
@@ -202,8 +202,7 @@ import PixelCursorTrail from '../components/ui/pixel-trail';
 		font-family: 'Rethink Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
-		overflow-x: clip;
-		overflow-y: visible;
+		overflow-x: hidden;
 		scrollbar-width: none;
 		-ms-overflow-style: none;
 	}

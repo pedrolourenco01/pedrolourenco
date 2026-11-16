@@ -237,8 +237,15 @@ export function Navbar() {
       }
     };
 
+    let lastNavWidth = typeof window !== "undefined" ? window.innerWidth : 0;
+    const onResize = () => {
+      if (typeof window !== "undefined" && window.innerWidth === lastNavWidth) return;
+      lastNavWidth = typeof window !== "undefined" ? window.innerWidth : 0;
+      measureBounds();
+    };
+
     measureBounds();
-    window.addEventListener("resize", measureBounds, { passive: true });
+    window.addEventListener("resize", onResize, { passive: true });
     window.addEventListener("orientationchange", measureBounds, { passive: true });
 
     // Recalcula limites após render e carregamento de fontes
@@ -296,18 +303,29 @@ export function Navbar() {
     };
 
     checkScrollState();
-    window.addEventListener("scroll", onScroll, { passive: true });
 
-    if ((window as any).lenis) {
-      (window as any).lenis.on("scroll", onScroll);
-    }
+    let usingLenis = false;
+    const attachScroll = () => {
+      if ((window as any).lenis && (window as any).lenis.on) {
+        (window as any).lenis.on("scroll", onScroll);
+        usingLenis = true;
+      }
+    };
+    attachScroll();
+
+    const onWindowScroll = () => {
+      if (!usingLenis) {
+        onScroll();
+      }
+    };
+    window.addEventListener("scroll", onWindowScroll, { passive: true });
 
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
-      window.removeEventListener("resize", measureBounds);
+      window.removeEventListener("resize", onResize);
       window.removeEventListener("orientationchange", measureBounds);
-      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("scroll", onWindowScroll);
       if ((window as any).lenis && (window as any).lenis.off) {
         (window as any).lenis.off("scroll", onScroll);
       }

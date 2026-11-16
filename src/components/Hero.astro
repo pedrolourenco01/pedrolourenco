@@ -656,13 +656,18 @@ const {
 
 		let ticking = false;
 		let cachedHeroHeight = typeof window !== 'undefined' ? (window.innerHeight || 800) : 800;
+		let lastHeroWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
 
 		const updateHeroHeight = () => {
+			if (typeof window !== 'undefined' && window.innerWidth === lastHeroWidth) return;
+			lastHeroWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
 			cachedHeroHeight = window.innerHeight || 800;
 		};
 
 		window.addEventListener('resize', updateHeroHeight, { passive: true });
-		window.addEventListener('orientationchange', updateHeroHeight, { passive: true });
+		window.addEventListener('orientationchange', () => {
+			cachedHeroHeight = window.innerHeight || 800;
+		}, { passive: true });
 
 		function updateParallax() {
 			const scrollY = window.scrollY || window.pageYOffset;
@@ -698,18 +703,23 @@ const {
 			}
 		};
 
-		window.addEventListener('scroll', onScroll, { passive: true });
-
-		// Sincroniza o parallax com o Lenis para fluidez máxima tanto em desktop quanto mobile
+		let heroUsingLenis = false;
 		const attachLenis = () => {
 			const lenis = (window as any).lenis;
 			if (lenis && lenis.on) {
 				lenis.on('scroll', onScroll);
+				heroUsingLenis = true;
 			} else if (typeof window !== 'undefined') {
 				setTimeout(attachLenis, 60);
 			}
 		};
 		attachLenis();
+
+		window.addEventListener('scroll', () => {
+			if (!heroUsingLenis) {
+				onScroll();
+			}
+		}, { passive: true });
 
 		updateParallax();
 	}

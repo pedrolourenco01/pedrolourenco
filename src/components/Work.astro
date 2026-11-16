@@ -985,7 +985,10 @@ const {
 	}
 
 	document.addEventListener('astro:after-swap', initWorkEntrance);
+	let lastWorkWinWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
 	window.addEventListener('resize', () => {
+		if (typeof window !== 'undefined' && window.innerWidth === lastWorkWinWidth) return;
+		lastWorkWinWidth = window.innerWidth;
 		ScrollTrigger.refresh();
-	});
+	}, { passive: true });
 </script>

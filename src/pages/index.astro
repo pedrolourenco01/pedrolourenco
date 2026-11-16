@@ -119,19 +119,28 @@ const contactProps = sanity?.contact ? {
 		}
 
 		let cachedExcess = 0;
+		let lastWinWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
 
-		function syncCurtainHeight() {
+		function syncCurtainHeight(forceRefresh = false) {
 			const winH = window.innerHeight;
 			const contactH = contact.offsetHeight;
 			const requiredH = Math.max(winH, contactH);
 			cachedExcess = Math.max(0, contactH - winH);
 			spacer.style.height = `${requiredH}px`;
 			shell.style.height = `${winH}px`;
-			ScrollTrigger.refresh();
+			if (forceRefresh) {
+				ScrollTrigger.refresh();
+			}
 		}
 
-		syncCurtainHeight();
-		window.addEventListener('resize', syncCurtainHeight);
+		syncCurtainHeight(true);
+
+		// Proteção contra a barra de endereços do mobile: só recalcula se a largura mudar (rotação ou desktop)
+		window.addEventListener('resize', () => {
+			if (typeof window !== 'undefined' && window.innerWidth === lastWinWidth) return;
+			lastWinWidth = window.innerWidth;
+			syncCurtainHeight(true);
+		}, { passive: true });
 
 		let isCurtainVisible = false;
 		let isRevealed = false;

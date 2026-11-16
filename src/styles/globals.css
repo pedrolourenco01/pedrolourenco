@@ -28,8 +28,7 @@
   body {
     -webkit-overflow-scrolling: touch;
     touch-action: auto;
-    overflow-x: clip;
-    overflow-y: visible;
+    overflow-x: hidden;
   }
 
   @media (max-width: 900px) {
@@ -871,6 +870,9 @@ body.hero-loaded .header-nav-container {
   background-size: 540px 360px;
   background-position: center top;
   box-shadow: none !important;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .footer-curtain-spacer {
