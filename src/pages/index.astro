@@ -118,16 +118,13 @@ const contactProps = sanity?.contact ? {
 			return;
 		}
 
-		let cachedExcess = 0;
 		let lastWinWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
 
 		function syncCurtainHeight(forceRefresh = false) {
 			const winH = window.innerHeight;
-			const contactH = Math.max(contact.scrollHeight, contact.offsetHeight);
-			const requiredH = Math.max(winH, contactH);
-			cachedExcess = Math.max(0, contactH - winH);
-			spacer.style.height = `${requiredH}px`;
+			spacer.style.height = `${winH}px`;
 			shell.style.height = `${winH}px`;
+			contact.style.transform = 'none';
 			if (forceRefresh) {
 				ScrollTrigger.refresh();
 				if ((window as any).lenis && typeof (window as any).lenis.resize === 'function') {
@@ -153,8 +150,6 @@ const contactProps = sanity?.contact ? {
 
 		let isCurtainVisible = false;
 		let isRevealed = false;
-		let isInteractive = false;
-		let lastContactY = 0;
 
 		ScrollTrigger.create({
 			id: 'footer-curtain-trigger',
@@ -180,20 +175,6 @@ const contactProps = sanity?.contact ? {
 					isRevealed = false;
 					shell.classList.remove('is-revealed');
 					window.dispatchEvent(new CustomEvent('footer:hide'));
-				}
-
-				// Ativa interatividade SOMENTE quando o footer estiver amplamente visível no final (p >= 0.95),
-				// impedindo que o elemento fixo intercepte e quebre o gesto de scroll no mobile
-				const shouldBeInteractive = p >= 0.95;
-				if (shouldBeInteractive !== isInteractive) {
-					isInteractive = shouldBeInteractive;
-					shell.classList.toggle('is-interactive', shouldBeInteractive);
-				}
-
-				// Se o conteúdo do rodapé for maior que a tela em telas pequenas, acompanha na direção natural do scroll
-				if (cachedExcess > 0) {
-					const targetY = -cachedExcess * p;
-					contact.style.transform = `translate3d(0, ${targetY.toFixed(2)}px, 0)`;
 				}
 			},
 		});

@@ -136,9 +136,9 @@ const {
 		padding: 0.04em 0 0 0;
 		margin-top: -0.04em;
 		user-select: none;
-		will-change: transform, opacity;
-		opacity: 0;
-		transform: translateY(35px);
+		will-change: transform;
+		opacity: 1;
+		transform: none;
 	}
 
 	.footer-marquee-track {
@@ -353,24 +353,43 @@ const {
 	@media (max-width: 768px) {
 		.contact-section {
 			padding: 0;
+			height: 100vh;
+			height: 100svh;
+			overflow: hidden;
+		}
+
+		.contact-container {
+			padding: clamp(0.75rem, 2vh, 1.25rem) clamp(1rem, 4vw, 1.5rem);
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			box-sizing: border-box;
+		}
+
+		.footer-marquee-wrapper {
+			opacity: 1 !important;
+			transform: none !important;
 		}
 
 		.footer-marquee-item {
-			font-size: clamp(4.8rem, 20vw, 8.5rem);
+			font-size: clamp(3.6rem, 16vw, 6.2rem);
 			line-height: 0.96;
-			margin-top: -0.03em;
+			margin-top: 0;
 			padding-bottom: 0;
 		}
 
 		.footer-marquee-spacer {
-			width: clamp(2rem, 5vw, 3.5rem);
+			width: clamp(1.5rem, 4vw, 2.5rem);
 		}
 
 		.footer-body-grid {
 			grid-template-columns: 1fr;
-			gap: 1.5rem;
-			margin-top: -0.04em;
+			gap: clamp(1rem, 2vh, 1.75rem);
+			margin-top: 0;
 			min-height: auto;
+			opacity: 1 !important;
+			transform: none !important;
 		}
 
 		.footer-orange-divider {
@@ -378,19 +397,25 @@ const {
 		}
 
 		.footer-talk-col {
-			padding: 2rem 1rem 0.5rem 1rem;
+			padding: 0;
 		}
 
 		.footer-talk-text {
-			font-size: clamp(2.4rem, 10vw, 4.2rem);
+			font-size: clamp(2rem, 8.5vw, 3.5rem);
 		}
 
 		.footer-links-nav {
-			padding: 0 1rem 3rem 1rem;
+			padding: 0 0 clamp(1rem, 2.5vh, 1.75rem) 0;
+		}
+
+		.footer-links-list {
+			display: flex;
+			flex-direction: column;
+			gap: 0.45rem;
 		}
 
 		.footer-nav-link {
-			font-size: 1.25rem;
+			font-size: 1.15rem;
 		}
 	}
 
@@ -427,30 +452,32 @@ const {
 
 		if (!marquee || !bodyGrid) return;
 
-		// Estado inicial
-		gsap.set(marquee, { opacity: 0, y: 35 });
-		gsap.set(bodyGrid, { opacity: 0, y: 25 });
+		// O Marquee monumental fica sempre 100% visível para aparecer limpo ao abrir da cortina
+		gsap.set(marquee, { opacity: 1, y: 0 });
+
+		const isMobile = window.innerWidth <= 768;
+		if (isMobile) {
+			gsap.set(bodyGrid, { opacity: 1, y: 0 });
+			return;
+		}
+
+		// Estado inicial no desktop para animação sutil da grid de links
+		gsap.set(bodyGrid, { opacity: 0, y: 20 });
 		if (divider) gsap.set(divider, { scaleY: 0, transformOrigin: 'top center' });
 
 		const tl = gsap.timeline({ paused: true });
 
-		tl.to(marquee, {
-			opacity: 1,
-			y: 0,
-			duration: 0.85,
-			ease: 'power3.out',
-		}, 0)
-		.to(bodyGrid, {
+		tl.to(bodyGrid, {
 			opacity: 1,
 			y: 0,
 			duration: 0.75,
 			ease: 'power3.out',
-		}, 0.15)
+		}, 0)
 		.to(divider, {
 			scaleY: 1,
-			duration: 0.95,
+			duration: 0.85,
 			ease: 'power2.out',
-		}, 0.2);
+		}, 0.1);
 
 		const onReveal = () => {
 			tl.play();

@@ -911,8 +911,16 @@ body.hero-loaded .header-nav-container {
   visibility: visible !important;
 }
 
-.footer-curtain-shell.is-interactive {
+/* Links do rodapé sempre clicáveis, enquanto o shell fixo nunca intercepta a rolagem touch */
+.footer-curtain-shell a,
+.footer-curtain-shell button,
+.footer-curtain-shell .footer-talk-text,
+.footer-curtain-shell .footer-nav-link {
   pointer-events: auto !important;
+}
+
+.footer-curtain-shell.is-interactive {
+  pointer-events: auto;
 }
 
 /* --------------------------------------------------
