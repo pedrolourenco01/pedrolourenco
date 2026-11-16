@@ -121,9 +121,18 @@ const contactProps = sanity?.contact ? {
 		let lastWinWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
 
 		function syncCurtainHeight(forceRefresh = false) {
-			const winH = window.innerHeight;
-			spacer.style.height = `${winH}px`;
-			shell.style.height = `${winH}px`;
+			const screenH = typeof window !== 'undefined'
+				? Math.max(
+					window.innerHeight,
+					(window.screen && window.screen.height) || 0,
+					document.documentElement.clientHeight || 0
+				  )
+				: 800;
+			// Altura suficiente para garantir que mesmo com o colapso da barra de endereços no Safari/Chrome,
+			// a section About suba 100% e saia completamente da tela
+			const curtainH = screenH + 80;
+			spacer.style.height = `${curtainH}px`;
+			shell.style.height = '100%';
 			contact.style.transform = 'none';
 			if (forceRefresh) {
 				ScrollTrigger.refresh();
@@ -160,18 +169,18 @@ const contactProps = sanity?.contact ? {
 				const p = self.progress;
 
 				// Ativa visibilidade apenas quando o estado mudar
-				const shouldBeVisible = p > 0.005;
+				const shouldBeVisible = p > 0.001;
 				if (shouldBeVisible !== isCurtainVisible) {
 					isCurtainVisible = shouldBeVisible;
 					shell.classList.toggle('is-visible', shouldBeVisible);
 				}
 
 				// Dispara animações de texto do footer quando a section About sobe revelando o footer
-				if (p > 0.25 && !isRevealed) {
+				if (p > 0.15 && !isRevealed) {
 					isRevealed = true;
 					shell.classList.add('is-revealed');
 					window.dispatchEvent(new CustomEvent('footer:reveal'));
-				} else if (p < 0.15 && isRevealed) {
+				} else if (p < 0.08 && isRevealed) {
 					isRevealed = false;
 					shell.classList.remove('is-revealed');
 					window.dispatchEvent(new CustomEvent('footer:hide'));
