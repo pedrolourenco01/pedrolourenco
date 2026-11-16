@@ -238,6 +238,9 @@ const {
 		filter: brightness(0.68) contrast(1.08);
 		transform-origin: center bottom;
 		will-change: transform;
+		transform: translate3d(0, 0, 0);
+		backface-visibility: hidden;
+		-webkit-backface-visibility: hidden;
 	}
 
 	.hero-bg-overlay {
@@ -652,10 +655,18 @@ const {
 		if (!heroImg) return;
 
 		let ticking = false;
+		let cachedHeroHeight = typeof window !== 'undefined' ? (window.innerHeight || 800) : 800;
+
+		const updateHeroHeight = () => {
+			cachedHeroHeight = window.innerHeight || 800;
+		};
+
+		window.addEventListener('resize', updateHeroHeight, { passive: true });
+		window.addEventListener('orientationchange', updateHeroHeight, { passive: true });
 
 		function updateParallax() {
 			const scrollY = window.scrollY || window.pageYOffset;
-			const heroHeight = window.innerHeight || 800;
+			const heroHeight = cachedHeroHeight;
 
 			// Parallax is active while transitioning to the next section
 			if (scrollY <= heroHeight * 1.5) {

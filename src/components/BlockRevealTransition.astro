@@ -95,12 +95,14 @@
     gridContainer.appendChild(fragment);
 
     if (initialCover) {
+      gridContainer.style.display = 'block';
       gsap.set(blocks, { opacity: 1 });
       gridContainer.style.pointerEvents = 'all';
       // Desativa o background plano da tela para que os blocos individuais executem a revelação
       document.documentElement.classList.remove('block-intro-active');
       (window as any).__blockIntroShown = true;
     } else {
+      gridContainer.style.display = 'none';
       gsap.set(blocks, { opacity: 0 });
       gridContainer.style.pointerEvents = 'none';
       document.documentElement.classList.remove('block-intro-active');
@@ -124,6 +126,7 @@
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       gsap.set(blocks, { opacity: 0 });
       gridContainer.style.pointerEvents = 'none';
+      gridContainer.style.display = 'none';
       document.body.classList.add('hero-loaded');
       return;
     }
@@ -131,12 +134,16 @@
     // Timeout de segurança caso algum script de terceiro ou bundle demore para responder
     setTimeout(() => {
       document.documentElement.classList.remove('block-intro-active');
-      if (gridContainer) gridContainer.style.pointerEvents = 'none';
+      if (gridContainer) {
+        gridContainer.style.pointerEvents = 'none';
+        gridContainer.style.display = 'none';
+      }
       document.body.classList.add('hero-loaded');
       try { sessionStorage.setItem('portfolio_intro_done', 'true'); } catch (e) {}
     }, 1200);
 
     isTransitioning = true;
+    gridContainer.style.display = 'block';
     gridContainer.style.pointerEvents = 'all';
     gsap.set(blocks, { opacity: 1 });
 
@@ -148,7 +155,10 @@
       ease: 'power2.inOut',
       stagger: getDescendingStagger(currentTotalRows, 0.55, 0.18),
       onComplete: () => {
-        if (gridContainer) gridContainer.style.pointerEvents = 'none';
+        if (gridContainer) {
+          gridContainer.style.pointerEvents = 'none';
+          gridContainer.style.display = 'none';
+        }
         isTransitioning = false;
         document.body.classList.add('hero-loaded');
         try { sessionStorage.setItem('portfolio_intro_done', 'true'); } catch (e) {}
@@ -173,11 +183,15 @@
     // Timeout de segurança caso algum script de terceiro ou bundle demore para responder
     setTimeout(() => {
       document.documentElement.classList.remove('block-intro-active');
-      if (gridContainer) gridContainer.style.pointerEvents = 'none';
+      if (gridContainer) {
+        gridContainer.style.pointerEvents = 'none';
+        gridContainer.style.display = 'none';
+      }
       document.body.classList.add('hero-loaded');
     }, 2000);
 
     isTransitioning = true;
+    gridContainer.style.display = 'block';
     gridContainer.style.pointerEvents = 'all';
 
     // 1. Leave: onda laranja desce cobrindo a tela de cima para baixo
@@ -205,7 +219,10 @@
             ease: 'power2.inOut',
             stagger: getDescendingStagger(currentTotalRows, 0.5, 0.18),
             onComplete: () => {
-              if (gridContainer) gridContainer.style.pointerEvents = 'none';
+              if (gridContainer) {
+                gridContainer.style.pointerEvents = 'none';
+                gridContainer.style.display = 'none';
+              }
               isTransitioning = false;
               window.dispatchEvent(new CustomEvent('portfolio:transition-complete'));
             },

@@ -133,6 +133,11 @@ const contactProps = sanity?.contact ? {
 		syncCurtainHeight();
 		window.addEventListener('resize', syncCurtainHeight);
 
+		let isCurtainVisible = false;
+		let isRevealed = false;
+		let isInteractive = false;
+		let lastContactY = 0;
+
 		ScrollTrigger.create({
 			id: 'footer-curtain-trigger',
 			trigger: spacer,
@@ -141,38 +146,36 @@ const contactProps = sanity?.contact ? {
 			onUpdate: (self) => {
 				const p = self.progress;
 
-				// Ativa visibilidade assim que a cortina começa a subir
-				if (p > 0.005) {
-					shell.classList.add('is-visible');
-				} else {
-					shell.classList.remove('is-visible');
+				// Ativa visibilidade apenas quando o estado mudar
+				const shouldBeVisible = p > 0.005;
+				if (shouldBeVisible !== isCurtainVisible) {
+					isCurtainVisible = shouldBeVisible;
+					shell.classList.toggle('is-visible', shouldBeVisible);
 				}
 
 				// Dispara animações de texto do footer quando a section About sobe revelando o footer
-				if (p > 0.25) {
-					if (!shell.classList.contains('is-revealed')) {
-						shell.classList.add('is-revealed');
-						window.dispatchEvent(new CustomEvent('footer:reveal'));
-					}
-				} else if (p < 0.15) {
-					if (shell.classList.contains('is-revealed')) {
-						shell.classList.remove('is-revealed');
-						window.dispatchEvent(new CustomEvent('footer:hide'));
-					}
+				if (p > 0.25 && !isRevealed) {
+					isRevealed = true;
+					shell.classList.add('is-revealed');
+					window.dispatchEvent(new CustomEvent('footer:reveal'));
+				} else if (p < 0.15 && isRevealed) {
+					isRevealed = false;
+					shell.classList.remove('is-revealed');
+					window.dispatchEvent(new CustomEvent('footer:hide'));
 				}
 
 				// Ativa interatividade quando o footer estiver amplamente visível
-				if (p > 0.6) {
-					shell.classList.add('is-interactive');
-				} else {
-					shell.classList.remove('is-interactive');
+				const shouldBeInteractive = p > 0.6;
+				if (shouldBeInteractive !== isInteractive) {
+					isInteractive = shouldBeInteractive;
+					shell.classList.toggle('is-interactive', shouldBeInteractive);
 				}
 
-				// Se o conteúdo do rodapé for maior que a tela, move suavemente o rodapé acompanhando a subida
-				if (cachedExcess > 0) {
-					gsap.set(contact, { y: -cachedExcess * (1 - p) });
-				} else {
-					gsap.set(contact, { y: 0 });
+				// Se o conteúdo do rodapé for maior que a tela, move suavemente com translate3d direto
+				const targetY = cachedExcess > 0 ? -cachedExcess * (1 - p) : 0;
+				if (Math.abs(targetY - lastContactY) > 0.05) {
+					contact.style.transform = `translate3d(0, ${targetY.toFixed(2)}px, 0)`;
+					lastContactY = targetY;
 				}
 			},
 		});

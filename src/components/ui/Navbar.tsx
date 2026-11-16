@@ -203,10 +203,47 @@ export function Navbar() {
     }
   };
 
-  // Scroll theme observer: switches navbar colors when over light sections (#services, #about)
-  // and hides the navbar completely at the bottom/footer (ultra-otimizado com RAF e checagem de refs para evitar re-renders desnecessários)
+  // Scroll theme observer: switches navbar colors when over light sections (#work, #services, #about)
+  // and hides the navbar completely at the bottom/footer (ultra-otimizado com cache de limites para evitar layout thrashing no mobile)
   useEffect(() => {
     let ticking = false;
+    let sectionBounds: { top: number; bottom: number }[] = [];
+    let spacerTop = Infinity;
+    let cachedWinH = typeof window !== "undefined" ? window.innerHeight : 800;
+    let cachedDocH = typeof document !== "undefined" ? document.documentElement.scrollHeight : 2000;
+
+    const measureBounds = () => {
+      if (typeof window === "undefined") return;
+      const currentScrollY = window.scrollY || window.pageYOffset || 0;
+      cachedWinH = window.innerHeight;
+      cachedDocH = document.documentElement.scrollHeight;
+
+      const work = document.getElementById("work");
+      const services = document.getElementById("services");
+      const about = document.getElementById("about");
+      const spacer = document.getElementById("footer-curtain-spacer");
+
+      sectionBounds = [work, services, about].map((sec) => {
+        if (!sec) return { top: -1, bottom: -1 };
+        const rect = sec.getBoundingClientRect();
+        return {
+          top: rect.top + currentScrollY,
+          bottom: rect.bottom + currentScrollY,
+        };
+      });
+
+      if (spacer) {
+        spacerTop = spacer.getBoundingClientRect().top + currentScrollY;
+      }
+    };
+
+    measureBounds();
+    window.addEventListener("resize", measureBounds, { passive: true });
+    window.addEventListener("orientationchange", measureBounds, { passive: true });
+
+    // Recalcula limites após render e carregamento de fontes
+    const t1 = setTimeout(measureBounds, 500);
+    const t2 = setTimeout(measureBounds, 1800);
 
     const checkScrollState = () => {
       const scrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
@@ -216,23 +253,14 @@ export function Navbar() {
         setIsScrolled(newScrolled);
       }
 
-      const work = document.getElementById("work");
-      const services = document.getElementById("services");
-      const about = document.getElementById("about");
-      const spacer = document.getElementById("footer-curtain-spacer");
-
-      const winH = window.innerHeight;
-      const docH = document.documentElement.scrollHeight;
-      const distFromBottom = docH - (scrollY + winH);
-
-      // Detecta se o usuário chegou no final do site / footer
+      // Detecta se o usuário chegou no final do site / footer sem layout thrashing
+      const distFromBottom = cachedDocH - (scrollY + cachedWinH);
       let inFooter = false;
-      if (spacer) {
-        const spacerRect = spacer.getBoundingClientRect();
-        if (spacerRect.top <= winH * 0.8) {
+      if (spacerTop < Infinity) {
+        if (spacerTop - scrollY <= cachedWinH * 0.8) {
           inFooter = true;
         }
-      } else if (distFromBottom <= winH * 0.8) {
+      } else if (distFromBottom <= cachedWinH * 0.8) {
         inFooter = true;
       }
 
@@ -241,16 +269,12 @@ export function Navbar() {
         setIsFooterVisible(inFooter);
       }
 
-      // Detecta se a barra está sobre qualquer seção clara (#work, #services, #about)
+      // Detecta se a barra está sobre qualquer seção clara (#work, #services, #about) via limites em memória
+      const navCheckDocY = scrollY + 50;
       let light = false;
-      const navCheckY = 50;
-
-      const sections = [work, services, about];
-      for (let i = 0; i < sections.length; i++) {
-        const sec = sections[i];
-        if (!sec) continue;
-        const rect = sec.getBoundingClientRect();
-        if (rect.top <= navCheckY && rect.bottom >= navCheckY) {
+      for (let i = 0; i < sectionBounds.length; i++) {
+        const bound = sectionBounds[i];
+        if (navCheckDocY >= bound.top && navCheckDocY <= bound.bottom) {
           light = true;
           break;
         }
@@ -279,6 +303,10 @@ export function Navbar() {
     }
 
     return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      window.removeEventListener("resize", measureBounds);
+      window.removeEventListener("orientationchange", measureBounds);
       window.removeEventListener("scroll", onScroll);
       if ((window as any).lenis && (window as any).lenis.off) {
         (window as any).lenis.off("scroll", onScroll);

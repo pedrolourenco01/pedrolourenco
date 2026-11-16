@@ -78,15 +78,15 @@ import PixelCursorTrail from '../components/ui/pixel-trail';
 
 				const lenis = new Lenis({
 					autoRaf: false,
-					duration: isTouchDevice ? 0.95 : 1.2,
+					duration: 1.2,
 					easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
 					orientation: 'vertical',
 					gestureOrientation: 'vertical',
 					smoothWheel: true,
 					wheelMultiplier: 1.05,
-					touchMultiplier: isTouchDevice ? 1.2 : 1.0,
+					touchMultiplier: 1.0,
 					infinite: false,
-					syncTouch: isTouchDevice,
+					syncTouch: false,
 				});
 
 				(window as any).lenis = lenis;
