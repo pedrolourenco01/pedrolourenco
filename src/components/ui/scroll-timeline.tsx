@@ -193,12 +193,7 @@ export default function Component({ milestones, className = "" }: TimelineProps)
       );
     }, container);
 
-    const timer = setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 150);
-
     return () => {
-      clearTimeout(timer);
       ctx.revert();
     };
   }, [milestones.length]);

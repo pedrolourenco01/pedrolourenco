@@ -138,6 +138,7 @@
     opacity: 0;
     transform: translateY(-24px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
@@ -236,6 +237,7 @@ body.hero-loaded .header-nav-container {
 
 /* Oculta os blocos de horário e email em mobile e telas até 999px (incluindo 768x1024) */
 @media (max-width: 999px) {
+
   .header-location-block,
   .header-contact-block {
     display: none !important;
@@ -244,7 +246,8 @@ body.hero-loaded .header-nav-container {
 
 /* Garante a navbar completa idêntica ao desktop na resolução 1032x1376 com tipografia aumentada */
 @media (min-width: 1000px) and (max-width: 1280px) and (orientation: portrait),
-       (width: 1032px) and (height: 1376px) {
+(width: 1032px) and (height: 1376px) {
+
   .header-location-block,
   .header-contact-block {
     display: flex !important;
@@ -367,6 +370,7 @@ body.hero-loaded .header-nav-container {
     opacity: 0;
     transform: translateY(-3px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -689,7 +693,10 @@ body.hero-loaded .header-nav-container {
  * Desativa animações de hover em botões e textos em dispositivos móveis e tablets
  * (Tanto nos tablets quanto nos celulares: resoluções <= 1200px, orientações retrato ou touch)
  * ------------------------------------------------------------------------- */
-@media (max-width: 1200px), (max-width: 1280px) and (orientation: portrait), (hover: none) {
+@media (max-width: 1200px),
+(max-width: 1280px) and (orientation: portrait),
+(hover: none) {
+
   /* 1. Botões (FlowButton / CTA): fixa o estado estático e oculta o slide de hover */
   .flow-button-root .flow-btn-static,
   .flow-button-root:hover .flow-btn-static,
@@ -792,7 +799,10 @@ body.hero-loaded .header-nav-container {
 /* -------------------------------------------------------------------------
  * Remoção completa de efeitos de hover no mobile (Botões, Links e Cards)
  * ------------------------------------------------------------------------- */
-@media (max-width: 900px), (hover: none), (pointer: coarse) {
+@media (max-width: 900px),
+(hover: none),
+(pointer: coarse) {
+
   /* Botões: sem transform, sem alteração de opacidade ou contorno */
   button:hover,
   button:active,
@@ -870,9 +880,6 @@ body.hero-loaded .header-nav-container {
   background-size: 540px 360px;
   background-position: center top;
   box-shadow: none !important;
-  transform: translate3d(0, 0, 0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
 }
 
 .footer-curtain-spacer {
@@ -1035,6 +1042,7 @@ html[data-lang="en"] a.lang-en {
 }
 
 @media (min-width: 901px) and (hover: hover) and (pointer: fine) {
+
   .button03:is(:hover, :focus-visible) .button03_bg-left .button03_bg-pixel:is(:nth-child(3), :nth-child(4), :nth-child(5), :nth-child(8), :nth-child(12)),
   .button03:is(:hover, :focus-visible) .button03_bg-right .button03_bg-pixel:is(:first-child, :nth-child(5), :nth-child(8), :nth-child(9), :nth-child(10)) {
     opacity: 0;
@@ -1052,7 +1060,10 @@ html[data-lang="en"] a.lang-en {
   }
 }
 
-@media (max-width: 900px), (hover: none), (pointer: coarse) {
+@media (max-width: 900px),
+(hover: none),
+(pointer: coarse) {
+
   .button03,
   .button03:hover,
   .button03:active,
@@ -1076,7 +1087,3 @@ html[data-lang="en"] a.lang-en {
     transition: none !important;
   }
 }
-
-
-
-

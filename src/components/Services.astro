@@ -57,7 +57,7 @@ const {
 		<header class="services-header-centered">
 			<div class="lang-pt services-header-inner">
 				<SlideUpText
-					client:visible
+					client:idle
 					inView
 					text={titlePt}
 					split="words"
@@ -70,7 +70,7 @@ const {
 			</div>
 			<div class="lang-en services-header-inner">
 				<SlideUpText
-					client:visible
+					client:idle
 					inView
 					text={titleEn}
 					split="words"
@@ -83,9 +83,9 @@ const {
 			</div>
 		</header>
 
-		<!-- Timeline Interativa de Serviços hidratada sob demanda ao entrar no viewport -->
+		<!-- Timeline Interativa de Serviços pré-hidratada em idle para evitar travamentos ao rolar até ela -->
 		<div class="services-timeline-wrap">
-			<ScrollTimeline client:visible milestones={milestones} />
+			<ScrollTimeline client:idle milestones={milestones} />
 		</div>
 	</div>
 </section>

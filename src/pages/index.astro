@@ -123,7 +123,7 @@ const contactProps = sanity?.contact ? {
 
 		function syncCurtainHeight(forceRefresh = false) {
 			const winH = window.innerHeight;
-			const contactH = contact.offsetHeight;
+			const contactH = Math.max(contact.scrollHeight, contact.offsetHeight);
 			const requiredH = Math.max(winH, contactH);
 			cachedExcess = Math.max(0, contactH - winH);
 			spacer.style.height = `${requiredH}px`;
@@ -134,6 +134,12 @@ const contactProps = sanity?.contact ? {
 		}
 
 		syncCurtainHeight(true);
+
+		if (typeof document !== 'undefined' && (document as any).fonts) {
+			(document as any).fonts.ready.then(() => {
+				syncCurtainHeight(true);
+			});
+		}
 
 		// Proteção contra a barra de endereços do mobile: só recalcula se a largura mudar (rotação ou desktop)
 		window.addEventListener('resize', () => {
